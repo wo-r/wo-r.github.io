@@ -7,12 +7,14 @@ Create a file in the root of this directory with or without a subroot path.
 
 #### EXAMPLE:
 ```md
-articles --- |
-             | --- hello-world.md
-             | --- custom-folder
-                | --- hello-earth.md
-                | --- another-custom-folder
-                   | --- hello-moon.md
+--- wo-r.github.io
+ | --- src/
+    | --- articles/
+       | --- hello-world.md
+       | --- custom-folder/
+          | --- hello-earth.md
+          | --- another-custom-folder/
+             | --- hello-moon.md
 ```
 
 <br>
