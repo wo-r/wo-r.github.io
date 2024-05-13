@@ -21,10 +21,79 @@
             .nunito {
                 font-family: "Nunito";
             }
+
+            /** hide scrollbar **/
+            ::-webkit-scrollbar {
+                width: 0px;
+                height: 0px;
+            }
+            
+            ::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            
+            ::-webkit-scrollbar-thumb {
+                background: transparent;
+            }
+
+            /** rippling **/
+            .ripple {
+                position: absolute;
+                background: rgba(150, 134, 19, 0.8) !important;
+                border-radius: 50%;
+                transform: scale(0);
+                animation: ripple 600ms linear;
+            }
+
+            @keyframes ripple {
+                to {
+                transform: scale(4);
+                opacity: 0;
+                }
+            }
         </style>
     </head>
-    <body class="nunito">
-        <!--<h1 class="text-8xl font-black">Welcome!</h1>-->
+    <body class="nunito relative min-h-screen box-border">
+        <div class="fixed inset-0 bg-[url('./src/background.png')] bg-cover opacity-50 -z-50"></div>
+        <div class="py-6 z-10">
+            <div class="flex flex-row justify-between items-center px-4 sm:px-6 lg:px-8 container mx-auto">
+                <div class="flex flex-1 items-center">
+                    <a class="cursor-pointer" goto="https://github.com/wo-r?tab=repositories">
+                        <img class="h-14 rounded-full shadow-xl" src="https://avatars.githubusercontent.com/u/78428114"/>
+                    </a>
+                </div>
+                <div class="flex flex-2 flex-row gap-2 justify-between">
+                    <button class="px-3 py-3 bg-brown-light hover:bg-brown-light text-white rounded-lg shadow-xl cursor-default relative overflow-hidden">Home</button>
+                    <button goto="/articles" ripple class="px-3 py-3 bg-brown hover:bg-brown-light text-white rounded-lg shadow-xl relative overflow-hidden">Articles</button>
+                    <button goto="/resume" ripple class="px-3 py-3 bg-brown hover:bg-brown-light text-white rounded-lg shadow-xl relative overflow-hidden">Resume</button>
+                </div>
+            </div>
+        </div>
+        <div class="pt-[5rem] pb-[15rem] px-4 sm:px-6 lg:px-8 container mx-auto">
+            <h1 class="text-8xl text-brown font-black">Welcome!</h1>
+            <span class="font-semibold">
+                Hello! Thanks for taking a look at my personal website! I have spent quite some time building it, and I wanted the website to be a place where I can share my thoughts and create my resume for future endeavors. I love to code; I spend almost every day trying to make something, either to fix, implement, or just for some fun. It's genuinely the best thing to ever exist on this planet, and I don't think I could really live without it.
+            </span>
+            <h1 class="text-5xl text-brown font-black mt-20">What is the purpose of this website?</h1>
+            <span class="font-semibold">
+                This website was created to serve multiple purposes: to share my resume, to write articles about my experiences, and to offer help through my articles to others who are in the same situation I was in. That's about it, and I'm proud that it is like that.
+            </span>
+            <h1 class="text-5xl text-brown font-black mt-20">How it started</h1>
+            <span class="font-semibold">
+                About 4 years ago from today (03/08/2024), I grew very tired of school's attempts to block access to websites or specific YouTube videos. I rebelled against this, perhaps a little too much. Some of my rebellious attempts worked, while others didn't. It was during this time that I learned about HTML and the ability to create websites. My journey began with a website template creator called Nicepage, which was okay, but I found it difficult to operate. I only managed to create one website with it, and it was not very good. Later that year, I started creating Python scripts, one of which was called Folder Manager, used for managing folders and directories. This was when my love for coding truly sparked. As a freshman in high school, I began coding websites with true HTML from the heart. After some time, I wanted to create a real website, one with a domain. I discovered a free website hosting service called 000webhost, where I also learned PHP, another amazing language that I love to use. It was during this time that projects like Vote-Ralph, Soldier-Island-Display, Chrome-Crash, and Read180-Bypass were created on GitHub. Afterwards, I learned about jQuery, which remains my best-known language to this day. I began to have some far-fetched but not impossible ideas. One of the most persistent ideas was for our school's website Echo, by Agilix, which, to me, was badly designed and could be greatly improved. This led to my involvement with Themius, CustomSkins, and now Proview. Throughout my sophomore and junior years, I continued this work whenever I had time, and it has really paid off, as I now use it daily. I could not imagine my school life without it. So, all of this brings us to now. I am an intermediate coder, self-taught, persistent at something that may never work, and still in high school. Why am I the way I am? Who knows, but I absolutely love it. 
+            </span>
+            <h1 class="text-5xl text-brown font-black mt-20">What is my plan?</h1>
+            <span class="font-semibold">
+                Quite simple, graduate from high school, earn a degree in Computer Science from college, and then either secure a job or start my own business, where I can develop games or create websites.
+            </span>
+        </div>
+        <div class="absolute bottom-0 w-full bg-brown-light">
+            <div class="flex flex-row justify-center md:justify-end py-14 items-center px-4 sm:px-6 lg:px-8 container mx-auto">
+                <div class="flex flex-row justify-center items-center">
+                    <span class="text-4xl font-black opacity-5">Wo-r &copy; 2021-<span id="copyright"></span></span>
+                </div>
+            </div>
+        </div>
         <!--TODO:-->
     </body>
     <script src="./src/thirdparty/jquery.js"></script>
