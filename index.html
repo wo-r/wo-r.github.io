@@ -1,79 +1,32 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth overscroll-none">
+<html lang="en" class="overscroll-none select-none">
     <head>
         <meta charset="utf-8">
         <title>Wo-r</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="https://avatars.githubusercontent.com/u/78428114">
-        <link rel="preload" href="style.css" as="style">
-        <link re="preload" href="script.js" as="script">
-        <!-- meta tags -->
-        <meta name="title" content="Wo-r">
-        <meta name="description" content="This is my personal website for posting articles, or other things. It also will most likely contain my resume.">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="https://wo-r.github.io/wo-r/">
-        <meta property="og:title" content="Wo-r">
-        <meta property="og:description" content="This is my personal website for posting articles, or other things. It also will most likely contain my resume.">
-        <meta property="og:image" content="https://avatars.githubusercontent.com/u/78428114">
-        <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:url" content="https://wo-r.github.io/wo-r/">
-        <meta property="twitter:title" content="Wo-r">
-        <meta property="twitter:description" content="This is my personal website for posting articles, or other things. It also will most likely contain my resume.">
-        <meta property="twitter:image" content="https://avatars.githubusercontent.com/u/78428114">
-        <!-- end meta tags -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Fira+Sans&display=swap">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
-        <script src="https://cdn.tailwindcss.com/"></script>
-        <script>
-            /** Manage specific settings from TailwindCSS 
-             * to let styles from style.css function. **/
-            tailwind.config = {
-                important: false,
-            };
-            console.clear(); // Remove tailwind production warning.
-        </script>
-        <link rel="stylesheet" href="style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <!---->
+        <meta name="robots" content="index, follow">
+        <meta name="language" content="English">
+        <meta name="author" content="Wo-r">
+        <!---->
+        <script src="./src/thirdparty/tailwind.js"></script>
+        <style>
+            @font-face {
+                font-family: "Nunito";
+                src: url("./src/nunito.ttf") format("truetype");
+            }
+
+            .nunito {
+                font-family: "Nunito";
+            }
+        </style>
     </head>
-    <body class="relative min-h-screen overflow-overlay scrollbar-hidden box-border text-black bg-whitish-grey font-default image-x">
-        <div class="py-4 select-none">
-            <div class="flex justify-between items-center container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center">
-                    <a goto="https://github.com/wo-r?tab=repositories">
-                        <img src="https://avatars.githubusercontent.com/u/78428114" alt="Wo-r" class="h-10 rounded-full">
-                    </a>
-                </div>
-                <div class="flex gap-2">
-                    <button goto="/" canripple class="bg-primary hover:bg-secondary text-white px-3 py-2 rounded relative overflow-hidden">Home</button>
-                    <button goto="/pages/articles.html" canripple class="bg-primary hover:bg-secondary text-white px-3 py-2 rounded relative overflow-hidden">Articles</button>
-                    <button goto="/pages/resume.html" canripple class="bg-primary hover:bg-secondary text-white px-3 py-2 rounded relative overflow-hidden">Resume</button>
-                </div>
-            </div>
-        </div>
-        <div class="container mx-auto px-4 pt-[3rem] pb-[13rem] sm:px-6 lg:px-8">
-            <h1 class="font-black color-primary text-6xl md:text-8xl leading-normal tracking-tight">Welcome!</h1>
-            <span>Hello! Thanks for taking a look at my personal website! I have spent quite some time building it, and I wanted the website to be a place where I can share my thoughts and create my resume for future endeavors. I love to code; I spend almost every day trying to make something, either to fix, implement, or just for some fun. It's genuinely the best thing to ever exist on this planet, and I don't think I could really live without it.</span>
-            <h2 class="font-black color-primary text-4xl md:text-5xl leading-normal tracking-tight mt-10">What is the purpose of this website?</h2>
-            <span>This website was created to serve multiple purposes: to share my resume, to write articles about my experiences, and to offer help through my articles to others who are in the same situation I was in. That's about it, and I'm proud that it is like that.</span>
-            <h2 class="font-black color-primary text-4xl md:text-5xl leading-normal tracking-tight mt-10">How it started</h2>
-            <div class="flex flex-col gap-5">
-                <span>About 4 years ago from today <b class="font-black color-accent">(03/08/2024)</b>, I grew very tired of school's attempts to block access to websites or specific YouTube videos. I rebelled against this, perhaps a little too much. Some of my rebellious attempts worked, while others didn't. It was during this time that I learned about HTML and the ability to create websites. My journey began with a website template creator called <b class="font-black color-accent">Nicepage</b>, which was okay, but I found it difficult to operate. I only managed to create one website with it, and it was not very good.</span>
-                <span>Later that year, I started creating Python scripts, one of which was called <b class="font-black color-accent">Folder Manager</b>, used for managing folders and directories. This was when my love for coding truly sparked. As a freshman in high school, I began coding websites with true HTML from the heart. After some time, I wanted to create a real website, one with a domain. I discovered a free website hosting service called <b class="font-black color-accent">000webhost</b>, where I also learned <b class="font-black color-accent">PHP</b>, another amazing language that I love to use. It was during this time that projects like <b class="font-black color-accent">Vote-Ralph</b>, <b class="font-black color-accent">Soldier-Island-Display</b>, <b class="font-black color-accent">Chrome-Crash</b>, and <b class="font-black color-accent">Read180-Bypass</b> were created on GitHub.</span>
-                <span>Afterwards, I learned about jQuery, which remains my best-known language to this day. I began to have some far-fetched but not impossible ideas. One of the most persistent ideas was for our school's website <b class="font-black color-accent">Echo, by Agilix</b>, which, to me, was badly designed and could be greatly improved. This led to my involvement with <b class="font-black color-accent">Themius</b>, <b class="font-black color-accent">CustomSkins</b>, and now <b class="font-black color-accent">Proview</b>.</span>
-                <span>Throughout my sophomore and junior years, I continued this work whenever I had time, and it has really paid off, as I now use it daily. I could not imagine my school life without it. So, all of this brings us to now. I am an intermediate coder, self-taught, persistent at something that may never work, and still in high school. Why am I the way I am? Who knows, but I absolutely love it.</span>
-            </div>
-            <h2 class="font-black color-primary text-5xl md:text-6xl leading-normal tracking-tight mt-10">What is my plan?</h2>
-            <span>Quite simple, <b class="font-black color-accent">graduate from high school</b>, <b class="font-black color-accent">earn a degree in Computer Science from college</b>, and then either secure a job or start my own business, where I can develop games or create websites.</span>
-        </div>
-        <div class="absolute bottom-0 w-full py-5 bg-secondary">
-            <div class="flex justify-center md:justify-end items-center container mx-auto my-5 px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-center items-center">
-                    <span class="font-black text-3xl opacity-5 select-none">Wo-r &copy; 2021-<span id="copyright"></span></span>
-                </div>
-            </div>
-        </div>
+    <body class="nunito">
+        <!--<h1 class="text-8xl font-black">Welcome!</h1>-->
+        <!--TODO:-->
     </body>
-    <script src="thirdparty/jquery.js"></script>
-    <script src="script.js" defer></script>
+    <script src="./src/thirdparty/jquery.js"></script>
+    <script src="./src/script.js"></script>
 </html>
