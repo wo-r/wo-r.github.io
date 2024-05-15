@@ -70,44 +70,19 @@
         }
     })
 
-    $('[tooltip]').each(function() {
-        var tooltipText = $(this).attr('tooltip');
-        $(this).addClass('relative inline-block');
-        $(this).append(`<div class="tooltip pointer-events-none hidden absolute w-max mt-14 z-10 p-3 bg-white shadow-xl text-black text-sm rounded-lg">${tooltipText}</div>`);
-    
-        $(this).on('mouseenter', function() {
-            var $tooltip = $(this).find('.tooltip');
-            $tooltip.fadeIn(200, function () {
-                $(this).attr("style", "")
-                $(this).removeClass('hidden');
-            })
+    $(document).on("scroll", function() {
+        if ($(".bar").first()[0].getBoundingClientRect().top >= 0 && 
+            $(".bar").first()[0].getBoundingClientRect().left >= 0 && 
+            $(".bar").first()[0].getBoundingClientRect().bottom <= $(window).height() && 
+            $(".bar").first()[0].getBoundingClientRect().right <= $(window).width()) {
+            
+            $(".bar").each(function() {
+                console.log(this)
+                var bar = $(this);
+                var percentage = bar.attr("to");
         
-            var rect = this.getBoundingClientRect();
-            var top = rect.top + window.scrollY;
-            var bottom = rect.bottom + window.scrollY;
-            var left = rect.left + window.scrollX;
-            var right = rect.right + window.scrollX;
-            var windowWidth = window.innerWidth;
-            var windowHeight = window.innerHeight;
-        
-            if (left < windowWidth / 2) {
-                $tooltip.addClass('right-full transform translate-x-full');
-            } else {
-                $tooltip.addClass('right-full');
-            }
-        
-            if (top < windowHeight / 2) {
-                $tooltip.addClass('top-full transform -translate-y-full');
-            } else {
-                $tooltip.addClass('bottom-full mb-3');
-            }
-        });
-    
-        $(this).on('mouseleave', function() {
-            $(this).find('.tooltip').fadeOut(200, function () {
-                $(this).attr("style", "")
-                $(this).addClass('hidden');
+                bar.children().animate({ width: percentage }, 1000);
             });
-        });
+        }
     });
 })();
