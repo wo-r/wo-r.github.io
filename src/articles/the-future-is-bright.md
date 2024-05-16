@@ -20,3 +20,5 @@ let test = "test string";
 *italic*
 
 [link](https://example.com)
+
+![image](https://avatars.githubusercontent.com/u/78428114)
