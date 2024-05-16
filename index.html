@@ -12,6 +12,19 @@
         <meta name="author" content="Wo-r">
         <!---->
         <script src="./src/thirdparty/tailwind.js"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            "brown": "#494327",
+                            "brown-light": "#766a37",
+                            "brown-accent": "#968613"
+                        },
+                    }
+                }
+            }
+        </script>
         <style>
             @font-face {
                 font-family: "Nunito";
@@ -121,17 +134,13 @@
                             </div>
                         </div>
                         <div class="flex flex-col sm:flex-row gap-10">
-                            <div class="flex flex-1">
-                                <div goto="https://github.com/wo-r-professional/fallout-4-codes" class="flex transition hover:transform-gpu hover:scale-105 flex-1 flex-col bg-white p-10 shadow-xl">
-                                    <h2 class="text-2xl font-black text-brown">Fallout 4 Codes (F4C)</h2>
-                                    <span class="font-semibold">A website that lets you easily find any item code from fallout 4 to use in the console.</span>
-                                </div>
+                            <div goto="https://github.com/wo-r-professional/fallout-4-codes" class="flex transition hover:transform-gpu hover:scale-105 flex-1 flex-col bg-white p-10 shadow-xl">
+                                <h2 class="text-2xl font-black text-brown">Fallout 4 Codes (F4C)</h2>
+                                <span class="font-semibold">A website that lets you easily find any item code from fallout 4 to use in the console.</span>
                             </div>
-                            <div class="flex flex-1">
-                                <div goto="https://github.com/wo-r-professional/arturo-sandoval-project" class="flex transition hover:transform-gpu hover:scale-105 flex-1 flex-col bg-white p-10 shadow-xl">
-                                    <h2 class="text-2xl font-black text-brown">Arturo Sandoval Project</h2>
-                                    <span class="font-semibold">Created for a spanish project—also my first tailwind website—to easily show who Arturo Sandoval is, and why I love him as a trumpet player.</span>
-                                </div>
+                            <div goto="https://github.com/wo-r-professional/arturo-sandoval-project" class="flex transition hover:transform-gpu hover:scale-105 flex-1 flex-col bg-white p-10 shadow-xl">
+                                <h2 class="text-2xl font-black text-brown">Arturo Sandoval Project</h2>
+                                <span class="font-semibold">Created for a spanish project—also my first tailwind website—to easily show who Arturo Sandoval is, and why I love him as a trumpet player.</span>
                             </div>
                         </div>
                     </div>
@@ -288,7 +297,6 @@
                 </div>
             </div>
         </div>
-        <!--TODO:-->
     </body>
     <script src="./src/thirdparty/jquery.js"></script>
     <script src="./src/script.js"></script>
