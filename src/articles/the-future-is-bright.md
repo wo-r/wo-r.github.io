@@ -12,7 +12,8 @@ SUBHEAD::[I was thinking about it, and I'm kinda in a really good spot right now
 text
 
 ```js
-let test = "test string";
+const KEY = `sha92894093`;
+console.log(KEY); // Output: sha92894093
 ```
 
 **bold**
@@ -22,3 +23,5 @@ let test = "test string";
 [link](https://example.com)
 
 ![image](https://avatars.githubusercontent.com/u/78428114)
+
+
