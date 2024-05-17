@@ -10,16 +10,6 @@ I must say, this is significantly better than the original articles page. It's c
 This part of the website contains things that I thought should be read by others, for any reason. One of the most important ideas of this section is that people can find things about coding problems that I had to face as a learning programmer. It also contains anything that I just think of.
 
 # Keep going
-<br>
-
-```js
-(async function () {
-  "use strict";
-
-  console.log("hello world!");
-})();
-```
-
 I feel like we all start somewhere we don't like, and have to correct it. I certaintly feel like that when I code. I feel like I am doing the right thing, then it suddenly hits me in the face with the "ERRRR, that ain't right". It's just annoying. Yet I still code and advance my development in it. Why? **Just do it**, Like actually. It can't get better if you don't power through it. Which is why it feels like hell sometimes, it just means you gotta keep trying at it. Eventually you will get it. 
 
 Take this for example:
