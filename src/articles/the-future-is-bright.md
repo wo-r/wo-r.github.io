@@ -1,6 +1,6 @@
 <!--
 HEAD::[The future is bright 😄]
-SUBHEAD::[I was thinking about it, and I'm kinda in a really good spot right now with my projects. Like literally my school wants me to make things for th...]
+SUBHEAD::[The articles page is awesome now, which makes me think of something. Lets talk about the way you probably should cod...]
 DATE::[May 16th, 2024]
 -->
 # Firstly
@@ -10,6 +10,8 @@ I must say, this is significantly better than the original articles page. It's c
 This part of the website contains things that I thought should be read by others, for any reason. One of the most important ideas of this section is that people can find things about coding problems that I had to face as a learning programmer. It also contains anything that I just think of.
 
 # Keep going
+<br>
+
 ```js
 (async function () {
   "use strict";
