@@ -24,6 +24,10 @@
         }
       
         item.append(circle);
+
+        circle.on("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", function() {
+            circle.remove();
+        });
     });
 
 
@@ -43,14 +47,16 @@
     })
 
     $("#menu").click(async function (e) {
-        if (!$("#menu svg:first-child").hasClass("hidden") && $("#menu svg:last-child").hasClass("hidden")) {
-            $("#menu svg:first-child").addClass("hidden").parent().find("svg:last-child").removeClass("hidden");
+        if (!$($(e.target).parent().find("svg")[0]).hasClass("hidden") && $($(e.target).parent().find("svg")[1]).hasClass("hidden")) {
+            $($(e.target).parent().find("svg")[0]).addClass("hidden")
+            $($(e.target).parent().find("svg")[1]).removeClass("hidden")
             $("#menu--target").fadeIn(200, function () {
                 $(this).removeClass("hidden");
                 $(this).attr("style", "")
             });
         } else {
-            $("#menu svg:first-child").removeClass("hidden").parent().find("svg:last-child").addClass("hidden");
+            $($(e.target).parent().find("svg")[0]).removeClass("hidden")
+            $($(e.target).parent().find("svg")[1]).addClass("hidden")
             $("#menu--target").fadeOut(200, function () {
                 $(this).addClass("hidden");
                 $(this).attr("style", "")
