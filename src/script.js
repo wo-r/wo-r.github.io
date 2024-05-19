@@ -61,11 +61,33 @@
             });
         }
     })
+    
+    function checkWindowSize() {
+        if ($(window).width() <= 640) {
+            $("[sidemenu]").addClass("absolute right-0 top-0 bottom-0");
+            $("[sidemenu]").prepend(`<div class="fixed inset-0 bg-black bg-opacity-50"></div>`)
+        } else {
+            $("[sidemenu]").removeClass("absolute right-0 top-0 bottom-0");
+            $("[sidemenu]").find(`.fixed.inset-0.bg-black.bg-opacity-50`).remove();
+        }
+    }
+
+    checkWindowSize();
+
+    $(window).resize(checkWindowSize);
+
+    if (localStorage.getItem("sidemenu-opened") != undefined && localStorage.getItem("sidemenu-opened") == "true") {
+        $("[sidemenu-btn]").addClass("invisible");
+        $("[sidemenu]").removeClass("invisible")
+        $("[sidemenu-btn]").parent().find("a:first-child").addClass("invisible");
+        $("[sidemenu]").css("width", `280px`);
+    }
 
     $("[sidemenu-btn], [sidemenu-close-btn]").click(async function (e) {
         if ($($(e.target).parent().find("svg")[0]).find("path").attr("d").length == 233) {
+            $("[sidemenu]").removeClass("invisible")
             $("[sidemenu-btn]").addClass("invisible");
-            $("[sidemenu-btn").parent().find("a:first-child").addClass("invisible");
+            $("[sidemenu-btn]").parent().find("a:first-child").addClass("invisible");
             let w = 0;
             let interval = setInterval(() => {
                 if (w >= 280) {
@@ -75,18 +97,22 @@
                     $("[sidemenu]").css("width", `${w}px`);
                 }
             })
+            localStorage.setItem("sidemenu-opened", true);
         } else  {
             let w = 280;
             let interval = setInterval(() => {
                 if (w <= 0) {
                     clearInterval(interval)
+                    $("[sidemenu]").addClass("invisible")
+                    $("[sidemenu-btn]").removeClass("invisible");
+                    $("[sidemenu-btn]").parent().find("a:first-child").removeClass("invisible");
                 } else {
                     w -= 20;
                     $("[sidemenu]").css("width", `${w}px`);
                 }
             })
-            $("[sidemenu-btn]").removeClass("invisible");
-            $("[sidemenu-btn").parent().find("a:first-child").removeClass("invisible");
+
+            localStorage.setItem("sidemenu-opened", false);
         }
     })
 

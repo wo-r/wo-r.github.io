@@ -27,32 +27,36 @@
     <body class="relative min-h-screen box-border bg-brown-dark text-zinc-300">
         <div class="h-[100vh]">
             <div class="flex flex-row-reverse h-full w-full">
-                <div sidemenu class="flex-shrink-0 overflow-x-hidden bg-brown-darker" style="width: 0px;">
+                <div sidemenu class="flex-shrink-0 overflow-x-hidden bg-brown-darker z-50 invisible" style="width: 0px;">
                     <div class="h-full w-[280px]">
                         <div class="flex h-full min-h-0 flex-col">
-                            <div class="relative overflow-hidden h-full w-full">
-                                <div class="flex justify-between py-3 px-4">
-                                    <a class="cursor-pointer">
-                                        <div ripple class="relative overflow-hidden hover:bg-brown-light hover:bg-opacity-20 transition rounded-xl">
-                                            <svg class="p-2" viewbox="-14 -1000 1000 1000" width="45px" height="45px">    
-                                                <path class="fill-zinc-300 pointer-events-none" d="M330-54q-57 0-96.5-38.8T194-190v-44h-30q-57 0-96.5-39.5T28-370v-144q0-68 47.04-116T189-678h582q68.17 0 114.59 48Q932-582 932-514v144q0 57-39.5 96.5T796-234h-30v44q0 58.4-39.5 97.2Q687-54 630-54H330Zm436-670H194v-29q0-58.4 39.5-97.2Q273-889 330-889h300q57 0 96.5 38.8T766-753v29Zm-76.5 321q25.5 0 42.5-16.81 17-16.82 17-41.69 0-25.5-16.81-43T689.5-522q-24.5 0-42 17.5t-17.5 43q0 24.5 17.5 41.5t42 17ZM330-183h300v-64H330v64Z">
-                                            </svg>
+                            <div class="flex h-full min-h-0 flex-col">
+                                <div class="relative h-full w-full flex-1 items-start">
+                                    <div class="flex h-full w-full flex-col">
+                                        <div class="flex justify-between py-3 px-4">
+                                            <a class="cursor-pointer">
+                                                <div ripple class="relative overflow-hidden hover:bg-brown-light hover:bg-opacity-20 transition rounded-xl z-20">
+                                                    <svg class="p-2" viewbox="-14 -1000 1000 1000" width="45px" height="45px">    
+                                                        <path class="fill-zinc-300 pointer-events-none" d="M330-54q-57 0-96.5-38.8T194-190v-44h-30q-57 0-96.5-39.5T28-370v-144q0-68 47.04-116T189-678h582q68.17 0 114.59 48Q932-582 932-514v144q0 57-39.5 96.5T796-234h-30v44q0 58.4-39.5 97.2Q687-54 630-54H330Zm436-670H194v-29q0-58.4 39.5-97.2Q273-889 330-889h300q57 0 96.5 38.8T766-753v29Zm-76.5 321q25.5 0 42.5-16.81 17-16.82 17-41.69 0-25.5-16.81-43T689.5-522q-24.5 0-42 17.5t-17.5 43q0 24.5 17.5 41.5t42 17ZM330-183h300v-64H330v64Z">
+                                                    </svg>
+                                                </div>
+                                            </a>
+                                            <a sidemenu-close-btn class="cursor-pointer">
+                                                <div ripple class="relative overflow-hidden hover:bg-brown-light hover:bg-opacity-20 transition rounded-xl z-20">
+                                                    <svg class="p-2" viewbox="0 0 50 45" width="45px" height="45px">    
+                                                        <path class="fill-zinc-300 pointer-events-none" d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z">
+                                                    </svg>
+                                                </div>
+                                            </a>
                                         </div>
-                                    </a>
-                                    <a sidemenu-close-btn class="cursor-pointer">
-                                        <div ripple class="relative overflow-hidden hover:bg-brown-light hover:bg-opacity-20 transition rounded-xl z-20">
-                                            <svg class="p-2" viewbox="0 0 50 45" width="45px" height="45px">    
-                                                <path class="fill-zinc-300 pointer-events-none" d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z">
-                                            </svg>
+                                        <div class="flex flex-col gap-[10px] overflow-y-auto">
+                                            <div class="flex flex-col gap-1 py-3 px-4">
+                                                <span class="font-black text-zinc-400 text-sm px-3">NAVIGATION</span>
+                                                <a goto="/" ripple class="relative overflow-hidden z-20 py-2 px-3 font-bold hover:bg-brown-light hover:bg-opacity-20 transition rounded-lg">Home</a>
+                                                <a goto="/articles" ripple class="relative overflow-hidden z-20 py-2 px-3 font-bold hover:bg-brown-light hover:bg-opacity-20 transition rounded-lg">Articles</a>
+                                                <a goto="/resume" ripple class="relative overflow-hidden z-20 py-2 px-3 font-bold hover:bg-brown-light hover:bg-opacity-20 transition rounded-lg">Resume</a>
+                                            </div>
                                         </div>
-                                    </a>
-                                </div>
-                                <div class="flex flex-col gap-[10px]">
-                                    <div class="flex flex-col gap-1 py-3 px-4">
-                                        <span class="font-black text-zinc-400 text-sm px-3">NAVIGATION</span>
-                                        <a goto="/" ripple class="relative overflow-hidden py-2 px-3 font-bold hover:bg-brown-light hover:bg-opacity-20 transition rounded-lg">Home</a>
-                                        <a goto="/articles" ripple class="relative overflow-hidden py-2 px-3 font-bold hover:bg-brown-light hover:bg-opacity-20 transition rounded-lg">Articles</a>
-                                        <a goto="/resume" ripple class="relative overflow-hidden py-2 px-3 font-bold hover:bg-brown-light hover:bg-opacity-20 transition rounded-lg">Resume</a>
                                     </div>
                                 </div>
                             </div>
@@ -81,6 +85,14 @@
                                     </svg>
                                 </div>
                             </a>
+                        </div>
+                    </div>
+                    <div class="py-3 z-10 px-4 container mx-auto">
+                        <div class="flex flex-col justify-center items-center h-[55vh]">
+                            <div class="text-6xl sm:text-9xl font-black">
+                                My Resume
+                            </div>
+                            <span></span>
                         </div>
                     </div>
                 </div>
