@@ -21,48 +21,69 @@
         <script src="/src/thirdparty/highlight.js" defer></script>
         <link rel="preload" href="/src/thirdparty/tailwind.js" as="script">
         <script src="/src/thirdparty/tailwind.js"></script>
-        <script>tailwind.config={theme:{extend:{colors:{"brown":"#494327","brown-dark":"#0a0a08","brown-light":"#766a37","brown-accent":"#968613"}}}}</script>
-        <style>@font-face{font-family:"Nunito";src:url("./src/nunito.ttf")format("truetype");}html,body{font-family:"Nunito";}::-webkit-scrollbar{width:0px;height:0px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:transparent;}.ripple{position:absolute;background:rgba(92, 83, 19, 0.8)!important;border-radius:50%;transform:scale(0);animation:ripple 600ms linear;}@keyframes ripple{to{transform:scale(4);opacity:0;}}</style>
+        <script>tailwind.config={theme:{extend:{colors:{"brown":"#494327","brown-darker":"#030302","brown-dark":"#0a0a08","brown-light":"#766a37","brown-accent":"#968613"}}}}</script>
+        <style>@font-face{font-family:"Nunito";src:url("./src/nunito.ttf")format("truetype");}html,body{font-family:"Nunito";}::-webkit-scrollbar{width:0px;height:0px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:transparent;}.ripple{position:absolute;background:rgba(92, 83, 19, 0.8)!important;border-radius:50%;transform:scale(0);animation:ripple 600ms linear;z-index: -1;}@keyframes ripple{to{transform:scale(4);opacity:0;}}</style>
     </head>
     <body class="relative min-h-screen box-border bg-brown-dark text-zinc-300">
-        <div>
-            <div navigator class="flex flex-row justify-between items-center py-3 z-10 px-4">
-                <div class="relative overflow-hidden flex flex-2 items-center rounded-full">
-                    <a ripple class="cursor-pointer p-1 transition rounded-full hover:bg-brown-light hover:bg-opacity-20" goto="https://github.com/wo-r?tab=repositories">
-                        <img class="h-8 rounded-full shadow-xl pointer-events-none" src="https://avatars.githubusercontent.com/u/78428114"/>
-                    </a>
-                </div>
-                <div class="flex flex-2 hidden sm:flex flex-row gap-2">
-                    <button goto="/" ripple class="px-3 py-2 hover:bg-brown-light hover:bg-opacity-20 transition font-bold rounded-lg shadow-xl cursor-default relative overflow-hidden">Home</button>
-                    <button goto="/articles" ripple class="px-3 py-2 hover:bg-brown-light hover:bg-opacity-20 transition font-bold rounded-lg shadow-xl relative overflow-hidden">Articles</button>
-                    <button goto="/resume" ripple class="px-3 py-2 hover:bg-brown-light hover:bg-opacity-20 transition font-bold rounded-lg shadow-xl relative overflow-hidden">Resume</button>
-                </div>
-                <div class="block sm:hidden">
-                    <a id="menu" class="cursor-pointer">
-                        <div ripple class="relative overflow-hidden hover:bg-brown-light hover:bg-opacity-20 transition rounded-xl">
-                            <svg class="p-2" viewbox="0 0 50 45" width="45px" height="45px">    
-                                <path class="fill-zinc-300" d="M 5 8 A 2.0002 2.0002 0 1 0 5 12 L 45 12 A 2.0002 2.0002 0 1 0 45 8 L 5 8 z M 5 23 A 2.0002 2.0002 0 1 0 5 27 L 45 27 A 2.0002 2.0002 0 1 0 45 23 L 5 23 z M 5 38 A 2.0002 2.0002 0 1 0 5 42 L 45 42 A 2.0002 2.0002 0 1 0 45 38 L 5 38 z">
-                            </svg>
-                        </div>
-                        <div ripple class="relative overflow-hidden hover:bg-brown-light hover:bg-opacity-20 transition rounded-xl">
-                            <svg class="hidden p-2" viewbox="0 0 50 45" width="45px" height="45px">    
-                                <path class="fill-zinc-300" d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z">
-                            </svg>
-                        </div>
-                    </a>
-                </div>
-                <div id="menu--target" class="hidden sm:hidden absolute top-[5rem] left-0 right-0 px-4 container mx-auto">
-                    <div class="bg-zinc-200 w-full h-full rounded-xl shadow-2xl p-5">
-                        <div class="flex flex-col w-fit">
-                            <a goto="/" class="py-2 text-black font-bold hover:text-brown-light hover:underline transition">Home</a>
-                            <a goto="/articles" class="py-2 text-black font-bold hover:text-brown-light hover:underline transition">Articles</a>
-                            <a goto="/resume" class="py-2 text-black font-bold hover:text-brown-light hover:underline transition">Resume</a>
+        <div class="h-[100vh]">
+            <div class="flex flex-row-reverse h-full w-full">
+                <div sidemenu class="flex-shrink-0 overflow-x-hidden bg-brown-darker" style="width: 0px;">
+                    <div class="h-full w-[280px]">
+                        <div class="flex h-full min-h-0 flex-col">
+                            <div class="relative overflow-hidden h-full w-full">
+                                <div class="flex justify-between py-3 px-4">
+                                    <a class="cursor-pointer">
+                                        <div ripple class="relative overflow-hidden hover:bg-brown-light hover:bg-opacity-20 transition rounded-xl">
+                                            <svg class="p-2" viewbox="-14 -1000 1000 1000" width="45px" height="45px">    
+                                                <path class="fill-zinc-300 pointer-events-none" d="M330-54q-57 0-96.5-38.8T194-190v-44h-30q-57 0-96.5-39.5T28-370v-144q0-68 47.04-116T189-678h582q68.17 0 114.59 48Q932-582 932-514v144q0 57-39.5 96.5T796-234h-30v44q0 58.4-39.5 97.2Q687-54 630-54H330Zm436-670H194v-29q0-58.4 39.5-97.2Q273-889 330-889h300q57 0 96.5 38.8T766-753v29Zm-76.5 321q25.5 0 42.5-16.81 17-16.82 17-41.69 0-25.5-16.81-43T689.5-522q-24.5 0-42 17.5t-17.5 43q0 24.5 17.5 41.5t42 17ZM330-183h300v-64H330v64Z">
+                                            </svg>
+                                        </div>
+                                    </a>
+                                    <a sidemenu-close-btn class="cursor-pointer">
+                                        <div ripple class="relative overflow-hidden hover:bg-brown-light hover:bg-opacity-20 transition rounded-xl z-20">
+                                            <svg class="p-2" viewbox="0 0 50 45" width="45px" height="45px">    
+                                                <path class="fill-zinc-300 pointer-events-none" d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z">
+                                            </svg>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="flex flex-col gap-[10px]">
+                                    <div class="flex flex-col gap-1 py-3 px-4">
+                                        <span class="font-black text-zinc-400 text-sm px-3">NAVIGATION</span>
+                                        <a goto="/" ripple class="relative overflow-hidden py-2 px-3 font-bold hover:bg-brown-light hover:bg-opacity-20 transition rounded-lg">Home</a>
+                                        <a goto="/articles" ripple class="relative overflow-hidden py-2 px-3 font-bold hover:bg-brown-light hover:bg-opacity-20 transition rounded-lg">Articles</a>
+                                        <a goto="/resume" ripple class="relative overflow-hidden py-2 px-3 font-bold hover:bg-brown-light hover:bg-opacity-20 transition rounded-lg">Resume</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="">
-                
+                <div class="flex h-full max-w-full flex-1 flex-col">
+                    <div navigator class="flex flex-row justify-between items-center py-3 z-10 px-4">
+                        <div class="relative overflow-hidden flex flex-2 items-center rounded-full">
+                            <a ripple class="cursor-pointer p-1 transition rounded-full hover:bg-brown-light hover:bg-opacity-20" goto="https://github.com/wo-r?tab=repositories">
+                                <img class="h-8 rounded-full shadow-xl pointer-events-none" src="https://avatars.githubusercontent.com/u/78428114"/>
+                            </a>
+                        </div>
+                        <div class="flex flex-row gap-2">
+                            <a class="cursor-pointer">
+                                <div ripple class="relative overflow-hidden hover:bg-brown-light hover:bg-opacity-20 transition rounded-xl">
+                                    <svg class="p-2" viewbox="-14 -1000 1000 1000" width="45px" height="45px">    
+                                        <path class="fill-zinc-300 pointer-events-none" d="M330-54q-57 0-96.5-38.8T194-190v-44h-30q-57 0-96.5-39.5T28-370v-144q0-68 47.04-116T189-678h582q68.17 0 114.59 48Q932-582 932-514v144q0 57-39.5 96.5T796-234h-30v44q0 58.4-39.5 97.2Q687-54 630-54H330Zm436-670H194v-29q0-58.4 39.5-97.2Q273-889 330-889h300q57 0 96.5 38.8T766-753v29Zm-76.5 321q25.5 0 42.5-16.81 17-16.82 17-41.69 0-25.5-16.81-43T689.5-522q-24.5 0-42 17.5t-17.5 43q0 24.5 17.5 41.5t42 17ZM330-183h300v-64H330v64Z">
+                                    </svg>
+                                </div>
+                            </a>
+                            <a sidemenu-btn class="cursor-pointer">
+                                <div ripple class="relative overflow-hidden hover:bg-brown-light hover:bg-opacity-20 transition rounded-xl">
+                                    <svg class="p-2" viewbox="0 0 50 45" width="45px" height="45px">    
+                                        <path class="fill-zinc-300 pointer-events-none" d="M 5 8 A 2.0002 2.0002 0 1 0 5 12 L 45 12 A 2.0002 2.0002 0 1 0 45 8 L 5 8 z M 5 23 A 2.0002 2.0002 0 1 0 5 27 L 45 27 A 2.0002 2.0002 0 1 0 45 23 L 5 23 z M 5 38 A 2.0002 2.0002 0 1 0 5 42 L 45 42 A 2.0002 2.0002 0 1 0 45 38 L 5 38 z">
+                                    </svg>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <script src="/src/script.js" defer></script>

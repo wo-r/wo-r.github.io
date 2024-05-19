@@ -47,20 +47,46 @@
     })
 
     $("#menu").click(async function (e) {
-        if (!$($(e.target).parent().find("svg")[0]).hasClass("hidden") && $($(e.target).parent().find("svg")[1]).hasClass("hidden")) {
-            $($(e.target).parent().find("svg")[0]).addClass("hidden")
-            $($(e.target).parent().find("svg")[1]).removeClass("hidden")
+        if (!$("#menu svg:first-child").hasClass("hidden") && $("#menu svg:last-child").hasClass("hidden")) {
+            $("#menu svg:first-child").addClass("hidden").parent().find("svg:last-child").removeClass("hidden");
             $("#menu--target").fadeIn(200, function () {
                 $(this).removeClass("hidden");
                 $(this).attr("style", "")
             });
         } else {
-            $($(e.target).parent().find("svg")[0]).removeClass("hidden")
-            $($(e.target).parent().find("svg")[1]).addClass("hidden")
+            $("#menu svg:first-child").removeClass("hidden").parent().find("svg:last-child").addClass("hidden");
             $("#menu--target").fadeOut(200, function () {
                 $(this).addClass("hidden");
                 $(this).attr("style", "")
             });
+        }
+    })
+
+    $("[sidemenu-btn], [sidemenu-close-btn]").click(async function (e) {
+        if ($($(e.target).parent().find("svg")[0]).find("path").attr("d").length == 233) {
+            $("[sidemenu-btn]").addClass("invisible");
+            $("[sidemenu-btn").parent().find("a:first-child").addClass("invisible");
+            let w = 0;
+            let interval = setInterval(() => {
+                if (w >= 280) {
+                    clearInterval(interval)
+                } else {
+                    w += 20;
+                    $("[sidemenu]").css("width", `${w}px`);
+                }
+            })
+        } else  {
+            let w = 280;
+            let interval = setInterval(() => {
+                if (w <= 0) {
+                    clearInterval(interval)
+                } else {
+                    w -= 20;
+                    $("[sidemenu]").css("width", `${w}px`);
+                }
+            })
+            $("[sidemenu-btn]").removeClass("invisible");
+            $("[sidemenu-btn").parent().find("a:first-child").removeClass("invisible");
         }
     })
 
