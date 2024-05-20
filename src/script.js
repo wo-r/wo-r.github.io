@@ -40,11 +40,58 @@
         else if ($(this).attr("goto").includes("#") && $(this).attr("goto").length > 1) {
             event.preventDefault();
             let offset = $(`${$(this).attr("goto")}`).offset().top;
-            $('html, body').animate({
+            $(".py-3.z-10.px-4.container.mx-auto.overflow-x-scroll").animate({
                 scrollTop: offset - 50
             }, 800)
         }
     })
+
+    $("[tip]").each(function() {
+        var tip = $("<div>")
+            .addClass("fixed text-1xl w-max text-leading px-4 py-2 text-center bg-brown-light rounded-lg shadow-lg transition tooltip")
+            .text($(this).attr("tip"))
+            .css(
+                "transform", 
+                "translate(" + 
+                    ($(this).is("[tip-left]") ? "calc(-100%)" : "-45%") + ", " + 
+                    ($(this).is("[tip-bottom]") ? "calc(-100%)" : "80%") + 
+                ")"
+            );
+    
+        $(this).append(tip);
+
+        $(this).on("mousemove", function(e) {
+            var windowWidth = $(window).width();
+            var tooltipWidth = $(".tooltip").outerWidth();
+
+            if ($(window).width() >= 820) {
+                // Adjust tooltip position if it is too close to the right edge
+                if (e.clientX + tooltipWidth > windowWidth) {
+                    $(".tooltip").css({
+                        transform: "translate(-100%, " + ($(this).is("[tip-bottom]") ? "calc(-100%)" : "80%") + ")"
+                    });
+                } else if (e.clientX < tooltipWidth) {
+                    // Adjust tooltip position if it is too close to the left edge
+                    $(".tooltip").css({
+                        transform: "translate(0, " + ($(this).is("[tip-bottom]") ? "calc(-100%)" : "80%") + ")"
+                    });
+                } else {
+                    $(".tooltip").css({
+                        transform: "translate(" + 
+                            ($(this).is("[tip-left]") ? "calc(-100%)" : "-45%") + ", " + 
+                            ($(this).is("[tip-bottom]") ? "calc(-100%)" : "80%") + 
+                        ")"
+                    });
+                }
+                
+
+                $(".tooltip").css({
+                    left: e.clientX + "px",
+                    top: e.clientY + "px"
+                });
+            }
+        });
+    });
 
     $("#menu").click(async function (e) {
         if (!$("#menu svg:first-child").hasClass("hidden") && $("#menu svg:last-child").hasClass("hidden")) {
@@ -66,7 +113,22 @@
         if ($(window).width() <= 820) {
             $("[sidemenu]").addClass("absolute right-0 top-0 bottom-0");
             if (!$("[sidemenu]").find(".fixed.inset-0.bg-black.bg-opacity-50").length) {
-                $("[sidemenu]").prepend(`<div class="fixed inset-0 bg-black bg-opacity-50"></div>`)
+                $("[sidemenu]").prepend(`<div class="fixed inset-0 bg-black bg-opacity-50"></div>`).off().click(async function () {
+                    let w = 280;
+                    let interval = setInterval(() => {
+                        if (w <= 0) {
+                            clearInterval(interval)
+                            $("[sidemenu]").addClass("invisible")
+                            $("[sidemenu-btn]").removeClass("invisible");
+                            $("[sidemenu-btn]").parent().find("a:first-child").removeClass("invisible");
+                        } else {
+                            w -= 20;
+                            $("[sidemenu]").css("width", `${w}px`);
+                        }
+                    })
+
+                    localStorage.setItem("sidemenu-opened", false);
+                })
             }
         } else {
             $("[sidemenu]").removeClass("absolute right-0 top-0 bottom-0");
@@ -231,7 +293,7 @@
                         else if ($(this).attr("goto").includes("#") && $(this).attr("goto").length > 1) {
                             event.preventDefault();
                             let offset = $(`${$(this).attr("goto")}`).offset().top;
-                            $('html, body').animate({
+                            $("html, body").animate({
                                 scrollTop: offset - 50
                             }, 800)
                         }
@@ -257,20 +319,9 @@
             top: event.clientY + "px"
         });
 
-        var $image = $('.tilt');
-        
-        var windowCenterX = $(window).width() / 2;
-        var windowCenterY = $(window).height() / 2;
-        
-        var mouseX = event.pageX;
-        var mouseY = event.pageY;
-        
-        var deltaX = mouseX - windowCenterX;
-        var deltaY = mouseY - windowCenterY;
-        
-        var rotateX = (deltaY / windowCenterY) * 40;
-        var rotateY = (deltaX / windowCenterX) * -40;
-        
-        $image.css('transform', 'rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg)');   
+        let shiftX = (event.pageX - $(window).width() / 2) / $(window).width() * 10;
+        let shiftY = (event.pageY - $(window).height() / 2) / $(window).height() * 10;
+  
+        $(".shift").css("transform", `translate(${shiftX}px, ${shiftY}px)`);
     });
 })();

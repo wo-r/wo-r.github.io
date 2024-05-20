@@ -23,6 +23,18 @@
         <script src="/src/thirdparty/tailwind.js"></script>
         <script>tailwind.config={theme:{extend:{colors:{"brown":"#494327","brown-darker":"#030302","brown-dark":"#0a0a08","brown-light":"#766a37","brown-accent":"#968613"}}}}</script>
         <style>@font-face{font-family:"Nunito";src:url("./src/nunito.ttf")format("truetype");}html,body{font-family:"Nunito";}::-webkit-scrollbar{width:0px;height:0px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:transparent;}.ripple{position:absolute;background:rgba(92, 83, 19, 0.8)!important;border-radius:50%;transform:scale(0);animation:ripple 600ms linear;z-index: -1;}@keyframes ripple{to{transform:scale(4);opacity:0;}}.gradient-cursor {width: 5000px;height: 5000px;background: radial-gradient(circle, rgba(150, 135, 19, 0.024), rgba(118, 108, 55, 0.382));pointer-events: none;border-radius: 50%;transform: translate(-50%, -50%);filter: blur(10000px);}</style>
+        <style>
+            [tip] .tooltip {
+                visibility: hidden;
+                opacity: 0;
+            }
+
+            [tip]:hover .tooltip {
+                visibility: visible;
+                opacity: 1;
+            }
+        </style>
+    
     </head>
     <body class="relative min-h-screen box-border bg-brown-dark text-zinc-300">
         <div gradient-cursor class="invisible sm:visible fixed gradient-cursor"></div>
@@ -67,13 +79,13 @@
                 <div class="flex h-full max-w-full flex-1 flex-col">
                     <div navigator class="flex flex-row justify-between items-center py-3 z-10 px-4 transition">
                         <div class="relative overflow-hidden flex flex-2 items-center rounded-full">
-                            <a ripple class="cursor-pointer p-1 transition rounded-full hover:bg-brown-light hover:bg-opacity-20" goto="https://github.com/wo-r?tab=repositories">
-                                <img class="h-8 rounded-full shadow-xl pointer-events-none" src="https://avatars.githubusercontent.com/u/78428114"/>
+                            <a ripple tip="Checkout my github here!" class="cursor-pointer p-1 transition rounded-full hover:bg-brown-light hover:bg-opacity-20" goto="https://github.com/wo-r?tab=repositories">
+                                <img class="h-8 rounded-full shadow-xl pointer-events-none" src="/src/logo/logo-full.jpg"/>
                             </a>
                         </div>
                         <div class="flex flex-row gap-2">
                             <a class="cursor-pointer">
-                                <div ripple class="relative overflow-hidden hover:bg-brown-light hover:bg-opacity-20 transition rounded-xl">
+                                <div ripple tip="View my resume in full here!" class="relative overflow-hidden hover:bg-brown-light hover:bg-opacity-20 transition rounded-xl">
                                     <svg class="p-2" viewbox="-14 -1000 1000 1000" width="45px" height="45px">    
                                         <path class="fill-zinc-300 pointer-events-none" d="M330-54q-57 0-96.5-38.8T194-190v-44h-30q-57 0-96.5-39.5T28-370v-144q0-68 47.04-116T189-678h582q68.17 0 114.59 48Q932-582 932-514v144q0 57-39.5 96.5T796-234h-30v44q0 58.4-39.5 97.2Q687-54 630-54H330Zm436-670H194v-29q0-58.4 39.5-97.2Q273-889 330-889h300q57 0 96.5 38.8T766-753v29Zm-76.5 321q25.5 0 42.5-16.81 17-16.82 17-41.69 0-25.5-16.81-43T689.5-522q-24.5 0-42 17.5t-17.5 43q0 24.5 17.5 41.5t42 17ZM330-183h300v-64H330v64Z">
                                     </svg>
@@ -101,14 +113,18 @@
                                 </div>
                                 <div class="hidden flex-1 lg:flex">
                                     <div class="flex flex-col justify-center items-end w-full">
-                                        <img class="rounded-2xl shadow-lg transition tilt" src="/src/logo/logo-full.jpg">
+                                        <img class="rounded-2xl shadow-lg transition shift" src="/src/logo/logo-full.jpg">
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="flex flex-col justify-center mt-[40vh]">
-
-                            
+                        <div class="flex flex-col justify-center mt-[30vh]">
+                            <h1 id="learn-more" class="font-black text-5xl sm:text-7xl">About Me</h1>
+                            <span class="mt-10 font-bold">My coding adventures started sometime around 2019. It originally started as a little joke because of my weird ambitions, making these weird template websites from a service called <b class="font-bold text-brown-accent">NicePage</b>. One such thing was this website called <b class="font-bold text-brown-accent">Virtia</b>, a <i>"Made For Custom VPN Addresses, Used For Chromebooks As A Way To Block Common Web Blockers"</i> website. Yeaaaaaaa, I have no clue what I was trying to do back then.</span>
+                            <span class="mt-5 font-bold">After that weird start to my programming development, I had actually learn't how to make websites from raw HTML. This sparked projects like <a class="transition text-brown-accent hover:underline" goto="https://github.com/wo-r/Vote-Ralph">Vote-Ralph</a>, <a class="transition text-brown-accent hover:underline" goto="https://github.com/wo-r/soldier-island-display">Soldier Island Display</a>, and <b class="font-bold text-brown-accent">Jxzy</b> (a privated github repo that would attempt to crash your browser).</span>
+                            <span class="mt-5 font-bold">Realising that I was pretty good at adapting to programming, I started to get more ambitious. I eventually found this free web hosting website called <b class="font-bold text-brown-accent">000Webhost</b>, ran and supported by <b class="font-bold text-brown-accent">Hostinger</b>. It allowed me to learn <b class="font-bold text-brown-accent">SQL</b> and <b class="font-bold text-brown-accent">PHP</b>. I made many websites, but unfortunately they were not saved :(</span>
+                            <span class="mt-5 font-bold">Around 2021, I had started to get very annoyed by <b class="font-bold text-brown-accent">Echo</b>&HorizontalLine;a LMS website&HorizontalLine;ran by <b class="font-bold text-brown-accent">Agilix</b> that our school used for school work, and grading. I started to making very complex google extensions like <b class="font-bold text-brown-accent">Themius</b> (privated), <b class="font-bold text-brown-accent">CustomSkins</b> (privated), <a class="transition text-brown-accent hover:underline" goto="https://github.com/wo-r-professional/echo-plus">Echo-Plus</a>, and recently <a class="transition text-brown-accent hover:underline" goto="https://github.com/gradpass/gradpass.github.io">Gradpass</a>. All attempting to fix and create a better experience using Echo. And with each iteration, my programming experience doubled. It's genuinely been a learning curve at every step, which I have pushed through time and time again.</span>
+                            <span class="mt-5 font-bold">Its now 2024 and I have experience is just about any frontend language, and could possibly learn more backend if needed. I'm very flexible, and very capable. I can figure out a problem, and solve it in a relativitly managable time. And in general, I just love coding. I will always do it, no matter how complex or frustrating it is.</span>
                         </div>
                     </div>
                 </div>
