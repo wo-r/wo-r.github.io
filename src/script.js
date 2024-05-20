@@ -33,7 +33,7 @@
 
     $("[goto]").addClass("cursor-pointer");
     $("[goto]").on("click", function (event) {
-        if ($(this).attr("goto").includes("//"))
+        if ($(this).attr("goto").includes("//") || $(this).attr("goto").includes("mailto:"))
             window.open($(this).attr("goto"), "_blank")
         else if ($(this).attr("goto").includes("/") && !$(this).attr("goto").includes("//"))
             window.location.href = $(this).attr("goto");
@@ -63,9 +63,11 @@
     })
     
     function checkWindowSize() {
-        if ($(window).width() <= 640) {
+        if ($(window).width() <= 820) {
             $("[sidemenu]").addClass("absolute right-0 top-0 bottom-0");
-            $("[sidemenu]").prepend(`<div class="fixed inset-0 bg-black bg-opacity-50"></div>`)
+            if (!$("[sidemenu]").find(".fixed.inset-0.bg-black.bg-opacity-50").length) {
+                $("[sidemenu]").prepend(`<div class="fixed inset-0 bg-black bg-opacity-50"></div>`)
+            }
         } else {
             $("[sidemenu]").removeClass("absolute right-0 top-0 bottom-0");
             $("[sidemenu]").find(`.fixed.inset-0.bg-black.bg-opacity-50`).remove();
@@ -246,4 +248,6 @@
             $("#articles").find(".loading").append(`<div class="flex flex-col justify-center items-center h-[55vh] font-semibold">Failed to get articles!</div>`);
         }
     }
+
+    $("[calculate-year]").html(new Date().getFullYear() - 2019)
 })();
