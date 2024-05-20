@@ -250,4 +250,27 @@
     }
 
     $("[calculate-year]").html(new Date().getFullYear() - 2019)
+
+    $(document).mousemove(function(event) {
+        $("[gradient-cursor]").css({
+            left: event.clientX + "px",
+            top: event.clientY + "px"
+        });
+
+        var $image = $('.tilt');
+        
+        var windowCenterX = $(window).width() / 2;
+        var windowCenterY = $(window).height() / 2;
+        
+        var mouseX = event.pageX;
+        var mouseY = event.pageY;
+        
+        var deltaX = mouseX - windowCenterX;
+        var deltaY = mouseY - windowCenterY;
+        
+        var rotateX = (deltaY / windowCenterY) * 40;
+        var rotateY = (deltaX / windowCenterX) * -40;
+        
+        $image.css('transform', 'rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg)');   
+    });
 })();
