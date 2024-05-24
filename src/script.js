@@ -64,94 +64,45 @@
             var windowWidth = $(window).width();
             var tooltipWidth = $(".tooltip").outerWidth();
 
-            if ($(window).width() >= 820) {
-                // Adjust tooltip position if it is too close to the right edge
-                if (e.clientX + tooltipWidth > windowWidth) {
-                    $(".tooltip").css({
-                        transform: "translate(-100%, " + ($(this).is("[tip-bottom]") ? "calc(-100%)" : "80%") + ")"
-                    });
-                } else if (e.clientX < tooltipWidth) {
-                    // Adjust tooltip position if it is too close to the left edge
-                    $(".tooltip").css({
-                        transform: "translate(0, " + ($(this).is("[tip-bottom]") ? "calc(-100%)" : "80%") + ")"
-                    });
-                } else {
-                    $(".tooltip").css({
-                        transform: "translate(" + 
-                            ($(this).is("[tip-left]") ? "calc(-100%)" : "-45%") + ", " + 
-                            ($(this).is("[tip-bottom]") ? "calc(-100%)" : "80%") + 
-                        ")"
-                    });
-                }
-                
-
+            // Adjust tooltip position if it is too close to the right edge
+            if (e.clientX + tooltipWidth > windowWidth) {
                 $(".tooltip").css({
-                    left: e.clientX + "px",
-                    top: e.clientY + "px"
+                    transform: "translate(-100%, " + ($(this).is("[tip-bottom]") ? "calc(-100%)" : "80%") + ")"
+                });
+            } else if (e.clientX < tooltipWidth) {
+                // Adjust tooltip position if it is too close to the left edge
+                $(".tooltip").css({
+                    transform: "translate(0, " + ($(this).is("[tip-bottom]") ? "calc(-100%)" : "80%") + ")"
+                });
+            } else {
+                $(".tooltip").css({
+                    transform: "translate(" + 
+                        ($(this).is("[tip-left]") ? "calc(-100%)" : "-45%") + ", " + 
+                        ($(this).is("[tip-bottom]") ? "calc(-100%)" : "80%") + 
+                    ")"
                 });
             }
+            
+            $(".tooltip").css({
+                left: e.clientX + "px",
+                top: e.clientY + "px"
+            });
         });
     });
 
-    $("#menu").click(async function (e) {
-        if (!$("#menu svg:first-child").hasClass("hidden") && $("#menu svg:last-child").hasClass("hidden")) {
-            $("#menu svg:first-child").addClass("hidden").parent().find("svg:last-child").removeClass("hidden");
-            $("#menu--target").fadeIn(200, function () {
-                $(this).removeClass("hidden");
-                $(this).attr("style", "")
-            });
-        } else {
-            $("#menu svg:first-child").removeClass("hidden").parent().find("svg:last-child").addClass("hidden");
-            $("#menu--target").fadeOut(200, function () {
-                $(this).addClass("hidden");
-                $(this).attr("style", "")
-            });
-        }
-    })
-    
-    function checkWindowSize() {
-        if ($(window).width() <= 820) {
-            $("[sidemenu]").addClass("absolute right-0 top-0 bottom-0");
-            if (!$("[sidemenu]").find(".fixed.inset-0.bg-black.bg-opacity-50").length) {
-                $("[sidemenu]").prepend(`<div class="fixed inset-0 bg-black bg-opacity-50"></div>`).off().click(async function () {
-                    let w = 280;
-                    let interval = setInterval(() => {
-                        if (w <= 0) {
-                            clearInterval(interval)
-                            $("[sidemenu]").addClass("invisible")
-                            $("[sidemenu-btn]").removeClass("invisible");
-                            $("[sidemenu-btn]").parent().find("a:first-child").removeClass("invisible");
-                        } else {
-                            w -= 20;
-                            $("[sidemenu]").css("width", `${w}px`);
-                        }
-                    })
-
-                    localStorage.setItem("sidemenu-opened", false);
-                })
-            }
-        } else {
-            $("[sidemenu]").removeClass("absolute right-0 top-0 bottom-0");
-            $("[sidemenu]").find(`.fixed.inset-0.bg-black.bg-opacity-50`).remove();
-        }
-    }
-
-    checkWindowSize();
-
-    $(window).resize(checkWindowSize);
-
-    if (localStorage.getItem("sidemenu-opened") != undefined && localStorage.getItem("sidemenu-opened") == "true") {
-        $("[sidemenu-btn]").addClass("invisible");
-        $("[sidemenu]").removeClass("invisible")
-        $("[sidemenu-btn]").parent().find("a:first-child").addClass("invisible");
-        $("[sidemenu]").css("width", `280px`);
-    }
-
-    $("[sidemenu-btn], [sidemenu-close-btn]").click(async function (e) {
+    /**
+     * Determine if the sidemenu should open or close.
+     */
+    $("[sidemenu-btn], [sidemenu-close-btn], [sidemenu-backdrop]").click(async function (e) {
         if ($($(e.target).parent().find("svg")[0]).find("path").attr("d").length == 233) {
-            $("[sidemenu]").removeClass("invisible")
+            // Hide elements
+            $("[sidemenu-backdrop]").removeClass("hidden")
+            $("[sidemenu]").removeClass("invisible");
             $("[sidemenu-btn]").addClass("invisible");
+            $("[sidemenu-contents]").removeClass("sm:flex");
             $("[sidemenu-btn]").parent().find("a:first-child").addClass("invisible");
+
+            // Open menu
             let w = 0;
             let interval = setInterval(() => {
                 if (w >= 280) {
@@ -161,14 +112,16 @@
                     $("[sidemenu]").css("width", `${w}px`);
                 }
             })
-            localStorage.setItem("sidemenu-opened", true);
         } else  {
+            // Close menu
             let w = 280;
             let interval = setInterval(() => {
                 if (w <= 0) {
                     clearInterval(interval)
+                    $("[sidemenu-backdrop]").addClass("hidden")
                     $("[sidemenu]").addClass("invisible")
                     $("[sidemenu-btn]").removeClass("invisible");
+                    $("[sidemenu-contents]").addClass("sm:flex");
                     $("[sidemenu-btn]").parent().find("a:first-child").removeClass("invisible");
                 } else {
                     w -= 20;
@@ -176,7 +129,6 @@
                 }
             })
 
-            localStorage.setItem("sidemenu-opened", false);
         }
     })
 
