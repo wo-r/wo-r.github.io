@@ -16,14 +16,16 @@
                 theme: {
                     extend: {
                         fontFamily: {
-                            nunito: ['Nunito', 'sans-serif']
+                            nunito: ['Nunito', 'sans-serif'],
+                            nunitoblack: ['NunitoBlack', 'sans-serif']
                         },
                         colors: {
                             "brown": "#494327",
                             "brown-dark":"#0a0a08",
                             "brown-darker":"#030302",
                             "brown-light": "#766a37",
-                            "brown-accent": "#968613"
+                            "brown-accent": "#968613",
+                            "brown-accent-light": "#f5f69f"
                         }
                     }
                 }
@@ -36,7 +38,7 @@
             <div class="flex flex-row-reverse h-full w-full">
                 <div class="flex flex-row-reversed">
                     <div id="sidemenuBackdrop" class="hidden lg:hidden z-30 fixed inset-[-1000px] bg-black opacity-50 cursor-pointer"></div>
-                    <div id="sidemenu" class="z-50 flex-shrink-0 absolute bottom-0 top-0 lg:relative overflow-x-hidden bg-brown-darker" style="width: 0px;">
+                    <div id="sidemenu" class="z-50 flex-shrink-0 absolute bottom-0 top-0 right-0 lg:relative overflow-x-hidden bg-brown-darker" style="width: 0px;">
                         <div class="h-full w-[280px]">
                             <div class="flex h-full min-h-0 flex-col">
                                 <div class="h-full w-full flex-1 items-start">
@@ -65,31 +67,64 @@
                 </div>
                 <div class="flex h-full max-w-full flex-1 flex-col">
                     <div class="z-10 flex flex-col py-3 px-4">
-                        <div class="w-full flex flex-row-reverse justify-between items-center select-none">
+                        <div id="navbar" class="w-full flex flex-row-reverse justify-between items-center select-none">
                             <div class="flex flex-row gap-2">
                                 <a id="showResume" type="navbar" class="cursor-pointer">
-                                    <div ripple class="relative overflow-hidden hover:bg-brown-light hover:bg-opacity-20 transition rounded-xl z-20">
+                                    <div ripple class="relative overflow-hidden hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition rounded-xl z-20">
                                         <svg class="p-2 pt-[5px]" viewbox="-14 -1000 1000 1000" width="45px" height="45px">    
                                             <path class="fill-black pointer-events-none" d="M330-54q-57 0-96.5-38.8T194-190v-44h-30q-57 0-96.5-39.5T28-370v-144q0-68 47.04-116T189-678h582q68.17 0 114.59 48Q932-582 932-514v144q0 57-39.5 96.5T796-234h-30v44q0 58.4-39.5 97.2Q687-54 630-54H330Zm436-670H194v-29q0-58.4 39.5-97.2Q273-889 330-889h300q57 0 96.5 38.8T766-753v29Zm-76.5 321q25.5 0 42.5-16.81 17-16.82 17-41.69 0-25.5-16.81-43T689.5-522q-24.5 0-42 17.5t-17.5 43q0 24.5 17.5 41.5t42 17ZM330-183h300v-64H330v64Z">
                                         </svg>
                                     </div>
                                 </a>
                                 <a id="sidemenuToggle" type="open" class="cursor-pointer">
-                                    <div class="relative overflow-hidden hover:bg-brown-light hover:bg-opacity-20 transition rounded-xl">
+                                    <div class="relative overflow-hidden hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition rounded-xl">
                                         <svg class="p-2 pt-[5px]" viewbox="0 0 50 45" width="45px" height="45px">    
                                             <path class="fill-black pointer-events-none" d="M 5 8 A 2.0002 2.0002 0 1 0 5 12 L 45 12 A 2.0002 2.0002 0 1 0 45 8 L 5 8 z M 5 23 A 2.0002 2.0002 0 1 0 5 27 L 45 27 A 2.0002 2.0002 0 1 0 45 23 L 5 23 z M 5 38 A 2.0002 2.0002 0 1 0 5 42 L 45 42 A 2.0002 2.0002 0 1 0 45 38 L 5 38 z">
                                         </svg>
                                     </div>
                                 </a>
                             </div>
-                            <span>
-                                Test textsss
-                            </span>
+                            <div class="flex flex-row items-center">
+                                <a class="cursor-pointer">
+                                    <div ripple class="relative overflow-hidden hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition rounded-xl">
+                                        <img class="w-[45px] h-[45px] p-2 rounded-full" src="./src/logo/logo-full.jpg">
+                                    </div>
+                                </a>
+                            </div>
                         </div>
-                        <div class="p-2 mt-20">
-                            s
-                        </div>
-                    
+                        <div id="main" class="p-2 mt-5">
+                            <div class="flex flex-col lg:flex-row gap-2">
+                                <div class="bg-black rounded-xl p-10 w-full lg:w-fit flex-2 shadow-xl flex flex-col">
+                                    <h1 class="font-black font-nunitoblack leading-tight text-7xl transition-all">Welcome</h1>
+                                    <div class="text-md font-black text-wrap max-w-[80ch]">
+                                        I'm <b class="text-brown-accent-light">Braden</b>, known as <b class="text-brown-accent-light">Wo-r</b> online, and I'm a <b class="text-brown-accent-light">self taught programmer</b> who has probably spent way too much time learning the subject. This is my personal website, for anything related to me. It serves not only as my place in the online world, but also for my resume, and other important things for the future.
+                                    </div>
+                                    <div class="mt-auto w-full flex justify-end items-center">
+                                        <a class="cursor-pointer select-none">
+                                            <div ripple class="relative overflow-hidden hover:bg-brown-light transition rounded-lg">
+                                                <div class="w-[45px] h-[45px] p-2 w-fit pt-[10px]">Learn More</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2 w-full flex-1">
+                                    <div class="flex flex-col sm:flex-row md:flex-row lg:flex-col 2xl:flex-row gap-2">
+                                        <div class="bg-black rounded-xl p-10 flex-1 shadow-xl text-center w-full">
+                                            <h1 class="text-7xl font-nunitoblack">27</h1>
+                                            <div>
+                                                <h1 class="text-[12px] font-nunitoblack">Total Repos</h1>
+                                            </div>
+                                        </div>
+                                        <div class="bg-black rounded-xl p-10 flex-1 shadow-xl text-center w-full">
+                                            <h1 class="text-7xl font-nunitoblack">6</h1>
+                                            <div>
+                                                <h1 class="text-[12px] font-nunitoblack">Total Stars</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                        
                     </div>
                 </div>
             </div>

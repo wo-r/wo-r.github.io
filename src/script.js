@@ -8,6 +8,8 @@
         if ($(event.target).parent().parent().attr("type") == "open") {
             $("#sidemenuToggle[type=\"open\"]").addClass("invisible");
             $("#showResume[type=\"navbar\"]").addClass("invisible");
+            $("#navbar").addClass("hidden")
+            $("#main").removeClass("mt-5")
             $("#sidemenuBackdrop").removeClass("hidden")
             $("#sidemenu").removeClass("invisible");
 
@@ -27,6 +29,8 @@
                     clearInterval(increaseWidth);
                     $("#sidemenuToggle[type=\"open\"]").removeClass("invisible");
                     $("#showResume[type=\"navbar\"]").removeClass("invisible");
+                    $("#navbar").removeClass("hidden")
+                    $("#main").addClass("mt-5")
                     $("#sidemenuBackdrop").addClass("hidden")
                     $("#sidemenu").addClass("invisible");
                 } else {
@@ -56,10 +60,6 @@
 
         let rippleAnimate = rippleTarget.find(".ripple");
 
-        if (rippleAnimate.length > 0) {
-            rippleAnimate.remove();
-        }
-
         rippleTarget.append(rippleCircle);
         rippleCircle.on("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", async function () {
             rippleCircle.remove();
@@ -67,4 +67,5 @@
     })
 
     // TODO: Tips
+    
 })();
