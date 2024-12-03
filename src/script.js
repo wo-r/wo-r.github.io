@@ -5,6 +5,7 @@
 
     // Disabled
     $("[disabled]").each(async function () {
+        $(this).attr("tooltip", "This is currently not available")
         $(this).find("[ripple]").removeAttr("ripple")
         $(this).addClass("select-none cursor-not-allowed").on("click", async function (e) {
             e.preventDefault()
@@ -37,6 +38,7 @@
         $("#showResume[type=\"navbar\"]").addClass("invisible");
         $("#navbar").addClass("hidden")
         $("#main").removeClass("mt-5")
+        $("#navbar").addClass("hidden").parent().addClass("hidden")
         $("#sidemenuBackdrop").removeClass("hidden")
         $("#sidemenu").removeClass("invisible");
         $("#sidemenu").css("width", "280px")
@@ -47,7 +49,7 @@
             localStorage.setItem("sidemenu", true)
             $("#sidemenuToggle[type=\"open\"]").addClass("invisible");
             $("#showResume[type=\"navbar\"]").addClass("invisible");
-            $("#navbar").addClass("hidden")
+            $("#navbar").addClass("hidden").parent().addClass("hidden")
             $("#main").removeClass("mt-5")
             $("#sidemenuBackdrop").removeClass("hidden")
             $("#sidemenu").removeClass("invisible");
@@ -69,7 +71,7 @@
                     clearInterval(increaseWidth);
                     $("#sidemenuToggle[type=\"open\"]").removeClass("invisible");
                     $("#showResume[type=\"navbar\"]").removeClass("invisible");
-                    $("#navbar").removeClass("hidden")
+                    $("#navbar").removeClass("hidden").parent().removeClass("hidden")
                     $("#main").addClass("mt-5")
                     $("#sidemenuBackdrop").addClass("hidden")
                     $("#sidemenu").addClass("invisible");
@@ -106,6 +108,60 @@
         })
     })
 
-    // TODO: Tips
-    
+    // Tooltips
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0) {
+      return;
+    } else {
+        var tooltip = $('<div class="tooltip bg-brown-dark rounded-xl p-5 text-zinc-300 font-black z-50"></div>').appendTo('body');
+
+        var isTooltipVisible = false;
+
+        $(document).mousemove(function (event) {
+            if (isTooltipVisible) {
+                var tooltipWidth = tooltip.outerWidth();
+                var tooltipHeight = tooltip.outerHeight();
+
+                var mouseX = event.pageX;
+                var mouseY = event.pageY;
+
+                var tooltipX = mouseX + 10;
+                var tooltipY = mouseY + 10;
+
+                if (tooltipX + tooltipWidth > $(window).width()) {
+                    tooltipX = mouseX - tooltipWidth - 10;
+                }
+
+                if (tooltipY + tooltipHeight > $(window).height()) {
+                    tooltipY = mouseY - tooltipHeight - 10;
+                }
+
+                if (tooltipX < 0) {
+                    tooltipX = 10; 
+                }
+
+                if (tooltipY < 0) {
+                    tooltipY = mouseY + 10;
+                }
+
+                tooltip.css({
+                    left: tooltipX,
+                    top: tooltipY
+                });
+            }
+        });
+
+        // Hover event to show the tooltip
+        $('[tooltip]').hover(function () {
+            var $this = $(this);
+            var tooltipText = $this.attr('tooltip');
+
+            tooltip.text(tooltipText);
+
+            tooltip.addClass('show');
+            isTooltipVisible = true;
+        }, function () {
+            tooltip.removeClass('show');
+            isTooltipVisible = false;
+        });
+    }
 })();

@@ -13,6 +13,10 @@
 }
 
 
+::selection {
+    background: #766a37;
+}
+
 
 ::-webkit-scrollbar {
     width: 0px;
@@ -53,15 +57,20 @@ b {
 
 
 
-[tip] .tooltip {
-    visibility: hidden;
+.tooltip {
+    position: absolute;
+    padding: 0.5rem;
     opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-[tip]:hover .tooltip {
-    visibility: visible;
+.tooltip.show {
     opacity: 1;
+    transform: scale(1);
 }
+
 
 
 
