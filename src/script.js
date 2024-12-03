@@ -3,9 +3,48 @@
      * Copyright Wo-r 2019
      */
 
+    // Disabled
+    $("[disabled]").each(async function () {
+        $(this).find("[ripple]").removeAttr("ripple")
+        $(this).addClass("select-none cursor-not-allowed").on("click", async function (e) {
+            e.preventDefault()
+        })
+    })
+
+    // Goto
+    $("[goto]").click(async function () {
+        if ($(this).attr("disabled") != undefined)
+            return;
+
+        if ($(this).attr("goto").includes("https://")) {
+            window.open($(this).attr("goto"), "_blank");
+        } else if ($(this).attr("goto").startsWith("#")) {
+            const targetElement = $($(this).attr("goto"));
+            if (targetElement.length) {
+                $("html, body").animate(
+                    { scrollTop: targetElement.offset().top },
+                    500
+                );
+            }
+        } else if ($(this).attr("goto").startsWith("/")) {
+            window.location.href = `${$(this).attr("goto")}`;
+        }
+    });
+
     // Sidemenu
+    if (localStorage.getItem("sidemenu") != null && localStorage.getItem("sidemenu") == "true") {
+        $("#sidemenuToggle[type=\"open\"]").addClass("invisible");
+        $("#showResume[type=\"navbar\"]").addClass("invisible");
+        $("#navbar").addClass("hidden")
+        $("#main").removeClass("mt-5")
+        $("#sidemenuBackdrop").removeClass("hidden")
+        $("#sidemenu").removeClass("invisible");
+        $("#sidemenu").css("width", "280px")
+    }
+
     $("#sidemenuToggle,#sidemenuBackdrop").on("click mousedown", async function (event) {
         if ($(event.target).parent().parent().attr("type") == "open") {
+            localStorage.setItem("sidemenu", true)
             $("#sidemenuToggle[type=\"open\"]").addClass("invisible");
             $("#showResume[type=\"navbar\"]").addClass("invisible");
             $("#navbar").addClass("hidden")
@@ -23,6 +62,7 @@
                 }
             })
         } else {
+            localStorage.setItem("sidemenu", false)
             let menuWidth = 280;
             let increaseWidth = setInterval(async function () {
                 if (menuWidth == 0) {
