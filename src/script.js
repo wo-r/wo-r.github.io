@@ -7,7 +7,7 @@
     $("[disabled]").each(async function () {
         $(this).attr("tooltip", "This is currently not available")
         $(this).find("[ripple]").removeAttr("ripple")
-        $(this).addClass("select-none cursor-not-allowed").on("click", async function (e) {
+        $(this).children().addClass("hover:opacity-20").parent().addClass("select-none cursor-not-allowed").on("click", async function (e) {
             e.preventDefault()
         })
     })
@@ -33,12 +33,23 @@
     });
 
     // Sidemenu
+    $(window).resize(async function () {
+        if ($(window).width() > 1024 && (localStorage.getItem("sidemenu") != null && localStorage.getItem("sidemenu") == "true")) {
+            $("#main").removeClass("mt-5")
+            $("#navbar").addClass("hidden").parent().addClass("hidden")
+        } else {
+            $("#navbar").removeClass("hidden").parent().removeClass("hidden")
+            $("#main").addClass("mt-5")
+        }
+    })
+
     if (localStorage.getItem("sidemenu") != null && localStorage.getItem("sidemenu") == "true") {
         $("#sidemenuToggle[type=\"open\"]").addClass("invisible");
         $("#showResume[type=\"navbar\"]").addClass("invisible");
-        $("#navbar").addClass("hidden")
-        $("#main").removeClass("mt-5")
-        $("#navbar").addClass("hidden").parent().addClass("hidden")
+        if ($(window).width() > 1024) {
+            $("#main").removeClass("mt-5")
+            $("#navbar").addClass("hidden").parent().addClass("hidden")
+        }
         $("#sidemenuBackdrop").removeClass("hidden")
         $("#sidemenu").removeClass("invisible");
         $("#sidemenu").css("width", "280px")
@@ -84,30 +95,36 @@
     })
 
     // Ripple
-    $("[ripple]").on("mousedown", async function (event) {
-        let rippleTarget = $(this);
-
-        let rippleCircle = $("<span></span>");
-        let rippleDiameter = Math.max(rippleTarget.width(), rippleTarget.height());
-        let rippleRadius = rippleDiameter / 2;
-
-        rippleCircle.css({
-            width: rippleDiameter,
-            height: rippleDiameter,
-            left: event.clientX - rippleTarget.offset().left - rippleRadius,
-            left: event.clientY - rippleTarget.offset().top - rippleRadius
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0) {
+        return;
+    } else {
+        $("[ripple]").on("mousedown", async function (event) {
+            let rippleTarget = $(this);
+        
+            let rippleCircle = $("<span></span>");
+            let rippleDiameter = Math.max(rippleTarget.width(), rippleTarget.height());
+            let rippleRadius = rippleDiameter / 2;
+        
+            // Corrected positioning logic
+            let offsetX = event.clientX - rippleTarget.offset().left - rippleRadius;
+            let offsetY = event.clientY - rippleTarget.offset().top - rippleRadius;
+        
+            rippleCircle.css({
+                width: rippleDiameter,
+                height: rippleDiameter,
+                left: offsetX,
+                top: offsetY
+            });
+        
+            rippleCircle.addClass("ripple");
+        
+            rippleTarget.append(rippleCircle);
+            rippleCircle.on("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", function () {
+                rippleCircle.remove();
+            });
         });
-
-        rippleCircle.addClass("ripple");
-
-        let rippleAnimate = rippleTarget.find(".ripple");
-
-        rippleTarget.append(rippleCircle);
-        rippleCircle.on("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", async function () {
-            rippleCircle.remove();
-        })
-    })
-
+    }
+    
     // Tooltips
     if ('ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0) {
       return;
