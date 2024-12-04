@@ -44,9 +44,9 @@
                                 <div class="h-full w-full flex-1 items-start">
                                     <div class="flex h-full w-full flex-col">
                                         <div class="flex justify-between py-3 px-4">
-                                            <a class="cursor-pointer" tooltip="View my github page">
+                                            <a goto="https://github.com/wo-r" class="cursor-pointer" tooltip="View my github page">
                                                 <div ripple class="relative overflow-hidden hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition rounded-xl">
-                                                    <img goto="https://github.com/wo-r" class="w-[45px] h-[45px] p-2 rounded-full" src="./src/logo/logo-full.jpg">
+                                                    <img class="w-[45px] h-[45px] p-2 rounded-full" src="./src/logo/logo-full.jpg">
                                                 </div>
                                             </a>
                                             <div class="flex flex-row gap-2">
@@ -143,9 +143,9 @@
                                 </a>
                             </div>
                             <div class="flex flex-row items-center">
-                                <a class="cursor-pointer" tooltip="View my github page">
+                                <a goto="https://github.com/wo-r" class="cursor-pointer" tooltip="View my github page">
                                     <div ripple class="relative overflow-hidden hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition rounded-xl">
-                                        <img goto="https://github.com/wo-r" class="w-[45px] h-[45px] p-2 rounded-full" src="./src/logo/logo-full.jpg">
+                                        <img class="w-[45px] h-[45px] p-2 rounded-full" src="./src/logo/logo-full.jpg">
                                     </div>
                                 </a>
                             </div>
@@ -159,7 +159,7 @@
                                         <h1 popup fast class="text-8xl font-nunitoblack font-black leading-tight tracking-tight">Welcome</h1>
                                         <span popup extremelyFast class="flex flex-row gap-x-1 flex-wrap justify-center lg:justify-start items-center lg:items-start">This is my personal website, designed and curated by me to serve as the hub for everything related to me. This includes my resume, certifications, and education, as well as my personal blogs and other miscellaneous content.</span>    
                                     </div>
-                                    <div class="flex flex-row justify-center items-center mt-10 lg:mt-0">
+                                    <div class="flex flex-row justify-center items-center mt-10 lg:mt-0 select-none">
                                         <div class="bg-brown-dark p-[1px] h-full mx-12 hidden lg:block transition-all"></div>
                                         <div class="flex flex-col flex-2 items-center justify-center">
                                             <h1 id="totalFollowers" popup moderate class="text-8xl font-nunitoblack font-black leading-tight tracking-tight">0</h1>
@@ -179,23 +179,23 @@
                                             <h1 popup fast class="flex flex-row gap-x-3 flex-wrap text-5xl font-nunitoblack font-black leading-tight tracking-tight">Learn about me</h1>
                                             <span popup extremelyFast class="flex flex-row gap-x-1 flex-wrap justify-center lg:justify-start items-center lg:items-start">Curious about who I am, and what I do? Select one of the options below to get started.</span>    
                                         </div>
-                                        <div class="flex flex-col lg:flex-row justify-between mt-5 gap-2">
+                                        <div class="flex flex-col lg:flex-row justify-between mt-5 gap-2 select-none">
                                             <a goto="#" class="cursor-pointer flex-1 text-center">
-                                                <div ripple class="relative overflow-hidden p-10 font-black bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                <div class="relative overflow-hidden p-10 font-black bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full flex items-center justify-center">
                                                     Who am I?
                                                 </div>
                                             </a>
-                                            <a goto="#" class="cursor-pointer flex-1 lg:flex-2 text-center">
-                                                <div ripple class="relative overflow-hidden p-10 font-black bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                            <a goto="#" class="cursor-pointer flex-1 text-center">
+                                                <div class="relative overflow-hidden p-10 font-black bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full flex items-center justify-center">
                                                     Best Projects
                                                 </div>
                                             </a>
-                                            <a goto="#" class="cursor-pointer flex-1 lg:flex-2 text-center">
-                                                <div ripple class="relative overflow-hidden p-10 font-black bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                            <a goto="#" class="cursor-pointer flex-1 text-center">
+                                                <div class="relative overflow-hidden p-10 font-black bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full flex items-center justify-center">
                                                     Languages
                                                 </div>
                                             </a>
-                                        </div>
+                                        </div>                                        
                                     </div>
                                     <div class="p-10 bg-brown-darker rounded-xl flex-1">
                                         <div class="flex flex-col flex-1 items-center lg:items-start">
@@ -203,13 +203,33 @@
                                             <span popup extremelyFast class="flex flex-row gap-x-1 flex-wrap justify-center lg:justify-start items-center lg:items-start">Want to know what I'm curious about? Check out some of my blogs to see what I like.</span>        
                                         </div>
                                         <div class="flex flex-row justify-center items-center mt-5 gap-2">
-                                            <a class="p-10">Currently there are no blogs, just you wait though!</a>
+                                            <a class="p-10">Currently there are no blogs, but just you wait though!</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="w-full flex justify-center items-center mt-[30px]">
+                                <a goto="#who-am-i" type="sidemenu" class="cursor-pointer">
+                                    <div ripple class="relative overflow-hidden hover:bg-brown-light hover:bg-opacity-20 transition rounded-xl z-20">
+                                        <svg class="p-2 pt-[7px]" viewbox="-14 -1000 1000 1000" width="45px" height="45px">    
+                                            <path class="fill-zinc-300 pointer-events-none" d="M480.44-333q-13.44 0-26.04-5.55-12.6-5.54-22.4-15.45L247-538q-19-19.8-19-47.4 0-27.6 19.5-47.6t47.5-20q28 0 47 20l138 138 138-138q20.04-20 48.02-20 27.98 0 47.48 20 19.5 20 19.5 47.6T713-538L529-354q-9.83 9.91-22.47 15.45-12.64 5.55-26.09 5.55Z">
+                                        </svg>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="w-full mt-[300px]">
+                                <div class="flex flex-row gap-2">
+                                    <div class="p-2 bg-brown-darker rounded-xl flex-2">
+                                        <img class="w-[20vh] lg:w-[37vh] rounded-xl" src="./src/logo/portrait.jpg">
+                                    </div>
+                                    <div id="who-am-i" class="p-10 bg-brown-darker rounded-xl flex-1">
+                                        <h1 popup fast class="flex flex-row gap-x-3 flex-wrap text-8xl font-nunitoblack font-black leading-tight tracking-tight invisible">Who am I?</h1>
+                                        <span popup extremelyFast class="flex flex-row gap-x-1 flex-wrap justify-center lg:justify-start items-center lg:items-start invisible">My name is Braden, also known as Wo-r online. I'm a self taught programmer with over 4 years of experience, coding a wide range of things from simple javascript websites to fully developed websites with php, apis, backends, and even sql. I do pretty much anything I set my mind too, so even if its something I've never tried before, I will keep going at it until I get it right, or get it to at least function the way I intended. I love programming, to the point that its probably unhealthy, but hey, its fun at least.</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
+                        
 
                         <div class="bg-brown-darker select-none flex-2">
                             <div class="py-5 px-6 w-full">Footer</div>

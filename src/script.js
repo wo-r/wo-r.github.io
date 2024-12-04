@@ -3,6 +3,39 @@
      * Copyright Wo-r 2019
      */
 
+    // Get github followers, and repositorys
+    try {
+        const userUrls = [
+            "wo-r",
+            "wo-r-professional",
+            "gradpass"
+        ];
+
+        await $.get("https://api.github.com/users/wo-r", function (data) {
+            const followersCount = data.followers;
+            $("#totalFollowers").text(followersCount);
+        }).fail(function () {
+            $("#totalFollowers").text("0");
+        });
+
+        let repositoriesCount = 0;
+        let usersProcessed = 0;
+        userUrls.forEach(async function (username) {
+            await $.get(`https://api.github.com/users/${username}/repos?per_page=100`, function (data) {
+                repositoriesCount += data.length;
+                usersProcessed++;
+                if (usersProcessed === userUrls.length) {
+                    $("#totalRepos").text(repositoriesCount);
+                }
+            }).fail(function () {
+                usersProcessed++;
+                if (usersProcessed === userUrls.length) {
+                    $("#totalRepos").text(repositoriesCount);
+                }
+            });
+        });
+    } catch (e) {}
+
     // Disabled
     $("[disabled]").each(async function () {
         $(this).attr("tooltip", "This is currently not available")
@@ -13,7 +46,7 @@
     })
 
     // Goto
-    $("[goto]").click(async function () {
+    $("[goto]").on("click", async function () {
         if ($(this).attr("disabled") != undefined)
             return;
 
@@ -22,10 +55,9 @@
         } else if ($(this).attr("goto").startsWith("#")) {
             const targetElement = $($(this).attr("goto"));
             if (targetElement.length) {
-                $("html, body").animate(
-                    { scrollTop: targetElement.offset().top },
-                    500
-                );
+                $("#main").parent().animate({
+                    scrollTop: targetElement.offset().top
+                }, 800);
             }
         } else if ($(this).attr("goto").startsWith("/")) {
             window.location.href = `${$(this).attr("goto")}`;
@@ -33,23 +65,11 @@
     });
 
     // Sidemenu
-    $(window).resize(async function () {
-        if ($(window).width() > 1024 && (localStorage.getItem("sidemenu") != null && localStorage.getItem("sidemenu") == "true")) {
-            $("#main").removeClass("mt-5")
-            $("#navbar").addClass("hidden").parent().addClass("hidden")
-        } else {
-            $("#navbar").removeClass("hidden").parent().removeClass("hidden")
-            $("#main").addClass("mt-5")
-        }
-    })
-
     if (localStorage.getItem("sidemenu") != null && localStorage.getItem("sidemenu") == "true") {
         $("#sidemenuToggle[type=\"open\"]").addClass("invisible");
         $("#showResume[type=\"navbar\"]").addClass("invisible");
-        if ($(window).width() > 1024) {
-            $("#main").removeClass("mt-5")
-            $("#navbar").addClass("hidden").parent().addClass("hidden")
-        }
+        $("#main").removeClass("mt-5")
+        $("#navbar").addClass("hidden").parent().addClass("hidden")
         $("#sidemenuBackdrop").removeClass("hidden")
         $("#sidemenu").removeClass("invisible");
         $("#sidemenu").css("width", "280px")
@@ -70,6 +90,13 @@
                 if (menuWidth >= 280) {
                     clearInterval(increaseWidth);
                 } else {
+                    // Check if the #main width gets smaller than specific tailwind container sizes
+                    if ($("#main").width() < 1280 && $(window).width() > 1280) { // XL
+                        $("#main").find("[class*=\"lg:\"]").each(async function () {
+                            $(this).attr("class", $(this).attr("class").replace("lg:", "1xl:"))
+                        })
+                    }
+
                     menuWidth += 20;
                     $("#sidemenu").css("width", `${menuWidth}px`)
                 }
@@ -87,6 +114,10 @@
                     $("#sidemenuBackdrop").addClass("hidden")
                     $("#sidemenu").addClass("invisible");
                 } else {
+                    $("#main").find("[class*=\"1xl:\"]").each(async function () {
+                        $(this).attr("class", $(this).attr("class").replace("1xl:", "lg:"))
+                    })
+
                     menuWidth -= 20;
                     $("#sidemenu").css("width", `${menuWidth}px`)
                 }
@@ -184,10 +215,12 @@
 
     // Popup text
     function animatePopupText(element) {
+        $(element).removeClass("invisible")
+
         var text = $(element).text();
         var wrappedText = '';
         var speed = 'slow'; // Default speed
-    
+
         // Check for speed attribute and set the speed accordingly
         if ($(element).attr('fast') !== undefined) {
             speed = 'fast';
@@ -198,7 +231,7 @@
         } else if ($(element).attr('extremelyFast') !== undefined) {
             speed = 'extremelyFast';
         }
-    
+
         // Adjust the delay based on the speed
         var delay;
         switch (speed) {
@@ -217,12 +250,12 @@
             default:
                 delay = 200; // slow by default
         }
-    
+
         // Split the text into words and wrap each word in a span
         var words = text.split(' ');
         for (var i = 0; i < words.length; i++) {
             if (words[i].trim()) { // Ignore empty spaces if any
-                wrappedText += '<div class="popup-word flex flex-row gap-[.5px]">';
+                wrappedText += '<div class="popup-word flex flex-row">';
                 for (var j = 0; j < words[i].length; j++) {
                     wrappedText += '<span class="popup-letter">' + words[i][j] + '</span>';
                 }
@@ -231,9 +264,9 @@
                 wrappedText += '<span class="popup-letter">&nbsp;</span>'; // For multiple spaces
             }
         }
-    
+
         $(element).html(wrappedText);
-    
+
         // Animate each letter
         $(element).find('.popup-letter').each(function (index) {
             $(this).delay(delay * index).queue(function (next) {
@@ -242,7 +275,7 @@
             });
         });
     }
-    
+
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -251,10 +284,8 @@
             }
         });
     }, { threshold: 0.5 });
-    
+
     $('[popup]').each(function () {
         observer.observe(this);
     });
-    
-    
 })();
