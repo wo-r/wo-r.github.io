@@ -100,34 +100,34 @@
     } else {
         $("[ripple]").on("mousedown", async function (event) {
             let rippleTarget = $(this);
-        
+
             let rippleCircle = $("<span></span>");
             let rippleDiameter = Math.max(rippleTarget.width(), rippleTarget.height());
             let rippleRadius = rippleDiameter / 2;
-        
+
             // Corrected positioning logic
             let offsetX = event.clientX - rippleTarget.offset().left - rippleRadius;
             let offsetY = event.clientY - rippleTarget.offset().top - rippleRadius;
-        
+
             rippleCircle.css({
                 width: rippleDiameter,
                 height: rippleDiameter,
                 left: offsetX,
                 top: offsetY
             });
-        
+
             rippleCircle.addClass("ripple");
-        
+
             rippleTarget.append(rippleCircle);
             rippleCircle.on("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", function () {
                 rippleCircle.remove();
             });
         });
     }
-    
+
     // Tooltips
     if ('ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0) {
-      return;
+        return;
     } else {
         var tooltip = $('<div class="tooltip bg-brown-dark rounded-xl p-5 text-zinc-300 font-black z-50"></div>').appendTo('body');
 
@@ -153,7 +153,7 @@
                 }
 
                 if (tooltipX < 0) {
-                    tooltipX = 10; 
+                    tooltipX = 10;
                 }
 
                 if (tooltipY < 0) {
@@ -181,4 +181,80 @@
             isTooltipVisible = false;
         });
     }
+
+    // Popup text
+    function animatePopupText(element) {
+        var text = $(element).text();
+        var wrappedText = '';
+        var speed = 'slow'; // Default speed
+    
+        // Check for speed attribute and set the speed accordingly
+        if ($(element).attr('fast') !== undefined) {
+            speed = 'fast';
+        } else if ($(element).attr('moderate') !== undefined) {
+            speed = 'moderate';
+        } else if ($(element).attr('veryFast') !== undefined) {
+            speed = 'veryFast';
+        } else if ($(element).attr('extremelyFast') !== undefined) {
+            speed = 'extremelyFast';
+        }
+    
+        // Adjust the delay based on the speed
+        var delay;
+        switch (speed) {
+            case 'fast':
+                delay = 50;
+                break;
+            case 'moderate':
+                delay = 100;
+                break;
+            case 'veryFast':
+                delay = 30;
+                break;
+            case 'extremelyFast':
+                delay = 5;
+                break;
+            default:
+                delay = 200; // slow by default
+        }
+    
+        // Split the text into words and wrap each word in a span
+        var words = text.split(' ');
+        for (var i = 0; i < words.length; i++) {
+            if (words[i].trim()) { // Ignore empty spaces if any
+                wrappedText += '<div class="popup-word flex flex-row gap-[.5px]">';
+                for (var j = 0; j < words[i].length; j++) {
+                    wrappedText += '<span class="popup-letter">' + words[i][j] + '</span>';
+                }
+                wrappedText += '</div> ';
+            } else {
+                wrappedText += '<span class="popup-letter">&nbsp;</span>'; // For multiple spaces
+            }
+        }
+    
+        $(element).html(wrappedText);
+    
+        // Animate each letter
+        $(element).find('.popup-letter').each(function (index) {
+            $(this).delay(delay * index).queue(function (next) {
+                $(this).addClass('show');
+                next();
+            });
+        });
+    }
+    
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animatePopupText(entry.target);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    $('[popup]').each(function () {
+        observer.observe(this);
+    });
+    
+    
 })();

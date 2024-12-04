@@ -24,7 +24,7 @@
         self.useGPU = true;
         self.className = null;
         self.snowColor = "#494327";
-        self.snowCharacter = "<div class='w-full transition-all animate-spin'>&bull;</div>";
+        self.snowCharacter = "<div class='w-full transition-all animate-spin select-none'>&bull;</div>";
         self.snowStick = true;
         self.targetElement = $("body")[0];
         self.useMeltEffect = true;
@@ -179,7 +179,10 @@
         };
 
         // Initialize snowfall
-        self.init();
+        if (self.excludeMobile == true && ('ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0))
+            return
+        else
+            self.init();
     };
 
     // Start SnowStorm instance

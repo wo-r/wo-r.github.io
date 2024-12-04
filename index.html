@@ -37,8 +37,8 @@
         <div class="h-[100vh]">
             <div class="flex flex-row-reverse h-full w-full">
                 <div class="flex flex-row-reversed">
-                    <div id="sidemenuBackdrop" class="hidden lg:hidden z-30 fixed inset-[-1000px] bg-black opacity-50 cursor-pointer"></div>
-                    <div id="sidemenu" class="z-50 flex-shrink-0 absolute bottom-0 top-0 right-0 lg:relative overflow-x-hidden bg-brown-darker select-none" style="width: 0px;">
+                    <div id="sidemenuBackdrop" class="hidden xl:hidden z-30 fixed inset-[-1000px] bg-black opacity-50 cursor-pointer"></div>
+                    <div id="sidemenu" class="z-50 flex-shrink-0 absolute bottom-0 top-0 right-0 xl:relative overflow-x-hidden bg-brown-darker select-none" style="width: 0px;">
                         <div class="h-full w-[280px]">
                             <div class="flex h-full min-h-0 flex-col">
                                 <div class="h-full w-full flex-1 items-start">
@@ -151,13 +151,69 @@
                             </div>
                         </div>
                     </div>
-                    <div class="z-10 flex flex-col py-3 px-4">
-                        <div id="main" class="p-2 mt-5">
-                            
-                              
-                            
-                            
-                        </div>                        
+                    <div class="z-10 flex flex-col overflow-scroll relative h-full">
+                        <div id="main" class="py-5 px-6 mt-5 flex-1">
+                            <div class="flex flex-col gap-2">
+                                <div class="p-10 bg-brown-darker rounded-xl h-min flex flex-col lg:flex-row">
+                                    <div class="flex flex-col flex-1 items-center lg:items-start">
+                                        <h1 popup fast class="text-8xl font-nunitoblack font-black leading-tight tracking-tight">Welcome</h1>
+                                        <span popup extremelyFast class="flex flex-row gap-x-1 flex-wrap justify-center lg:justify-start items-center lg:items-start">This is my personal website, designed and curated by me to serve as the hub for everything related to me. This includes my resume, certifications, and education, as well as my personal blogs and other miscellaneous content.</span>    
+                                    </div>
+                                    <div class="flex flex-row justify-center items-center mt-10 lg:mt-0">
+                                        <div class="bg-brown-dark p-[1px] h-full mx-12 hidden lg:block transition-all"></div>
+                                        <div class="flex flex-col flex-2 items-center justify-center">
+                                            <h1 id="totalFollowers" popup moderate class="text-8xl font-nunitoblack font-black leading-tight tracking-tight">0</h1>
+                                            <span popup fast class="flex flex-row gap-x-2 flex-wrap">Total Followers</span>    
+                                        </div>
+                                        <div class="bg-brown-dark p-[1px] h-[192px] mx-12 block lg:hidden transition-all"></div>
+                                        <div class="bg-brown-dark p-[1px] h-full mx-12 hidden lg:block transition-all"></div>
+                                        <div class="flex flex-col flex-2 items-center justify-center">
+                                            <h1 id="totalRepos" popup moderate class="text-8xl font-nunitoblack font-black leading-tight tracking-tight">0</h1>
+                                            <span popup fast class="flex flex-row gap-x-2 flex-wrap">Total Repositorys</span>    
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col xl:flex-row gap-2">
+                                    <div class="p-10 bg-brown-darker rounded-xl flex-1">
+                                        <div class="flex flex-col flex-1 items-center lg:items-start">
+                                            <h1 popup fast class="flex flex-row gap-x-3 flex-wrap text-5xl font-nunitoblack font-black leading-tight tracking-tight">Learn about me</h1>
+                                            <span popup extremelyFast class="flex flex-row gap-x-1 flex-wrap justify-center lg:justify-start items-center lg:items-start">Curious about who I am, and what I do? Select one of the options below to get started.</span>    
+                                        </div>
+                                        <div class="flex flex-col lg:flex-row justify-between mt-5 gap-2">
+                                            <a goto="#" class="cursor-pointer flex-1 text-center">
+                                                <div ripple class="relative overflow-hidden p-10 font-black bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                    Who am I?
+                                                </div>
+                                            </a>
+                                            <a goto="#" class="cursor-pointer flex-1 lg:flex-2 text-center">
+                                                <div ripple class="relative overflow-hidden p-10 font-black bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                    Best Projects
+                                                </div>
+                                            </a>
+                                            <a goto="#" class="cursor-pointer flex-1 lg:flex-2 text-center">
+                                                <div ripple class="relative overflow-hidden p-10 font-black bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                    Languages
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="p-10 bg-brown-darker rounded-xl flex-1">
+                                        <div class="flex flex-col flex-1 items-center lg:items-start">
+                                            <h1 popup fast class="flex flex-row gap-x-3 flex-wrap text-5xl font-nunitoblack font-black leading-tight tracking-tight">Check out my blogs</h1>
+                                            <span popup extremelyFast class="flex flex-row gap-x-1 flex-wrap justify-center lg:justify-start items-center lg:items-start">Want to know what I'm curious about? Check out some of my blogs to see what I like.</span>        
+                                        </div>
+                                        <div class="flex flex-row justify-center items-center mt-5 gap-2">
+                                            <a class="p-10">Currently there are no blogs, just you wait though!</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="bg-brown-darker select-none flex-2">
+                            <div class="py-5 px-6 w-full">Footer</div>
+                        </div>
                     </div>
                 </div>
             </div>
