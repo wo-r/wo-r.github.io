@@ -280,6 +280,9 @@
 
     // Wait for document to be ready
     await $(window).ready(async function () {
+        // Set current year
+        $("#currentYear").text(new Date().getFullYear())
+
         // Run all the initialization functions
         await fetchFollowersCount();
         await fetchRepositoriesCount();
