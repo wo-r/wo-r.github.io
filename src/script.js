@@ -71,6 +71,66 @@
         });
     };
 
+    // Function to count total amount of blogs
+    const fetchTotalBlogs = async () => {
+        await $.getJSON('../blogs/blogs.json', function(data) {
+            if (data.blogs && Array.isArray(data.blogs)) {
+                var totalBlogs = data.blogs.length;
+                $("#totalBlogs").text(totalBlogs)
+            }
+        });
+    };
+
+    // Function to fetch blogs for the blogs.json file
+    const fetchBlogs = async () => {
+        await $.getJSON('../blogs/blogs.json', function(data) {
+            if (data.blogs && Array.isArray(data.blogs)) {
+                // TODO:
+            }
+        });
+    }
+
+    // Function to allow the navbar to hide while scrolling dowm
+    const navbarScroll = async () => {
+        if ('ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0) {
+            return;
+        } else {
+            let prevScrollpos = $("#main").parent().scrollTop();
+            await $("#main").parent().scroll(function() {
+                let currentScrollPos = $("#main").parent().scrollTop();
+                if (prevScrollpos > currentScrollPos) {
+                    $('#navbar').parent().removeClass('opacity-0').addClass("py-3 px-4").find("#navbar").removeClass("h-0");
+                } else
+                    $('#navbar').parent().addClass('opacity-0').removeClass("py-3 px-4").find("#navbar").addClass("h-0");
+                prevScrollpos = currentScrollPos;
+            });
+        }
+    }
+
+    // Function to let the user search for blogs
+    const searchBlogs = () => {
+        /** Copied from Gradpass
+         * TODO:
+        $('#search').on('input', function() {
+            var search = $(this).val();
+            $('#worklist div h1').each(function() {
+                if (search.length === 0) {
+                    $(this).html($(this).text()).show();
+                    $(this).parent().parent().parent().parent().show()
+                } else {            
+                    if ($(this).text().match(new RegExp(search, "gi"))) {
+                        var highlightedText = $(this).text().replace(new RegExp(search, "gi"), `<span class="${hlp.gettheme("text", "700")}">$&</span>`);
+                        $(this).html(highlightedText).show();
+                        $(this).parent().parent().parent().parent().show()
+                    } else {
+                        $(this).parent().parent().parent().parent().hide();
+                    }
+                }
+            });
+        });
+        */
+    }
+
     // Function to handle disabled elements
     const handleDisabledElements = () => {
         $("[disabled]").each(function () {
@@ -287,6 +347,9 @@
         await fetchFollowersCount();
         await fetchRepositoriesCount();
         await fetchBestRepositories();
+        await fetchTotalBlogs();
+        await fetchBlogs();
+        await navbarScroll();
         handleDisabledElements();
         setupGotoLinks();
         setupSidemenu();

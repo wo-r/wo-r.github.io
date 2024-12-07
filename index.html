@@ -74,7 +74,7 @@
                                                         Home
                                                     </div>
                                                 </a>
-                                                <a goto="/" class="cursor-pointer">
+                                                <a goto="/blogs/" class="cursor-pointer">
                                                     <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         Blogs
                                                     </div>
@@ -82,22 +82,22 @@
                                             </div>
                                             <div class="flex flex-col gap-1 py-3 px-4">
                                                 <span class="font-black font-nunitoblack text-sm px-3 pb-2">FOR BUSINESS</span>
-                                                <a goto="/" class="cursor-pointer">
+                                                <a goto="/resume/" class="cursor-pointer">
                                                     <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         Resume
                                                     </div>
                                                 </a>
-                                                <a goto="/" class="cursor-pointer" disabled>
+                                                <a goto="" class="cursor-pointer" disabled>
                                                     <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         Certifications
                                                     </div>
                                                 </a>
-                                                <a goto="/" class="cursor-pointer" disabled>
+                                                <a goto="" class="cursor-pointer" disabled>
                                                     <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         Experience
                                                     </div>
                                                 </a>
-                                                <a goto="/" class="cursor-pointer" disabled>
+                                                <a goto="" class="cursor-pointer" disabled>
                                                     <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         Education
                                                     </div>
@@ -105,12 +105,12 @@
                                             </div>
                                             <div class="flex flex-col gap-1 py-3 px-4">
                                                 <span class="font-black font-nunitoblack text-sm px-3 pb-2">CONTACT</span>
-                                                <a goto="/" class="cursor-pointer" disabled>
+                                                <a goto="" class="cursor-pointer" disabled>
                                                     <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         Give Feedback
                                                     </div>
                                                 </a>
-                                                <a goto="/" class="cursor-pointer" disabled>
+                                                <a goto="" class="cursor-pointer" disabled>
                                                     <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         Email Me
                                                     </div>
@@ -124,7 +124,7 @@
                     </div>
                 </div>
                 <div class="flex h-full max-w-full flex-1 flex-col">
-                    <div class="z-10 flex flex-col py-3 px-4 bg-brown-darker">
+                    <div class="z-10 flex flex-col py-3 px-4 bg-brown-darker transition-all opacity-1">
                         <div id="navbar" class="w-full h-full flex flex-row-reverse justify-between items-center select-none">
                             <div class="flex flex-row gap-2">
                                 <a id="printResume" type="navbar" tooltip="Quickly print out my entire resume for reviewing" class="cursor-pointer">
@@ -161,7 +161,7 @@
                                             <span popup extremelyFast class="flex flex-row gap-x-1 flex-wrap justify-center text-center lg:text-left lg:justify-start items-center lg:items-start">This is my personal website, designed and curated by me to serve as the hub for everything related to me. This includes my resume, certifications, and education, as well as my personal blogs and other miscellaneous content.</span>    
                                         </div>
                                     </div>
-                                    <div class="flex flex-col sm:flex-row gap-2 flex-3">
+                                    <div class="flex flex-col sm:flex-row gap-2 flex-3 select-none">
                                         <div class="p-10 bg-brown-darker rounded-xl flex flex-col lg:flex-row h-full w-full">
                                             <div class="flex flex-col flex-2 items-center justify-center">
                                                 <h1 id="totalFollowers" popup moderate class="text-6xl md:text-8xl font-nunitoblack font-black leading-tight tracking-tight">0</h1>
@@ -228,7 +228,7 @@
                                         <img tooltip="A picture of me from senior year of high school" class="w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[300px] lg:h-[300px] rounded-xl shadow-xl" src="./src/logo/portrait.png">
                                     </div>
                                     <div class="flex flex-row flex-wrap w-full gap-2">
-                                        <a goto="" tooltip="View or download my resume here" class="cursor-pointer flex-1 text-center select-none">
+                                        <a goto="/resume/" tooltip="View or download my resume here" class="cursor-pointer flex-1 text-center select-none">
                                             <div ripple class="relative overflow-hidden p-10 font-black bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full flex items-center justify-center">
                                                 <div class="flex flex-row justify-center items-center">
                                                     <span>Resume</span>
@@ -347,8 +347,6 @@
                                 </a>                                
                             </div>
                         </div>
-                        
-
                         <div class="bg-brown-darker select-none flex-2">
                             <div class="py-5 px-6 w-full">
                                 <div class="flex justify-between items-center">
