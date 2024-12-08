@@ -75,8 +75,11 @@
     const fetchTotalBlogs = async () => {
         await $.getJSON('../blogs/blogs.json', function(data) {
             if (data.blogs && Array.isArray(data.blogs)) {
-                var totalBlogs = data.blogs.length;
-                $("#totalBlogs").text(totalBlogs)
+                // Filter out blogs that are locked
+                const visibleBlogs = data.blogs.filter(blog => !blog.locked);
+                // Get the count of visible blogs
+                var totalBlogs = visibleBlogs.length;
+                $("#totalBlogs").text(totalBlogs);
             }
         });
     };
@@ -91,7 +94,7 @@
 
                 let date = new Date(created).toLocaleString();
                 $("#blogs").append(`
-                    <a goto="/blogs${PATH}" class="cursor-pointer flex-1 select-none">
+                    <a goto="${PATH}" class="cursor-pointer flex-1 select-none">
                         <div ripple class="relative overflow-hidden p-10 bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full">
                             <div class="flex flex-col gap-2 justify-center md:justify-start items-center md:items-start h-full">
                                 <h1 class="text-1xl md:text-6xl font-nunitoblack font-black leading-tight tracking-tight">${name}</h1>
