@@ -1,10 +1,10 @@
 {
-    "about": "Lists all blogs insides /blog/.",
+    "about": "Lists all blogs that were made by me.",
     "blogs": [
         {
             "locked": true,
             "name": "Test blog",
-            "description": "A blog to test the blog portion of the site",
+            "description": "A blog to test the blog portion of the site.",
             "created": "2024-12-08T03:39:20.794Z",
             "PATH": "/blogs/blog/test-blog.html"
         },

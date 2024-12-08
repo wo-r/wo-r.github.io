@@ -75,9 +75,7 @@
     const fetchTotalBlogs = async () => {
         await $.getJSON('../blogs/blogs.json', function(data) {
             if (data.blogs && Array.isArray(data.blogs)) {
-                // Filter out blogs that are locked
                 const visibleBlogs = data.blogs.filter(blog => !blog.locked);
-                // Get the count of visible blogs
                 var totalBlogs = visibleBlogs.length;
                 $("#totalBlogs").text(totalBlogs);
             }
@@ -93,6 +91,9 @@
                     return;
 
                 let date = new Date(created).toLocaleString();
+                if (window.location.href.includes("127.0.0.1"))
+                    console.log("Current Date:", new Date().toISOString())
+
                 $("#blogs").append(`
                     <a goto="${PATH}" class="cursor-pointer flex-1 select-none">
                         <div ripple class="relative overflow-hidden p-10 bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full">
