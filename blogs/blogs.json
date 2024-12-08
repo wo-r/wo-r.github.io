@@ -2,11 +2,11 @@
     "about": "Lists all blogs insides /blog/.",
     "blogs": [
         {
-            "locked": false,
+            "locked": true,
             "name": "Test blog",
             "description": "A blog to test the blog portion of the site",
-            "created": "1733611060487",
-            "PATH": "./blog/test-blog.html"
+            "created": "2024-12-08T03:39:20.794Z",
+            "PATH": "/blog/test-blog.html"
         }
     ]
 }

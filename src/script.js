@@ -83,10 +83,25 @@
 
     // Function to fetch blogs for the blogs.json file
     const fetchBlogs = async () => {
-        await $.getJSON('../blogs/blogs.json', function(data) {
-            if (data.blogs && Array.isArray(data.blogs)) {
-                // TODO:
-            }
+        await $.getJSON('../blogs/blogs.json', function(blogs) {
+            blogs.blogs.sort((a, b) => new Date(b.created) - new Date(a.created))
+            $.each(blogs.blogs, async function (index, {locked, name, description, created, PATH}) {
+                if (locked)
+                    return;
+
+                let date = new Date(created).toLocaleString();
+                $("#blogs").append(`
+                    <a goto="/blogs${PATH}" class="cursor-pointer flex-1 select-none">
+                        <div ripple class="relative overflow-hidden p-10 bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full">
+                            <div class="flex flex-col gap-2 justify-center md:justify-start items-center md:items-start h-full">
+                                <h1 class="text-1xl md:text-6xl font-nunitoblack font-black leading-tight tracking-tight">${name}</h1>
+                                <span class="text-sm md:text-lg justify-center h-full text-center lg:text-left lg:justify-start items-center lg:items-start">${description}</span>    
+                                <span date class="text-sm md:text-lg justify-center text-center lg:text-left lg:justify-start items-center lg:items-start">Written ${date.split(",")[0]} at${date.split(",")[1]}</span>    
+                            </div>
+                        </div>
+                    </a>
+                `)
+            })
         });
     }
 
@@ -109,26 +124,23 @@
 
     // Function to let the user search for blogs
     const searchBlogs = () => {
-        /** Copied from Gradpass
-         * TODO:
         $('#search').on('input', function() {
             var search = $(this).val();
-            $('#worklist div h1').each(function() {
+            $('#blogs a h1').each(function() {
                 if (search.length === 0) {
                     $(this).html($(this).text()).show();
-                    $(this).parent().parent().parent().parent().show()
+                    $(this).parent().parent().parent().show()
                 } else {            
-                    if ($(this).text().match(new RegExp(search, "gi"))) {
-                        var highlightedText = $(this).text().replace(new RegExp(search, "gi"), `<span class="${hlp.gettheme("text", "700")}">$&</span>`);
+                    if ($(this).text().match(new RegExp(search, "gi")) !== null) {
+                        var highlightedText = $(this).text().replace(new RegExp(search, "gi"), `<span class="text-brown-light">$&</span>`);
                         $(this).html(highlightedText).show();
-                        $(this).parent().parent().parent().parent().show()
+                        $(this).parent().parent().parent().show()
                     } else {
-                        $(this).parent().parent().parent().parent().hide();
+                        $(this).parent().parent().parent().hide()
                     }
                 }
             });
         });
-        */
     }
 
     // Function to handle disabled elements
@@ -167,12 +179,15 @@
 
     // Function to manage side menu toggle
     const setupSidemenu = () => {
-        if (localStorage.getItem("sidemenu") === "true") {
-            $("#sidemenuToggle[type='open']").addClass("invisible");
-            $("#showResume[type='navbar']").addClass("invisible");
-            $("#navbar").addClass("hidden").parent().addClass("hidden");
-            $("#sidemenuBackdrop").removeClass("hidden");
-            $("#sidemenu").removeClass("invisible").css("width", "280px");
+        if ('ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0) {
+        } else {
+            if (localStorage.getItem("sidemenu") === "true") {
+                $("#sidemenuToggle[type='open']").addClass("invisible");
+                $("#showResume[type='navbar']").addClass("invisible");
+                $("#navbar").addClass("hidden").parent().addClass("hidden");
+                $("#sidemenuBackdrop").removeClass("hidden");
+                $("#sidemenu").removeClass("invisible").css("width", "280px");
+            }
         }
 
         $("#sidemenuToggle, #sidemenuBackdrop").on("click mousedown", function (event) {
@@ -341,7 +356,7 @@
     // Wait for document to be ready
     await $(window).ready(async function () {
         // Set current year
-        $("#currentYear").text(new Date().getFullYear())
+        $("#currentYear").text(new Date().getFullYear());
 
         // Run all the initialization functions
         await fetchFollowersCount();
@@ -350,6 +365,7 @@
         await fetchTotalBlogs();
         await fetchBlogs();
         await navbarScroll();
+        searchBlogs();
         handleDisabledElements();
         setupGotoLinks();
         setupSidemenu();
