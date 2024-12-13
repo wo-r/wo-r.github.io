@@ -28,6 +28,13 @@
             "description": "This was created for a spanish project, it's designed to present the life of Arturo Sandoval through spanglish, a mixture of english and spanish.",
             "created": "2024-03-07T18:29:04.789Z",
             "PATH": "https://wo-r-professional.github.io/arturo-sandoval-project/"
-        }       
+        },
+        {
+            "locked": false,
+            "name": "Psychological Disorders Project",
+            "description": "This explores Disinhibited Social Engagement Disorder (DSED) and Reactive Attachment Disorder (RAD), two attachment disorders caused by early childhood trauma, neglect, or abuse. It examines their symptoms, causes, treatments, and differences, and discusses how childhood attachment issues, exemplified by David Berkowitz, can lead to violent behavior later in life.",
+            "created": "2024-12-13T17:07:41.523Z",
+            "PATH": "/blogs/blog/understanding-dsed-rad-comprehensive-overview.html"
+        }    
     ]
 }

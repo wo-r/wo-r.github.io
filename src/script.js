@@ -363,18 +363,26 @@
         $("#currentYear").text(new Date().getFullYear());
 
         // Run all the initialization functions
-        await fetchFollowersCount();
-        await fetchRepositoriesCount();
-        await fetchBestRepositories();
-        await fetchTotalBlogs();
-        await fetchBlogs();
-        await navbarScroll();
-        searchBlogs();
-        handleDisabledElements();
-        setupGotoLinks();
-        setupSidemenu();
-        setupRippleEffect();
-        setupTooltips();
-        setupPopupText();
+        const tasks = [
+            fetchFollowersCount,
+            fetchRepositoriesCount,
+            fetchBestRepositories,
+            fetchTotalBlogs,
+            fetchBlogs,
+            navbarScroll,
+            searchBlogs,
+            handleDisabledElements,
+            setupGotoLinks,
+            setupSidemenu,
+            setupRippleEffect,
+            setupTooltips,
+            setupPopupText
+        ];
+    
+        for (let task of tasks) {
+            try {
+                await task();
+            } catch (e) {}
+        }
     })
 })();
