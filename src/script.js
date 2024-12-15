@@ -265,7 +265,7 @@
     const setupTooltips = () => {
         if ('ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0) return;
 
-        const tooltip = $('<div class="tooltip bg-brown-dark rounded-xl p-5 text-zinc-300 font-black z-50 select-none"></div>').appendTo('body');
+        const tooltip = $('<div class="tooltip bg-brown-dark rounded-xl p-5 text-zinc-300 font-black z-50 select-none shadow-xl"></div>').appendTo('body');
         let isTooltipVisible = false;
 
         $('[tooltip]').hover(function () {

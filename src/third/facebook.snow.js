@@ -40,6 +40,25 @@
         self.disabled = false;
         self.timer = null;
 
+        // Retrieve snowstorm settings from the HTML container
+        var snowContainer = document.getElementById('snowOptions');
+
+        console.log(snowContainer)
+
+        if (snowContainer) {
+            self.flakesMax = parseInt(snowContainer.getAttribute('data-flakes-max')) || self.flakesMax;
+            self.snowColor = snowContainer.getAttribute('data-snow-color') || self.snowColor;
+            self.flakeWidth = parseInt(snowContainer.getAttribute('data-flake-width')) || self.flakeWidth;
+            self.flakeHeight = parseInt(snowContainer.getAttribute('data-flake-height')) || self.flakeHeight;
+            self.snowCharacter = snowContainer.getAttribute('data-snow-character') || self.snowCharacter;
+            self.vMaxX = parseFloat(snowContainer.getAttribute('data-vmax-x')) || self.vMaxX;
+            self.vMaxY = parseFloat(snowContainer.getAttribute('data-vmax-y')) || self.vMaxY;
+            self.autoStart = snowContainer.getAttribute('data-auto-start') === 'false' ? false : self.autoStart;
+            self.useGPU = snowContainer.getAttribute('data-use-gpu') === 'false' ? false : self.useGPU;
+            self.snowStick = snowContainer.getAttribute('data-snow-stick') === 'false' ? false : self.snowStick;
+            self.excludeMobile = snowContainer.getAttribute('data-exclude-mobile') === 'false' ? false : self.excludeMobile;
+        }
+
         // Properties
         self.h = 0;  // window width
         self.l = 0;  // window height
