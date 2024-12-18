@@ -109,20 +109,6 @@
         });
     }
 
-    // 
-    const appendElements = async () => {
-        // Manage all the elements that have constant path changes & possible inconsistencies
-        let elements = {
-            navbar: {
-                sidemenu: ``,
-                default: ``
-            },
-            footer: ``
-        }
-
-        // TODO:
-    }
-
     // Function to allow the navbar to hide while scrolling dowm
     const navbarScroll = async () => {
         if ('ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0) {
@@ -383,7 +369,6 @@
             fetchBestRepositories,
             fetchTotalBlogs,
             fetchBlogs,
-            appendElements,
             navbarScroll,
             searchBlogs,
             handleDisabledElements,

@@ -43,8 +43,6 @@
         // Retrieve snowstorm settings from the HTML container
         var snowContainer = document.getElementById('snowOptions');
 
-        console.log(snowContainer)
-
         if (snowContainer) {
             self.flakesMax = parseInt(snowContainer.getAttribute('data-flakes-max')) || self.flakesMax;
             self.snowColor = snowContainer.getAttribute('data-snow-color') || self.snowColor;
