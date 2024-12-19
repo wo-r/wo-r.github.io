@@ -109,6 +109,28 @@
         });
     }
 
+    const previewBlogs = async () => {
+        await $.getJSON('../blogs/blogs.json', function(blogs) {
+            blogs.blogs.sort((a, b) => new Date(b.created) - new Date(a.created))
+            blogs.blogs = blogs.blogs.filter(blog => blog.locked !== true).slice(0, 2);
+            
+            $.each(blogs.blogs, async function (index, {name, description, created, PATH}) {
+                let date = new Date(created).toLocaleString();
+                $("#previewBlogs").append(`
+                    <a goto="${PATH}" class="cursor-pointer flex-1 select-none">
+                        <div ripple class="relative overflow-hidden p-10 bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full">
+                            <div class="flex flex-col gap-2 h-full">
+                                <h1 class="text-1xl md:text-2xl font-nunitoblack font-black leading-tight tracking-tight text-center lg:text-left lg:justify-start items-center lg:items-start">${name}</h1>
+                                <span class="text-sm justify-center h-full text-center lg:text-left lg:justify-start items-center lg:items-start">${description}</span>    
+                                <span date class="text-sm justify-center text-center lg:text-left lg:justify-start items-center lg:items-start">Written ${date.split(",")[0]} at${date.split(",")[1]}</span>    
+                            </div>
+                        </div>
+                    </a>
+                `)
+            })
+        });
+    }
+
     // Function to allow the navbar to hide while scrolling dowm
     const navbarScroll = async () => {
         if ('ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0) {
@@ -525,6 +547,7 @@
             fetchBestRepositories,
             fetchTotalBlogs,
             fetchBlogs,
+            previewBlogs,
             navbarScroll,
             searchBlogs,
             handleDisabledElements,
