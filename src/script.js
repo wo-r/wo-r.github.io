@@ -139,10 +139,17 @@
             let prevScrollpos = $("#main").parent().scrollTop();
             await $("#main").parent().scroll(function() {
                 let currentScrollPos = $("#main").parent().scrollTop();
-                if (prevScrollpos > currentScrollPos) {
-                    $('#navbar').parent().removeClass('opacity-0').addClass("py-3 px-4").find("#navbar").removeClass("h-0");
-                } else
+    
+                if ($("#main").parent().scrollTop() + $("#main").parent()[0].clientHeight >= $("#main")[0].scrollHeight - 20) {
                     $('#navbar').parent().addClass('opacity-0').removeClass("py-3 px-4").find("#navbar").addClass("h-0");
+                } else {
+                    if (prevScrollpos > currentScrollPos) {
+                        $('#navbar').parent().removeClass('opacity-0').addClass("py-3 px-4").find("#navbar").removeClass("h-0");
+                    } else {
+                        $('#navbar').parent().addClass('opacity-0').removeClass("py-3 px-4").find("#navbar").addClass("h-0");
+                    }
+                }
+    
                 prevScrollpos = currentScrollPos;
             });
         }
@@ -211,6 +218,7 @@
                 $("#sidemenuToggle[type='open']").addClass("invisible");
                 $("#showResume[type='navbar']").addClass("invisible");
                 $("#navbar").addClass("hidden").parent().addClass("hidden");
+                $("#footer").addClass("hidden");
                 $("#sidemenuBackdrop").removeClass("hidden");
                 $("#sidemenu").removeClass("invisible").css("width", "280px");
             }
@@ -224,6 +232,7 @@
                 $("#sidemenuToggle[type='open']").addClass("invisible");
                 $("#showResume[type='navbar']").addClass("invisible");
                 $("#navbar").addClass("hidden").parent().addClass("hidden");
+                $("#footer").addClass("hidden");
                 $("#sidemenuBackdrop").removeClass("hidden");
                 $("#sidemenu").removeClass("invisible");
 
@@ -240,6 +249,7 @@
                 $("#sidemenuToggle[type='open']").removeClass("invisible");
                 $("#showResume[type='navbar']").removeClass("invisible");
                 $("#navbar").removeClass("hidden").parent().removeClass("hidden");
+                $("#footer").removeClass("hidden");
                 $("#sidemenuBackdrop").addClass("hidden");
                 $("#sidemenu").addClass("invisible");
 
@@ -485,17 +495,22 @@
                                                 Education
                                             </div>
                                         </a>
-                                    </div>
-                                    <div class="flex flex-col gap-1 py-3 px-4">
-                                        <span class="font-black font-nunitoblack text-sm px-3 pb-2">CONTACT</span>
                                         <a goto="" class="cursor-pointer" disabled>
                                             <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
-                                                Give Feedback
+                                                Contact Me
                                             </div>
                                         </a>
+                                    </div>
+                                    <div class="flex flex-col gap-1 py-3 px-4">
+                                        <span class="font-black font-nunitoblack text-sm px-3 pb-2">SOCIALS</span>
                                         <a goto="" class="cursor-pointer" disabled>
                                             <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
-                                                Email Me
+                                                LinkedIn
+                                            </div>
+                                        </a>
+                                        <a goto="https://www.youtube.com/@thatguywoods" tooltip="Check out my youtube channel where I make videos" class="cursor-pointer">
+                                            <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                Youtube
                                             </div>
                                         </a>
                                     </div>
