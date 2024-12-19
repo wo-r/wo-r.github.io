@@ -357,6 +357,17 @@
         }
     };
 
+    const applyElements = async () => {
+        let slashes = window.location.pathname.split("/").length - 2;
+        let base = "./";
+        
+        for (let i = 0; i < slashes; i++) {
+            base += "../";
+        }
+        
+        // TODO:
+    }
+
     // Wait for document to be ready
     await $(window).ready(async function () {
         // Set current year
@@ -364,6 +375,7 @@
 
         // Run all the initialization functions
         const tasks = [
+            applyElements,
             fetchFollowersCount,
             fetchRepositoriesCount,
             fetchBestRepositories,
