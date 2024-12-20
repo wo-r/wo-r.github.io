@@ -16,6 +16,9 @@
 
     // Function to fetch and display total followers
     const fetchFollowersCount = async () => {
+        if ($("#totalFollowers").length == 0)
+            return;
+
         const userData = await fetchGitHubData("https://api.github.com/users/wo-r");
         const followersCount = userData ? userData.followers : 0;
         $("#totalFollowers").text(followersCount);
@@ -23,6 +26,9 @@
 
     // Function to fetch and display total repositories
     const fetchRepositoriesCount = async () => {
+        if ($("#totalRepos").length == 0)
+            return;
+
         const userUrls = ["wo-r", "wo-r-professional", "gradpass"];
         let repositoriesCount = 0;
         let usersProcessed = 0;
@@ -41,6 +47,9 @@
 
     // Function to fetch and display best repositories
     const fetchBestRepositories = async () => {
+        if ($("#bestRepos").length == 0)
+            return;
+
         const userUrls = ["wo-r", "wo-r-professional", "gradpass"];
         const targetRepos = [
             "gradpass.github.io",
@@ -73,6 +82,9 @@
 
     // Function to count total amount of blogs
     const fetchTotalBlogs = async () => {
+        if ($("#totalBlogs").length == 0)
+            return;
+
         await $.getJSON('../blogs/blogs.json', function(data) {
             if (data.blogs && Array.isArray(data.blogs)) {
                 const visibleBlogs = data.blogs.filter(blog => !blog.locked);
@@ -84,6 +96,9 @@
 
     // Function to fetch blogs for the blogs.json file
     const fetchBlogs = async () => {
+        if ($("#blogs").length == 0)
+            return;
+
         await $.getJSON('../blogs/blogs.json', function(blogs) {
             blogs.blogs.sort((a, b) => new Date(b.created) - new Date(a.created))
             $.each(blogs.blogs, async function (index, {locked, name, description, created, PATH}) {
@@ -110,6 +125,9 @@
     }
 
     const previewBlogs = async () => {
+        if ($("#previewBlogs").length == 0)
+            return;
+
         await $.getJSON('../blogs/blogs.json', function(blogs) {
             blogs.blogs.sort((a, b) => new Date(b.created) - new Date(a.created))
             blogs.blogs = blogs.blogs.filter(blog => blog.locked !== true).slice(0, 2);
@@ -137,10 +155,18 @@
             return;
         } else {
             let prevScrollpos = $("#main").parent().scrollTop();
+        
             await $("#main").parent().scroll(function() {
                 let currentScrollPos = $("#main").parent().scrollTop();
-    
-                if ($("#main").parent().scrollTop() + $("#main").parent()[0].clientHeight >= $("#main")[0].scrollHeight - 20) {
+                const contentHeight = $("#main")[0].scrollHeight;
+                const viewportHeight = $("#main").parent()[0].clientHeight + 100;
+                
+                if (contentHeight <= viewportHeight) {
+                    $('#navbar').parent().removeClass('opacity-0').addClass("py-3 px-4").find("#navbar").removeClass("h-0");
+                    return;
+                }
+                
+                if (currentScrollPos + viewportHeight >= contentHeight - 20) {
                     $('#navbar').parent().addClass('opacity-0').removeClass("py-3 px-4").find("#navbar").addClass("h-0");
                 } else {
                     if (prevScrollpos > currentScrollPos) {
@@ -157,6 +183,9 @@
 
     // Function to let the user search for blogs
     const searchBlogs = () => {
+        if ($("#search").length == 0)
+            return;
+
         $('#search').on('input', function() {
             var search = $(this).val();
             $('#blogs a h1').each(function() {
@@ -174,6 +203,40 @@
                 }
             });
         });
+    }
+
+    const manageFeedback = () => {
+        if ($("#message").length == 0 || $("#email").length == 0 || $("#name").length == 0 || $("#submit").attr("disabled"))
+            return;
+
+        $('#message').on('input', function () {
+            $(this).css('height', 'auto');
+            $(this).css('height', this.scrollHeight + 'px');
+
+            if ($(this).val() != "")
+                $("#message").parent().removeClass("border-2 border-red-800 animate-shake");
+        });
+
+        $("#email").on("input", function () {
+            if ($(this).val() != "")
+                $("#email").parent().removeClass("border-2 border-red-800 animate-shake");
+        })
+        
+        if ($("#message").length && $("#email").length) {
+            $("#submit").click(function () {
+                if ($("#message").val() != "" && $("#email").val() != "" && $("#email").val().includes("@")) {
+                    // TODO:
+                } else {
+                    if ($($("#message")).val() == "") {
+                        $("#message").parent().addClass("border-2 border-red-800 animate-shake");
+                    }
+
+                    if ($("#email").val() == "" || !$("#email").val().includes("@")) {
+                        $("#email").parent().addClass("border-2 border-red-800 animate-shake");
+                    }
+                }
+            })
+        }
     }
 
     // Function to handle disabled elements
@@ -206,6 +269,9 @@
                 }
             } else if (goto.startsWith("/")) {
                 window.location.href = goto;
+            }   else if (goto.startsWith("mailto:")) {
+                // Handle the mailto link
+                window.location.href = goto;  // This will open the default mail client
             }
         });
     };
@@ -482,6 +548,11 @@
                                         </a>
                                         <a goto="" class="cursor-pointer" disabled>
                                             <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                Portfolio
+                                            </div>
+                                        </a>
+                                        <a goto="" class="cursor-pointer" disabled>
+                                            <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                 Certifications
                                             </div>
                                         </a>
@@ -495,7 +566,7 @@
                                                 Education
                                             </div>
                                         </a>
-                                        <a goto="" class="cursor-pointer" disabled>
+                                        <a goto="/contact/" class="cursor-pointer">
                                             <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                 Contact Me
                                             </div>
@@ -565,6 +636,7 @@
             previewBlogs,
             navbarScroll,
             searchBlogs,
+            manageFeedback,
             handleDisabledElements,
             setupGotoLinks,
             setupSidemenu,
