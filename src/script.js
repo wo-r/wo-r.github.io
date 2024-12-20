@@ -205,10 +205,8 @@
         });
     }
 
+    // Function using EmailJS to send a feedback form to a target email
     const manageFeedback = () => {
-        if ($("#message").length == 0 || $("#email").length == 0 || $("#name").length == 0 || $("#submit").attr("disabled"))
-            return;
-
         $('#message').on('input', function () {
             $(this).css('height', 'auto');
             $(this).css('height', this.scrollHeight + 'px');
@@ -216,6 +214,9 @@
             if ($(this).val() != "")
                 $("#message").parent().removeClass("border-2 border-red-800 animate-shake");
         });
+
+        if ($("#message").length == 0 || $("#email").length == 0 || $("#name").length == 0 || $("#submit").attr("disabled"))
+            return;
 
         $("#email").on("input", function () {
             if ($(this).val() != "")
@@ -225,7 +226,39 @@
         if ($("#message").length && $("#email").length) {
             $("#submit").click(function () {
                 if ($("#message").val() != "" && $("#email").val() != "" && $("#email").val().includes("@")) {
-                    // TODO:
+                    function sanitizeInput(input) {
+                        if (!input) return '';
+                        return input.trim().replace(/["'<>&]/g, function(match) {
+                            return '&#' + match.charCodeAt(0) + ';';
+                        });
+                    }
+
+                    let name = $("#name").val() ? sanitizeInput($("#name").val()) : `Anonymous`;
+                    let email = sanitizeInput($("#email").val());
+                    let message = sanitizeInput($("#message").val());
+
+                    emailjs.init({publicKey: "9ac5poQVMm8gyPC01"})
+
+                    $("#submit").find("span").text("...")
+
+                    let form = {
+                        name: name,
+                        email: email,
+                        message: message,
+                    }
+
+                    emailjs.send("default_service", "template_sx6avhu", form).then(() => {
+                        $("#submit").find("span").text("Message Sent")
+                        setTimeout(function () {
+                            $("#submit").find("span").text("Send Message")
+                        }, 2000)
+                    }, (err) => {
+                        $("#submit").find("span").text("Failed to send message (Check console)")
+                        setTimeout(function () {
+                            $("#submit").find("span").text("Send Message")
+                        }, 8000)
+                        console.log(JSON.stringify(err));
+                    });
                 } else {
                     if ($($("#message")).val() == "") {
                         $("#message").parent().addClass("border-2 border-red-800 animate-shake");
@@ -546,7 +579,7 @@
                                                 Resume
                                             </div>
                                         </a>
-                                        <a goto="" class="cursor-pointer" disabled>
+                                        <a goto="/portfolio/" class="cursor-pointer">
                                             <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                 Portfolio
                                             </div>
