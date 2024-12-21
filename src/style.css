@@ -97,6 +97,38 @@ b {
 
 
 
+.image-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+.zoomed-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: 200% 133%;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.zoom-image {
+    max-height: 300px;
+    max-width: 300px;
+    cursor: pointer;
+    transition: transform 0.1s ease-out;
+    border-radius: 1rem;
+}
+
+
+
 /*.gradient-cursor {
     width: 5000px;
     height: 5000px;

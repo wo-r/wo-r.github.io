@@ -205,6 +205,60 @@
         });
     }
 
+    // Function to initialize multiple galleries, bind events, and control image switching for each gallery
+    const galleryController = () => {
+        if ($("#gradpass").length == 0)
+            return;
+
+        $.getJSON("../portfolio/gallerys/gallerys.json", function(data) {
+            $.each(data.gallerys, function(galleryKey, galleryImages) {
+                const galleryId = `#${galleryKey}`;
+
+                let currentImageIndex = 0;
+
+                const updateGallery = () => {
+                    const currentImage = galleryImages[currentImageIndex];
+                    const imagePath = currentImage.PATH;
+
+                    $(`${galleryId} #gallery img`).attr("src", imagePath);
+
+                    if (currentImage.tooltip != "") {
+                        $(`${galleryId} #gallery img`).attr("tooltip", currentImage.tooltip);
+                        setupTooltips();
+                    }
+
+                    $(`${galleryId} .gallery-image`).find("svg").attr("width", "25px").attr("height", "25px")
+                        .find("path").attr("d", "M480-34q-92.64 0-174.47-34.6-81.82-34.61-142.07-94.86T68.6-305.53Q34-387.36 34-480q0-92.9 34.66-174.45 34.67-81.55 95.18-141.94 60.51-60.39 142.07-95Q387.48-926 480-926q92.89 0 174.48 34.59 81.59 34.6 141.96 94.97 60.37 60.37 94.97 141.99Q926-572.83 926-479.92q0 92.92-34.61 174.25-34.61 81.32-95 141.83Q736-103.33 654.45-68.66 572.9-34 480-34Zm-.23-136q130.74 0 220.49-89.51Q790-349.03 790-479.77t-89.51-220.49Q610.97-790 480.23-790t-220.49 89.51Q170-610.97 170-480.23t89.51 220.49Q349.03-170 479.77-170Zm.23-310Z");
+
+                    $(`${galleryId} .gallery-image[image='${currentImageIndex + 1}']`).find("svg").attr("width", "35px").attr("height", "35px")
+                        .find("path").attr("d", "M480.04-269q87.58 0 149.27-61.73Q691-392.46 691-480.04q0-87.58-61.73-149.27Q567.54-691 479.96-691q-87.58 0-149.27 61.73Q269-567.54 269-479.96q0 87.58 61.73 149.27Q392.46-269 480.04-269ZM480-34q-92.64 0-174.47-34.6-81.82-34.61-142.07-94.86T68.6-305.53Q34-387.36 34-480q0-92.9 34.66-174.45 34.67-81.55 95.18-141.94 60.51-60.39 142.07-95Q387.48-926 480-926q92.89 0 174.48 34.59 81.59 34.6 141.96 94.97 60.37 60.37 94.97 141.99Q926-572.83 926-479.92q0 92.92-34.61 174.25-34.61 81.32-95 141.83Q736-103.33 654.45-68.66 572.9-34 480-34Zm-.23-136q130.74 0 220.49-89.51Q790-349.03 790-479.77t-89.51-220.49Q610.97-790 480.23-790t-220.49 89.51Q170-610.97 170-480.23t89.51 220.49Q349.03-170 479.77-170Zm.23-310Z");
+                };
+
+                $(`${galleryId} .gallery-image`).click(function() {
+                    const targetImage = $(this).attr("image") - 1;
+                    currentImageIndex = targetImage;
+                    updateGallery();
+                });
+
+                $(`${galleryId} #gallery-image-decrease`).click(function() {
+                    if (currentImageIndex > 0) {
+                        currentImageIndex--;
+                        updateGallery();
+                    }
+                });
+
+                $(`${galleryId} #gallery-image-increase`).click(function() {
+                    if (currentImageIndex < galleryImages.length - 1) {
+                        currentImageIndex++;
+                        updateGallery();
+                    }
+                });
+
+                updateGallery();
+            });
+        });
+    };
+
     // Function using EmailJS to send a feedback form to a target email
     const manageFeedback = async () => {
         $('#message').on('input', function () {
@@ -698,6 +752,7 @@
             previewBlogs,
             navbarScroll,
             searchBlogs,
+            galleryController,
             manageFeedback,
             handleDisabledElements,
             setupGotoLinks,
