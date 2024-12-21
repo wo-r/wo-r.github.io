@@ -206,7 +206,7 @@
     }
 
     // Function using EmailJS to send a feedback form to a target email
-    const manageFeedback = () => {
+    const manageFeedback = async () => {
         $('#message').on('input', function () {
             $(this).css('height', 'auto');
             $(this).css('height', this.scrollHeight + 'px');
@@ -224,7 +224,7 @@
         })
         
         if ($("#message").length && $("#email").length) {
-            $("#submit").click(function () {
+            await $("#submit").click(async function () {
                 if ($("#message").val() != "" && $("#email").val() != "" && $("#email").val().includes("@")) {
                     function sanitizeInput(input) {
                         if (!input) return '';
@@ -237,28 +237,57 @@
                     let email = sanitizeInput($("#email").val());
                     let message = sanitizeInput($("#message").val());
 
-                    emailjs.init({publicKey: "9ac5poQVMm8gyPC01"})
+                    $("#submit").attr("disabled", "");
+                    $("#feedbackStatus").removeClass("hidden");
+                    $("#feedbackStatus div.p-10").removeClass("scale-95 opacity-0").addClass("scale-100 opacity-100")
+                    $("#progressBar").attr("style", "width: 0%;");
 
-                    $("#submit").find("span").text("...")
+                    setTimeout(async function () {
+                        await emailjs.init({publicKey: "9ac5poQVMm8gyPC01"})
 
-                    let form = {
-                        name: name,
-                        email: email,
-                        message: message,
-                    }
+                        $("#progressBar").attr("style", `width: ${20 + Math.floor(Math.random() * (20 - 40))}%;`);
+                        $("#loadingMessage").text("Initalizing Email.js...");
 
-                    emailjs.send("default_service", "template_sx6avhu", form).then(() => {
-                        $("#submit").find("span").text("Message Sent")
-                        setTimeout(function () {
-                            $("#submit").find("span").text("Send Message")
-                        }, 2000)
-                    }, (err) => {
-                        $("#submit").find("span").text("Failed to send message (Check console)")
-                        setTimeout(function () {
-                            $("#submit").find("span").text("Send Message")
-                        }, 8000)
-                        console.log(JSON.stringify(err));
-                    });
+                        setTimeout(async function () {
+                            $("#progressBar").attr("style", `width: ${40 + Math.floor(Math.random() * (40 - 60))}%;`);
+                            $("#loadingMessage").text("Getting form data...");
+    
+                            let form = {
+                                name: name,
+                                email: email,
+                                message: message,
+                            }
+    
+                            setTimeout(async function () {
+                                $("#progressBar").attr("style", `width: ${70 + Math.floor(Math.random() * (70 - 90))}%;`);
+                                $("#loadingMessage").text("Sending message...");
+                                setTimeout(async function () {
+                                    await emailjs.send("gmail_sender_98wERH34", "feedback_form_98yuadsf9u", form).then(() => {
+                                        $("#progressBar").attr("style", "width: 100%;");
+                                        $("#loadingMessage").text("Message sent...");
+                                        setTimeout(function () {
+                                            $("#name").val("")
+                                            $("#email").val("")
+                                            $("#message").val("")
+
+                                            $('#feedbackStatus').addClass('hidden');
+                                        }, 2000)
+                                    }, (err) => {
+                                        $("#progressBar").attr("style", "width: 0%;");
+                                        $("#loadingMessage").html(`Error sending message: <code class="text-sm bg-brown">${err}</code><br>Logged to console...`);
+                                        setTimeout(function () {
+                                            $("#name").val("")
+                                            $("#email").val("")
+                                            $("#message").val("")
+
+                                            $('#feedbackStatus').addClass('hidden');
+                                        }, 5000)
+                                        console.error(err)
+                                    });  
+                                }, 1000 + Math.floor(Math.random() * (2000 - 1000)))
+                            }, 500 + Math.floor(Math.random() * (500 - 100)))
+                        }, 1000 + Math.floor(Math.random() * (2000 - 1000)))
+                    }, 800 + Math.floor(Math.random() * (800 - 400)))
                 } else {
                     if ($($("#message")).val() == "") {
                         $("#message").parent().addClass("border-2 border-red-800 animate-shake");
