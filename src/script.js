@@ -221,6 +221,10 @@
                     const imagePath = currentImage.PATH;
 
                     $(`${galleryId} #gallery img`).attr("src", imagePath);
+                    
+                    if (currentImage.custom_classings != "") {
+                        $(`${galleryId} #gallery img`).addClass(currentImage.custom_classings)
+                    }
 
                     if (currentImage.tooltip != "") {
                         $(`${galleryId} #gallery img`).attr("tooltip", currentImage.tooltip);
