@@ -1,7 +1,17 @@
 (async function () {
     /**
      * Copyright Wo-r 2019
+     * 
+     * TODO: refresh this crap its old and needs updating lol
      */
+
+    // Checker function to manage theme stuff throughout the site.
+    function isThemeEnabled() {
+        if (window.location.href.includes("blogs/blog"))
+            return true;
+
+        return false;
+    }
 
     // Utility function to check if it's a new day
     const isNewDay = () => {
@@ -764,18 +774,20 @@
                                         </a>
                                     </div>
                                 </div>
-                                <div class="flex justify-between py-3 px-4">
-                                    <div></div>
-                                    <div class="flex flex-row gap-2">
-                                        <a id="themeToggle" type="close" class="cursor-pointer">
-                                            <div ripple class="relative overflow-hidden hover:bg-brown-light hover:bg-opacity-20 transition rounded-xl z-20">
-                                                <svg class="p-2 pt-[6px]" viewbox="0 -960 960 960" width="45px" height="45px">    
-                                                    <path class="fill-zinc-300 pointer-events-none" d="M481-100q-164 0-272.5-108T100-480q0-115 59-213.5T341-837q29-10 53-9t40 13q17 11 25.5 31.5T466-752q2 16 1 28.5t-1 22.5q0 99 70 168t170 69q12 0 25 .5t26 2.5q29-2 48.5 6t29.5 24q11 16 11.5 38t-9.5 51q-44 109-140 175.5T481-100Z">
-                                                </svg>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
+                                ${isThemeEnabled() == false ? `
+                                    <div class="flex justify-between py-3 px-4">
+                                        <div></div>
+                                        <div class="flex flex-row gap-2">
+                                            <a id="themeToggle" type="close" class="cursor-pointer">
+                                                <div ripple class="relative overflow-hidden hover:bg-brown-light hover:bg-opacity-20 transition rounded-xl z-20">
+                                                    <svg class="p-2 pt-[6px]" viewbox="0 -960 960 960" width="45px" height="45px">    
+                                                        <path class="fill-zinc-300 pointer-events-none" d="M481-100q-164 0-272.5-108T100-480q0-115 59-213.5T341-837q29-10 53-9t40 13q17 11 25.5 31.5T466-752q2 16 1 28.5t-1 22.5q0 99 70 168t170 69q12 0 25 .5t26 2.5q29-2 48.5 6t29.5 24q11 16 11.5 38t-9.5 51q-44 109-140 175.5T481-100Z">
+                                                    </svg>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>    
+                                ` : ""}
                             </div>
                         </div>
                     </div>
@@ -815,39 +827,49 @@
     }
 
     // Septerate to all other functions: Handles the theming of the page by loading elements to change it.
-    {
-        // TODO: btn #themeToggle
+    function applyTheme() {
+        if (isThemeEnabled())
+            return;
 
         if (localStorage.getItem("theme") == "dark" || localStorage.getItem("theme") == null) {
             if ($("#themeManager").length) {
-                $("#themeManager, #themeManagerCSS").remove();
+                $("#themeManagerCSS, #snowOptions").remove();
             }
-        } else if (localStorage.getItem("theme") == "light" && localStorage.getItem("theme") != null) {
-            $("head").append(`
-                <!--THEME INJECTED BY USER CHOICE-->
-                <script id="themeManager">
-                    tailwind.config = {
-                        theme: {
-                            extend: {
-                                fontFamily: {
-                                    nunito: ['Nunito', 'sans-serif'],
-                                    nunitoblack: ['NunitoBlack', 'sans-serif']
-                                },
-                                colors: {
-                                    "brown": "#b6bcd8",
-                                    "brown-dark":"#f5f5f7",
-                                    "brown-darker":"#fcfcfd",
-                                    "brown-light": "#8995c8",
-                                    "brown-accent": "#6979ec",
-                                    "brown-accent-light": "#0a0960",
-                                    "black": "#b6bcd8",
-                                    "zinc-300": "#3f3f46",
-                                    "gray-300": "#3f3f46"
-                                }
-                            }
+
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            "brown": "#494327",
+                            "brown-dark":"#0a0a08",
+                            "brown-darker":"#030302",
+                            "brown-light": "#766a37",
+                            "brown-accent": "#968613",
+                            "brown-accent-light": "#f5f69f"
                         }
                     }
-                </script>    
+                }
+            }
+        } else if (localStorage.getItem("theme") == "light" && localStorage.getItem("theme") != null) {
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            "brown": "#b6bcd8",
+                            "brown-dark":"#f5f5f7",
+                            "brown-darker":"#fcfcfd",
+                            "brown-light": "#8995c8",
+                            "brown-accent": "#6979ec",
+                            "brown-accent-light": "#0a0960",
+                            "black": "#b6bcd8",
+                            "zinc-300": "#3f3f46",
+                            "gray-300": "#3f3f46"
+                        }
+                    }
+                }
+            }
+
+            $("head").append(`
                 <style id="themeManagerCSS">
                     ::selection {
                         background: #8995c8 !important;
@@ -872,6 +894,8 @@
             `)
         }
     }
+
+    applyTheme();
 
     // Wait for document to be ready
     await $(window).ready(async function () {
@@ -901,6 +925,20 @@
                 await task();
             } catch (e) { }
         }
+
+        $("#themeToggle").mousedown(function () {
+            let currentTheme = localStorage.getItem("theme");
+    
+            if (currentTheme === "dark" || currentTheme === null) {
+                // Switch to light theme
+                localStorage.setItem("theme", "light");
+                applyTheme();
+            } else {
+                // Switch to dark theme
+                localStorage.setItem("theme", "dark");
+                applyTheme();
+            }
+        });
 
         // Set current year
         $("#currentYear").text(new Date().getFullYear());
