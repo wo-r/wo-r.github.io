@@ -3,6 +3,19 @@
      * Copyright Wo-r 2019
      */
 
+    // Utility function to check if it's a new day
+    const isNewDay = () => {
+        const lastUpdated = localStorage.getItem('lastUpdated');
+        const today = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+        return lastUpdated !== today;
+    };
+
+    // Utility function to update the last update timestamp
+    const updateLastUpdated = () => {
+        const today = new Date().toISOString().split('T')[0];
+        localStorage.setItem('lastUpdated', today);
+    };
+
     // Helper function to get GitHub user data
     const fetchGitHubData = async (url) => {
         try {
@@ -16,39 +29,74 @@
 
     // Function to fetch and display total followers
     const fetchFollowersCount = async () => {
-        if ($("#totalFollowers").length == 0)
+        if ($("#totalFollowers").length == 0) return;
+
+        if (!isNewDay() && localStorage.getItem('followersCount') != null) {
+            // Use the cached value if it's not a new day
+            const cachedFollowersCount = localStorage.getItem('followersCount');
+            if (cachedFollowersCount) {
+                $("#totalFollowers").text(cachedFollowersCount);
+            }
             return;
+        }
 
         const userData = await fetchGitHubData("https://api.github.com/users/wo-r");
         const followersCount = userData ? userData.followers : 0;
+
+        // Store the fetched data and the timestamp
+        localStorage.setItem('followersCount', followersCount);
+        updateLastUpdated();
+
         $("#totalFollowers").text(followersCount);
     };
 
     // Function to fetch and display total repositories
     const fetchRepositoriesCount = async () => {
-        if ($("#totalRepos").length == 0)
+        if ($("#totalRepos").length == 0) return;
+
+        if (!isNewDay() && localStorage.getItem('repositoriesCount') != null) {
+            console.log("cached")
+            // Use the cached value if it's not a new day
+            const cachedRepositoriesCount = localStorage.getItem('repositoriesCount');
+            if (cachedRepositoriesCount) {
+                $("#totalRepos").text(cachedRepositoriesCount);
+            }
             return;
+        }
 
         const userUrls = ["wo-r", "wo-r-professional", "gradpass"];
         let repositoriesCount = 0;
         let usersProcessed = 0;
 
-        userUrls.forEach(async (username) => {
+        // Fetch repository count for each user
+        for (const username of userUrls) {
             const repoData = await fetchGitHubData(`https://api.github.com/users/${username}/repos?per_page=100`);
             if (repoData) {
                 repositoriesCount += repoData.length;
             }
             usersProcessed++;
+            console.log(usersProcessed)
             if (usersProcessed === userUrls.length) {
+                // Store the fetched data and the timestamp
+                localStorage.setItem('repositoriesCount', repositoriesCount);
+                updateLastUpdated();
                 $("#totalRepos").text(repositoriesCount);
             }
-        });
+        }
     };
 
     // Function to fetch and display best repositories
     const fetchBestRepositories = async () => {
-        if ($("#bestRepos").length == 0)
+        if ($("#bestRepos").length == 0) return;
+
+        if (!isNewDay() && localStorage.getItem('bestRepos') != null) {
+            // Use the cached value if it's not a new day
+            const cachedBestRepos = localStorage.getItem('bestRepos');
+            if (cachedBestRepos) {
+                $("#bestRepos").html(cachedBestRepos);
+            }
             return;
+        }
 
         const userUrls = ["wo-r", "wo-r-professional", "gradpass"];
         const targetRepos = [
@@ -59,6 +107,7 @@
         ];
         let bestRepos = [];
 
+        // Fetch repositories for each user
         await Promise.all(userUrls.map(async (username) => {
             const repos = await fetchGitHubData(`https://api.github.com/users/${username}/repos?per_page=100`);
             if (repos) {
@@ -67,25 +116,34 @@
             }
         }));
 
+        // Cache the best repositories and store them
+        let reposHtml = '';
         bestRepos.forEach((repo) => {
-            $("#bestRepos").append(`
-                <a href="${repo.html_url}" tooltip="${repo.description || 'No description available'}" class="cursor-pointer flex-1 text-center select-none">
-                    <div class="relative overflow-hidden p-10 font-black bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full flex items-center justify-center">
-                        <div class="flex flex-row justify-center items-center">
-                            <span>${repo.name}</span>
-                        </div>
+            reposHtml += `
+            <a href="${repo.html_url}" tooltip="${repo.description || 'No description available'}" class="cursor-pointer flex-1 text-center select-none">
+                <div class="relative overflow-hidden p-10 font-black bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full flex items-center justify-center">
+                    <div class="flex flex-row justify-center items-center">
+                        <span>${repo.name}</span>
                     </div>
-                </a>
-            `);
+                </div>
+            </a>
+        `;
         });
-    };
 
+        // Store the HTML content and update the timestamp
+        localStorage.setItem('bestRepos', reposHtml);
+        updateLastUpdated();
+
+        // Update the DOM with the fetched HTML
+        $("#bestRepos").html(reposHtml);
+    };
+    
     // Function to count total amount of blogs
     const fetchTotalBlogs = async () => {
         if ($("#totalBlogs").length == 0)
             return;
 
-        await $.getJSON('../blogs/blogs.json', function(data) {
+        await $.getJSON('../blogs/blogs.json', function (data) {
             if (data.blogs && Array.isArray(data.blogs)) {
                 const visibleBlogs = data.blogs.filter(blog => !blog.locked);
                 var totalBlogs = visibleBlogs.length;
@@ -99,9 +157,9 @@
         if ($("#blogs").length == 0)
             return;
 
-        await $.getJSON('../blogs/blogs.json', function(blogs) {
+        await $.getJSON('../blogs/blogs.json', function (blogs) {
             blogs.blogs.sort((a, b) => new Date(b.created) - new Date(a.created))
-            $.each(blogs.blogs, async function (index, {locked, name, description, created, PATH}) {
+            $.each(blogs.blogs, async function (index, { locked, name, description, created, PATH }) {
                 if (locked)
                     return;
 
@@ -128,11 +186,11 @@
         if ($("#previewBlogs").length == 0)
             return;
 
-        await $.getJSON('../blogs/blogs.json', function(blogs) {
+        await $.getJSON('../blogs/blogs.json', function (blogs) {
             blogs.blogs.sort((a, b) => new Date(b.created) - new Date(a.created))
             blogs.blogs = blogs.blogs.filter(blog => blog.locked !== true).slice(0, 2);
-            
-            $.each(blogs.blogs, async function (index, {name, description, created, PATH}) {
+
+            $.each(blogs.blogs, async function (index, { name, description, created, PATH }) {
                 let date = new Date(created).toLocaleString();
                 $("#previewBlogs").append(`
                     <a goto="${PATH}" class="cursor-pointer flex-1 select-none">
@@ -155,17 +213,17 @@
             return;
         } else {
             let prevScrollpos = $("#main").parent().scrollTop();
-        
-            await $("#main").parent().scroll(function() {
+
+            await $("#main").parent().scroll(function () {
                 let currentScrollPos = $("#main").parent().scrollTop();
                 const contentHeight = $("#main")[0].scrollHeight;
                 const viewportHeight = $("#main").parent()[0].clientHeight + 100;
-                
+
                 if (contentHeight <= viewportHeight) {
                     $('#navbar').parent().removeClass('opacity-0').addClass("py-3 px-4").find("#navbar").removeClass("h-0");
                     return;
                 }
-                
+
                 if (currentScrollPos + viewportHeight >= contentHeight - 20) {
                     $('#navbar').parent().addClass('opacity-0').removeClass("py-3 px-4").find("#navbar").addClass("h-0");
                 } else {
@@ -175,7 +233,7 @@
                         $('#navbar').parent().addClass('opacity-0').removeClass("py-3 px-4").find("#navbar").addClass("h-0");
                     }
                 }
-    
+
                 prevScrollpos = currentScrollPos;
             });
         }
@@ -186,13 +244,13 @@
         if ($("#search").length == 0)
             return;
 
-        $('#search').on('input', function() {
+        $('#search').on('input', function () {
             var search = $(this).val();
-            $('#blogs a h1').each(function() {
+            $('#blogs a h1').each(function () {
                 if (search.length === 0) {
                     $(this).html($(this).text()).show();
                     $(this).parent().parent().parent().show()
-                } else {            
+                } else {
                     if ($(this).text().match(new RegExp(search, "gi")) !== null) {
                         var highlightedText = $(this).text().replace(new RegExp(search, "gi"), `<span class="text-brown-light">$&</span>`);
                         $(this).html(highlightedText).show();
@@ -210,8 +268,8 @@
         if ($("#gradpass").length == 0)
             return;
 
-        $.getJSON("../portfolio/gallerys/gallerys.json", function(data) {
-            $.each(data.gallerys, function(galleryKey, galleryImages) {
+        $.getJSON("../portfolio/gallerys/gallerys.json", function (data) {
+            $.each(data.gallerys, function (galleryKey, galleryImages) {
                 const galleryId = `#${galleryKey}`;
 
                 let currentImageIndex = 0;
@@ -221,7 +279,7 @@
                     const imagePath = currentImage.PATH;
 
                     $(`${galleryId} #gallery img`).attr("src", imagePath);
-                    
+
                     if (currentImage.custom_classings != "") {
                         $(`${galleryId} #gallery img`).addClass(currentImage.custom_classings)
                     }
@@ -238,20 +296,20 @@
                         .find("path").attr("d", "M480.04-269q87.58 0 149.27-61.73Q691-392.46 691-480.04q0-87.58-61.73-149.27Q567.54-691 479.96-691q-87.58 0-149.27 61.73Q269-567.54 269-479.96q0 87.58 61.73 149.27Q392.46-269 480.04-269ZM480-34q-92.64 0-174.47-34.6-81.82-34.61-142.07-94.86T68.6-305.53Q34-387.36 34-480q0-92.9 34.66-174.45 34.67-81.55 95.18-141.94 60.51-60.39 142.07-95Q387.48-926 480-926q92.89 0 174.48 34.59 81.59 34.6 141.96 94.97 60.37 60.37 94.97 141.99Q926-572.83 926-479.92q0 92.92-34.61 174.25-34.61 81.32-95 141.83Q736-103.33 654.45-68.66 572.9-34 480-34Zm-.23-136q130.74 0 220.49-89.51Q790-349.03 790-479.77t-89.51-220.49Q610.97-790 480.23-790t-220.49 89.51Q170-610.97 170-480.23t89.51 220.49Q349.03-170 479.77-170Zm.23-310Z");
                 };
 
-                $(`${galleryId} .gallery-image`).click(function() {
+                $(`${galleryId} .gallery-image`).click(function () {
                     const targetImage = $(this).attr("image") - 1;
                     currentImageIndex = targetImage;
                     updateGallery();
                 });
 
-                $(`${galleryId} #gallery-image-decrease`).click(function() {
+                $(`${galleryId} #gallery-image-decrease`).click(function () {
                     if (currentImageIndex > 0) {
                         currentImageIndex--;
                         updateGallery();
                     }
                 });
 
-                $(`${galleryId} #gallery-image-increase`).click(function() {
+                $(`${galleryId} #gallery-image-increase`).click(function () {
                     if (currentImageIndex < galleryImages.length - 1) {
                         currentImageIndex++;
                         updateGallery();
@@ -280,13 +338,13 @@
             if ($(this).val() != "")
                 $("#email").parent().removeClass("border-2 border-red-800 animate-shake");
         })
-        
+
         if ($("#message").length && $("#email").length) {
             await $("#submit").click(async function () {
                 if ($("#message").val() != "" && $("#email").val() != "" && $("#email").val().includes("@")) {
                     function sanitizeInput(input) {
                         if (!input) return '';
-                        return input.trim().replace(/["'<>&]/g, function(match) {
+                        return input.trim().replace(/["'<>&]/g, function (match) {
                             return '&#' + match.charCodeAt(0) + ';';
                         });
                     }
@@ -301,7 +359,7 @@
                     $("#progressBar").attr("style", "width: 0%;");
 
                     setTimeout(async function () {
-                        await emailjs.init({publicKey: "9ac5poQVMm8gyPC01"})
+                        await emailjs.init({ publicKey: "9ac5poQVMm8gyPC01" })
 
                         $("#progressBar").attr("style", `width: ${20 + Math.floor(Math.random() * (20 - 40))}%;`);
                         $("#loadingMessage").text("Initalizing Email.js...");
@@ -309,13 +367,13 @@
                         setTimeout(async function () {
                             $("#progressBar").attr("style", `width: ${40 + Math.floor(Math.random() * (40 - 60))}%;`);
                             $("#loadingMessage").text("Getting form data...");
-    
+
                             let form = {
                                 name: name,
                                 email: email,
                                 message: message,
                             }
-    
+
                             setTimeout(async function () {
                                 $("#progressBar").attr("style", `width: ${70 + Math.floor(Math.random() * (70 - 90))}%;`);
                                 $("#loadingMessage").text("Sending message...");
@@ -341,7 +399,7 @@
                                             $('#feedbackStatus').addClass('hidden');
                                         }, 5000)
                                         console.error(err)
-                                    });  
+                                    });
                                 }, 1000 + Math.floor(Math.random() * (2000 - 1000)))
                             }, 500 + Math.floor(Math.random() * (500 - 100)))
                         }, 1000 + Math.floor(Math.random() * (2000 - 1000)))
@@ -389,7 +447,7 @@
                 }
             } else if (goto.startsWith("/")) {
                 window.location.href = goto;
-            }   else if (goto.startsWith("mailto:")) {
+            } else if (goto.startsWith("mailto:")) {
                 // Handle the mailto link
                 window.location.href = goto;  // This will open the default mail client
             }
@@ -580,7 +638,7 @@
         for (let i = 0; i < window.location.pathname.split("/").length - 2; i++) {
             slashPath += "../";
         }
-        
+
         let elements = {
             component: {
                 navbar: "",
@@ -765,12 +823,12 @@
             setupTooltips,
             setupPopupText
         ];
-        
+
         // Run all the initialization functions
         for (let task of tasks) {
             try {
                 await task();
-            } catch (e) {}
+            } catch (e) { }
         }
 
         // Set current year
