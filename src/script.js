@@ -850,6 +850,10 @@
                     }
                 }
             }
+
+            window.SnowStorm.snowColor = "#766a37";
+            window.SnowStorm.snowCharacter = "<div class='w-full select-none'>&bull;</div>";
+            window.SnowStorm.restartSnow();
         } else if (localStorage.getItem("theme") == "light" && localStorage.getItem("theme") != null) {
             tailwind.config = {
                 theme: {
@@ -869,6 +873,10 @@
                 }
             }
 
+            window.SnowStorm.snowColor = "#8995c8";
+            window.SnowStorm.snowCharacter = "<div class='w-full select-none'>&bull;</div>";
+            window.SnowStorm.restartSnow();
+
             $("head").append(`
                 <style id="themeManagerCSS">
                     ::selection {
@@ -878,27 +886,14 @@
                         background: rgb(137, 149, 200, 0.8) !important;
                     }
                 </style>
-                <div id="snowOptions"
-                    data-flakes-max="100"
-                    data-snow-color="#8995c8"
-                    data-flake-width="120"
-                    data-flake-height="120"
-                    data-snow-character="<div class='w-full select-none'>&bull;</div>"
-                    data-vmax-x="1"
-                    data-vmax-y="1"
-                    data-auto-start="true"
-                    data-use-gpu="false"
-                    data-snow-stick="false"
-                    data-exclude-mobile="true">
-                </div>
             `)
         }
     }
 
-    applyTheme();
-
     // Wait for document to be ready
     await $(window).ready(async function () {
+        window.SnowStorm.init();
+    
         const tasks = [
             applyElements,
             fetchFollowersCount,
@@ -926,6 +921,8 @@
             } catch (e) { }
         }
 
+        applyTheme();
+
         $("#themeToggle").mousedown(function () {
             let currentTheme = localStorage.getItem("theme");
     
@@ -939,6 +936,7 @@
                 applyTheme();
             }
         });
+
 
         // Set current year
         $("#currentYear").text(new Date().getFullYear());

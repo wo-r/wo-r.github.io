@@ -199,7 +199,7 @@
         if (self.excludeMobile == true && ('ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0))
             return
         else
-            self.init();
+            window.SnowStorm = self
     };
 
     // Start SnowStorm instance
