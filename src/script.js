@@ -832,7 +832,7 @@
             return;
 
         if (localStorage.getItem("theme") == "dark" || localStorage.getItem("theme") == null) {
-            if ($("#themeManager").length) {
+            if ($("#themeManagerCSS").length) {
                 $("#themeManagerCSS, #snowOptions").remove();
             }
 
