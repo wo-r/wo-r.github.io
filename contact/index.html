@@ -58,6 +58,9 @@
         <link rel="stylesheet" href="./../src/style.css">
     </head>
     <body class="relative min-h-screen overflow-hidden box-border font-nunito bg-black text-zinc-300">
+        <div id="loader" class="fixed top-0 left-0 w-full h-full bg-black flex items-center justify-center z-[100]">
+            <div class="loader"></div>
+        </div>
         <div class="h-[100vh]">
             <div class="flex flex-row-reverse h-full w-full">
                 <div id="sidemenuContainer" class="flex flex-row-reversed"></div>
@@ -182,16 +185,6 @@
                             </div>
                         </div>
                         <div id="footer" class="bg-brown-darker select-none flex-2"></div>
-                    </div>
-                </div>
-                <div id="feedbackStatus" class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 hidden">
-                    <div class="p-10 bg-brown-darker rounded-xl flex flex-col lg:flex-row w-full max-w-md lg:max-w-xl flex-1 transition-all transform scale-95 opacity-0 transition-transform duration-300 ease-out">
-                        <div class="flex flex-col flex-1 items-center lg:items-start">
-                            <div class="w-full bg-brown rounded-md mt-2">
-                                <div id="progressBar" class="h-10 bg-brown-light rounded-md transition-all" style="width: 0%;"></div>
-                            </div>
-                            <p id="loadingMessage" class="mt-4 text-lg text-brown-100">Please wait...</p>
-                        </div>
                     </div>
                 </div>
             </div>

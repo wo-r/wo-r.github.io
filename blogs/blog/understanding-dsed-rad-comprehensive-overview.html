@@ -37,7 +37,8 @@
                             "brown-darker":"#450a0a",
                             "brown-light": "#ef4444",
                             "brown-accent": "#dc2626",
-                            "brown-accent-light": "#ef4444"
+                            "brown-accent-light": "#ef4444",
+                            "black": "#450a0a"
                         }
                     }
                 }
@@ -60,6 +61,12 @@
                 transform: scale(0);
                 animation: ripple 600ms linear;
             }
+
+            .loader {
+                --c: linear-gradient(#fff 0 0);
+                --r1: radial-gradient(farthest-side at bottom, #fff 93%, #fff);
+                --r2: radial-gradient(farthest-side at top, #fff 93%, #fff);
+            }
         </style>
         <div id="snowOptions"
             data-flakes-max="100"
@@ -76,6 +83,9 @@
         </div>
     </head>
     <body class="relative min-h-screen overflow-hidden box-border font-nunito bg-white text-zinc-300">
+        <div id="loader" class="fixed top-0 left-0 w-full h-full bg-black flex items-center justify-center z-[100]">
+            <div class="loader"></div>
+        </div>
         <div class="h-[100vh]">
             <div class="flex flex-row-reverse h-full w-full">
                 <div id="sidemenuContainer" class="flex flex-row-reversed"></div>

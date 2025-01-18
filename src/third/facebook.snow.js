@@ -1,5 +1,5 @@
 /*!
- * Snowstorm Effect v1.0
+ * SnowStorm Effect v1.0
  * Original code sourced from Facebook (Meta) 2024
  * Property of Facebook (Meta), all rights reserved.
  *
