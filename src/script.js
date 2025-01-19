@@ -187,7 +187,7 @@
      */
     var dayCheckManager = {
         isNewDay: () => { return storageManager.lastUpdated !== currentDateYMDFormat },
-        updateLastUpdated: () => { storageEditorManager.edit( "lastUpdated", currentDateYMDFormat ) },
+        updateLastUpdated: () => { storageEditorManager.edit( storageManager.raw.lastUpdated, currentDateYMDFormat ) },
     }
 
     /**
@@ -284,7 +284,7 @@
         // Easily manages the closed and opened states of the menu
         var PropMenuState = function ( callback ) {
             var isMenuOpened = callback;
-            storageEditorManager.edit( "sideMenu", isMenuOpened ? "opened" : "closed" );
+            storageEditorManager.edit( storageManager.raw.sideMenu, isMenuOpened ? "opened" : "closed" );
 
             isMenuOpened ? elementsManager.sideMenuOptions.toggleButton.addClass( "invisible" ) : elementsManager.sideMenuOptions.toggleButton.removeClass( "invisible" );
             isMenuOpened ? elementsManager.sideMenuOptions.resumeButton.addClass( "invisible" ) : elementsManager.sideMenuOptions.resumeButton.removeClass( "invisible" );
@@ -411,12 +411,12 @@
                                             <div class="flex flex-col gap-1 py-3 px-4">
                                                 <span class="font-black font-nunitoblack text-sm px-3 pb-2">OVERVIEW</span>
                                                 <a goto="/" class="cursor-pointer">
-                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         Home
                                                     </div>
                                                 </a>
                                                 <a goto="/blogs/" class="cursor-pointer">
-                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         Blogs
                                                     </div>
                                                 </a>
@@ -424,32 +424,32 @@
                                             <div class="flex flex-col gap-1 py-3 px-4">
                                                 <span class="font-black font-nunitoblack text-sm px-3 pb-2">FOR BUSINESS</span>
                                                 <a goto="/resume/" class="cursor-pointer">
-                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         Resume
                                                     </div>
                                                 </a>
                                                 <a goto="/portfolio/" class="cursor-pointer">
-                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         Portfolio
                                                     </div>
                                                 </a>
                                                 <a goto="" class="cursor-pointer" disabled>
-                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         Certifications
                                                     </div>
                                                 </a>
                                                 <a goto="" class="cursor-pointer" disabled>
-                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         Experience
                                                     </div>
                                                 </a>
                                                 <a goto="" class="cursor-pointer" disabled>
-                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         Education
                                                     </div>
                                                 </a>
                                                 <a goto="/contact/" class="cursor-pointer">
-                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         Contact Me
                                                     </div>
                                                 </a>
@@ -457,12 +457,12 @@
                                             <div class="flex flex-col gap-1 py-3 px-4">
                                                 <span class="font-black font-nunitoblack text-sm px-3 pb-2">SOCIALS</span>
                                                 <a goto="" class="cursor-pointer" disabled>
-                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         LinkedIn
                                                     </div>
                                                 </a>
                                                 <a goto="https://www.youtube.com/@thatguywoods" tooltip="Check out my youtube channel where I make videos" class="cursor-pointer">
-                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-black hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         Youtube
                                                     </div>
                                                 </a>
@@ -793,7 +793,7 @@
 
         var userData = await get( githubAPI( githubAccounts[0] ) );
         var totalFollowers = userData ? userData.followers : 0;
-        storageEditorManager.edit( "totalFollowers", totalFollowers );
+        storageEditorManager.edit( storageManager.raw.totalFollowers, totalFollowers );
         dayCheckManager.updateLastUpdated();
 
         elementsManager.totalFollowers.text( totalFollowers );
@@ -823,7 +823,7 @@
 
             usersProcessed++
             if ( usersProcessed === githubAccounts.length ) {
-                storageEditorManager.edit( "totalRepos", totalRepos );
+                storageEditorManager.edit( storageManager.raw.totalRepos, totalRepos );
                 dayCheckManager.updateLastUpdated();
 
                 elementsManager.totalRepos.text( totalRepos );
@@ -1112,7 +1112,7 @@
 
                     // First time use of this button
                     if ( storageManager.theme == undefined ) {
-                        storageEditorManager.edit( "theme", "light" )
+                        storageEditorManager.edit( storageManager.raw.theme, "light" )
                         storageManager.theme = "light";
                         elementsManager.update();
                         initalizeCurrentTheme( SnowStorm );
@@ -1120,12 +1120,12 @@
                     // Any other time the user clicks the button
                     } else {
                         if ( storageManager.theme == "dark" ) {
-                            storageEditorManager.edit( "theme", "light" );
+                            storageEditorManager.edit( storageManager.raw.theme, "light" );
                             storageManager.theme = "light";
                             elementsManager.update();
                             initalizeCurrentTheme( SnowStorm );
                         } else {
-                            storageEditorManager.edit( "theme", "dark" );
+                            storageEditorManager.edit( storageManager.raw.theme, "dark" );
                             storageManager.theme = "dark";
                             elementsManager.update();
                             initalizeCurrentTheme( SnowStorm );
