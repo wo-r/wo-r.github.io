@@ -5,7 +5,7 @@
  *  - jQuery v3.7.1
  *  - Tailwind v3.4.6
  *  - SnowStorm v1.0.0 by Facebook (Meta)
- *  - EmailJS
+ *  - EmailJS v4.0.3
  * 
  * Website: https://wo-r.github.io/
  * Built: 2025-01-17T00:00Z
@@ -229,9 +229,11 @@
         // Current theme is dark.
         if ( storageManager.theme == "dark" || storageManager.theme == undefined ) {
             elementsManager.themeManager != undefined ? elementsManager.themeManager.remove() : null;
-            SnowStorm.snowColor = "#766a37";
-            SnowStorm.snowCharacter = "<div class='w-full select-none'>&bull;</div>";
-            SnowStorm.restartSnow();
+            if ( !isMobile ) {
+                SnowStorm.snowColor = "#766a37";
+                SnowStorm.snowCharacter = "<div class='w-full select-none'>&bull;</div>";
+                SnowStorm.restartSnow();
+            }
             tailwind.config = {
                 theme: {
                     extend: {
@@ -250,9 +252,11 @@
         // Current theme is light.
         } else if ( storageManager.theme == "light" && storageManager.theme != undefined ) {
             $( "head" ).append( `<style id="themeManagerCSS"> ::selection { background: #8995c8 !important; } .ripple { background: rgb(137, 149, 200, 0.8) !important; } .loader { --c: linear-gradient(#fff 0 0); --r1: radial-gradient(farthest-side at bottom, #fff 93%, #fff); --r2: radial-gradient(farthest-side at top, #fff 93%, #fff); } </style>` );
-            SnowStorm.snowColor = "#8995c8";
-            SnowStorm.snowCharacter = "<div class='w-full select-none'>&bull;</div>";
-            SnowStorm.restartSnow();
+            if ( !isMobile ) {
+                SnowStorm.snowColor = "#8995c8";
+                SnowStorm.snowCharacter = "<div class='w-full select-none'>&bull;</div>";
+                SnowStorm.restartSnow();
+            }
             tailwind.config = {
                 theme: {
                     extend: {
@@ -1088,7 +1092,7 @@
          * 9. `restartSnow()`: Clears existing snowflakes and re-creates them when the window is resized.
          */
         var SnowStorm = window.SnowStorm;
-        SnowStorm.init();
+        if ( !isMobile ) SnowStorm.init();
 
         // Contains a long list of functions to run in order from HIGHEST priority to LOWEST priority.
         var tasks = [

@@ -195,11 +195,7 @@
             self.active = false;
         };
 
-        // Initialize snowfall
-        if (self.excludeMobile == true && ('ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0))
-            return
-        else
-            window.SnowStorm = self
+        window.SnowStorm = self
     };
 
     // Start SnowStorm instance
