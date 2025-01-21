@@ -142,6 +142,12 @@
             name: $( "#name" ).length == 0 ? undefined : $( "#name" ),
             submitButton: $( "#submit" ).length == 0 ? undefined : $( "#submit" ),
         },
+        contextMenuOptions: {
+            contextMenu: $( "#contextMenu" ).length == 0 ? undefined : $( "#contextMenu" ),
+            backdrop: $( "#contextMenuBackdrop" ).length == 0 ? undefined : $( "#contextMenuBackdrop" ),
+            //...
+            settings: $( "#contextMenu #settings" ).length == 0 ? undefined : $( "#contextMenu #settings" ),
+        },
 
         // Isn't really a stanalone part of this (only exists as a check for the page)
         galleryOptions: {
@@ -177,6 +183,10 @@
             elementsManager.feedbackOptions.email = $( "#email" ).length == 0 ? undefined : $( "#email" );
             elementsManager.feedbackOptions.name = $( "#name" ).length == 0 ? undefined : $( "#name" );
             elementsManager.feedbackOptions.submitButton = $( "#submit" ).length == 0 ? undefined : $( "#submit" );
+            elementsManager.contextMenuOptions.contextMenu = $( "#contextMenu" ).length == 0 ? undefined : $( "#contextMenu" );
+            elementsManager.contextMenuOptions.backdrop = $( "#contextMenuBackdrop" ).length == 0 ? undefined : $( "#contextMenuBackdrop" );
+            //...
+            elementsManager.contextMenuOptions.settings = $( "#contextMenu #settings" ).length == 0 ? undefined : $( "#contextMenu #settings" );
         }
     }
 
@@ -514,6 +524,23 @@
                         </div>
                     </div>
                 `,
+            },
+            contextMenu: {
+                target: $( "#contextMenu" ),
+                source: `
+                    <div id="contextMenuBackdrop" class="hidden z-[150] fixed inset-[-1000px] cursor-pointer"></div>
+                    <div id="contextMenu" class="absolute hidden shadow-xl z-[200] bg-brown-dark text-zinc-300 rounded-lg shadow-lg w-52 select-none">
+                        <div class="flex flex-col p-0 m-0">
+                            <div ripple id="copy" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-t-lg transition">Copy</div>
+                            <div ripple id="paste" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition">Paste</div>
+                            <hr class="border-brown-light border-[1.5px] rounded-full">
+                            <div ripple id="reload" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition">Reload</div>
+                            <div ripple id="fullscreen" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition">Fullscreen</div>
+                            <hr class="border-brown-light border-[1.5px] rounded-full">
+                            <div ripple id="settings" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-b-lg transition">Settings</div>
+                        </div>
+                    </div>
+                `,
             }
         };
 
@@ -522,6 +549,7 @@
             await elementComponents.navigation.target.append( elementComponents.navigation.source );
             await elementComponents.sideMenu.target.append( elementComponents.sideMenu.source );
             await elementComponents.footer.target.append( elementComponents.footer.source );
+            await $( "body" ).append( elementComponents.contextMenu.source );
         }
     }
 
@@ -743,6 +771,53 @@
                 observer.observe( this );
             } );
         }
+    }
+
+    /**
+     * Creates a alternate right click menu for desktop users which has functionalities of the right click menu, without the clutter most right click menus consist of.
+     */
+    async function initalizeContextMenu() {
+        if ( isMobile ) return;
+        
+        // TODO:
+        return;
+
+        $( document ).on( "contextmenu", function (e) {
+            e.preventDefault();
+            
+            var contextMenuWidth = elementsManager.contextMenuOptions.contextMenu.outerWidth();
+            var contextMenuHeight = elementsManager.contextMenuOptions.contextMenu.outerHeight();
+            var contextMenuX = e.pageX + 10;
+            var contextMenuY = e.pageY + 10;
+
+            if ( contextMenuX+contextMenuWidth > $( window ).width() ) contextMenuX = e.pageX - contextMenuWidth-10;
+            if ( contextMenuY+contextMenuHeight > $( window ).height() ) contextMenuY = e.pageY - contextMenuHeight-10;
+            if ( contextMenuX < 0 ) contextMenuX = 10;
+            if ( contextMenuY < 0 ) contextMenuY = e.pageY+10;
+
+            elementsManager.contextMenuOptions.contextMenu.css( {
+                left: contextMenuX-10,
+                top: contextMenuY-12,
+            } ).removeClass( "hidden" );
+
+            elementsManager.contextMenuOptions.backdrop.removeClass( "hidden" );
+        } );
+
+        elementsManager.contextMenuOptions.backdrop.on( "click mousedown", function () {
+            elementsManager.contextMenuOptions.contextMenu.addClass( "hidden" );
+            elementsManager.contextMenuOptions.backdrop.addClass( "hidden" );
+        } )
+
+        // Events for context menu
+        
+
+        // Settings manages a wide range of things the website does, this allows settings to handle runtime things.
+        elementsManager.contextMenuOptions.settings.mousedown( function () {
+            // Settings html
+            //TODO:
+
+
+        } );
     }
 
     /**
@@ -1145,6 +1220,7 @@
             initalizeTooltipElements,
             initalizeAlternateLinks,
             async () => initalizeCurrentTheme( SnowStorm ),
+            initalizeContextMenu,
             dynamicNavigationScroll,
             latestBlogsPreviewer,
             async () => elementsManager.update(),
