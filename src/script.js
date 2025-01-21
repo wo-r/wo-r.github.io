@@ -647,9 +647,9 @@
             // Targets a fragment identifier
             // TODO: fix (doesn't scroll to stuff)
             } else if ( goto.startsWith( "#" ) ) {
-                if (elementsManager.goto != undefined) {
+                if ( goto.length ) {
                     elementsManager.body.parent().animate( {
-                        scrollTop: elementsManager.goto.offset().top-elementsManager.body.offset().top-200,
+                        scrollTop: $( $( this ).attr( "goto" ) ).offset().top - elementsManager.body.offset().top-200,
                     }, 800 );
                 }
 
