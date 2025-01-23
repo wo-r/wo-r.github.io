@@ -30,6 +30,8 @@
     var pathname = window.location.pathname;
     
     var currentDate = new Date().getFullYear();
+
+    var osType = navigator.platform.includes( "Win" ) ? "Windows" : navigator.platform.includes( "Mac" ) ? "Mac" : navigator.platform.includes( "Linux" ) ? "Linux" : "Unknown";
     
     var githubAPI = ( username, additonalData = "" ) => { return `https://api.github.com/users/${ username }${ additonalData }` };
 
@@ -147,6 +149,7 @@
             backdrop: $( "#contextMenuBackdrop" ).length == 0 ? undefined : $( "#contextMenuBackdrop" ),
             //...
             settings: $( "#contextMenu #settings" ).length == 0 ? undefined : $( "#contextMenu #settings" ),
+            settingsModal: $( "#settingsModal" ).length == 0 ? undefined : $( "#settingsModal" ),
         },
 
         // Isn't really a stanalone part of this (only exists as a check for the page)
@@ -187,6 +190,7 @@
             elementsManager.contextMenuOptions.backdrop = $( "#contextMenuBackdrop" ).length == 0 ? undefined : $( "#contextMenuBackdrop" );
             //...
             elementsManager.contextMenuOptions.settings = $( "#contextMenu #settings" ).length == 0 ? undefined : $( "#contextMenu #settings" );
+            elementsManager.contextMenuOptions.settingsModal = $( "#settingsModal" ).length == 0 ? undefined : $( "#settingsModal" );
         }
     }
 
@@ -279,7 +283,7 @@
                             "brown-accent-light": "#0a0960",
                             "black": "#b6bcd8",
                             "zinc-300": "#3f3f46",
-                            "gray-300": "#3f3f46"
+                            "gray-300": "#3f3f46",
                         }
                     }
                 }
@@ -531,12 +535,34 @@
                     <div id="contextMenuBackdrop" class="hidden z-[150] fixed inset-[-1000px] cursor-pointer"></div>
                     <div id="contextMenu" class="absolute hidden shadow-xl z-[200] bg-brown-dark text-zinc-300 rounded-lg shadow-lg w-52 select-none">
                         <div class="flex flex-col p-0 m-0">
-                            <div ripple id="copy" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-t-lg transition">Copy</div>
-                            <div ripple id="paste" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition">Paste</div>
-                            <hr class="border-brown-light border-[1.5px] rounded-full">
-                            <div ripple id="reload" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition">Reload</div>
-                            <div ripple id="fullscreen" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition">Fullscreen</div>
-                            <hr class="border-brown-light border-[1.5px] rounded-full">
+                            <div ripple id="copy" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-t-lg transition">
+                                <div class="flex flex-row justify-between items-center">
+                                    <span>Copy</span>
+                                    ${ osType == "Windows" ? `<span class="text-sm opacity-20">CTRL + C</span>` : osType == "Mac" ? `<span class="text-sm opacity-20">⌘ + C</span>` : "" }
+                                </div>
+                            </div>
+                            <div ripple id="paste" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition">
+                                <div class="flex flex-row justify-between items-center">
+                                    <span>Paste</span>
+                                    ${ osType == "Windows" ? `<span class="text-sm opacity-20">CTRL + V</span>` : osType == "Mac" ? `<span class="text-sm opacity-20">⌘ + V</span>` : "" }
+                                </div>
+                            </div>
+                            <div ripple id="forward" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition">Forward</div>
+                            <div ripple id="back" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition">Back</div>
+                            <hr class="border-brown-light border-[1.2px] rounded-full">
+                            <div ripple id="reload" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition">
+                                <div class="flex flex-row justify-between items-center">
+                                    <span>Reload</span>
+                                    ${ osType == "Windows" ? `<span class="text-sm opacity-20">F5</span>` : "" }
+                                </div>
+                            </div>
+                            <div ripple id="fullscreen" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition">
+                                <div class="flex flex-row justify-between items-center">
+                                    <span>Fullscreen</span>
+                                    ${ osType == "Windows" ? `<span class="text-sm opacity-20">F11</span>` : "" }
+                                </div>
+                            </div>
+                            <hr class="border-brown-light border-[1.2px] rounded-full">
                             <div ripple id="settings" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-b-lg transition">Settings</div>
                         </div>
                     </div>
@@ -588,7 +614,7 @@
     async function initalizeTooltipElements() {
         if ( isMobile ) return;
 
-        var tooltip = $( `<div class="tooltip bg-brown-dark rounded-xl p-5 text-zinc-300 font-black z-50 select-none shadow-xl"></div>` ).appendTo( "body" );
+        var tooltip = $( `<div class="tooltip bg-brown-dark rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl"></div>` ).appendTo( "body" );
         var isTooltipVisible = false;
 
         elementsManager.tooltip.hover( function () {
@@ -778,12 +804,13 @@
      */
     async function initalizeContextMenu() {
         if ( isMobile ) return;
-        
-        // TODO:
-        return;
 
+        return;
+        
         $( document ).on( "contextmenu", function (e) {
             e.preventDefault();
+
+            if ( elementsManager.contextMenuOptions.settingsModal ) return;
             
             var contextMenuWidth = elementsManager.contextMenuOptions.contextMenu.outerWidth();
             var contextMenuHeight = elementsManager.contextMenuOptions.contextMenu.outerHeight();
@@ -811,11 +838,57 @@
         // Events for context menu
         
 
-        // Settings manages a wide range of things the website does, this allows settings to handle runtime things.
+        // Settings manages a wide range of things the website does, this allows edits to the runtime functions
         elementsManager.contextMenuOptions.settings.mousedown( function () {
-            // Settings html
-            //TODO:
+            elementsManager.contextMenuOptions.contextMenu.addClass( "hidden" )
+            elementsManager.contextMenuOptions.backdrop.addClass( "hidden" );
 
+            //TODO:
+            $( "body" ).find( "div[class='h-\[100vh\]']" ).append( `
+                <div id="settingsModal" class="fixed inset-0 z-[50] select-none">
+                    <div id="settingsModalBackdrop" class="fixed inset-0 z-[-1] bg-brown-darker bg-opacity-50"></div>
+                    <div class="flex items-center justify-center min-h-screen">
+                        <div class="bg-brown-dark p-6 rounded-lg shadow-lg w-80">
+                            <h2 class="text-5xl font-black mb-4">Settings</h2>
+
+                            <form class="text-zinc-300 flex flex-col gap-5">
+                                <div class="mb-3">
+                                    <label for="dropdownTheme" class="block text-md font-medium">Theme:</label>
+                                    <select id="dropdownTheme" name="theme" class="mt-1 block w-full px-3 py-2 bg-brown-darker appearance-none rounded-md outline-none bg-brown-dark">
+                                        <option value="light">Light</option>
+                                        <option value="dark">Dark</option>
+                                    </select>
+                                </div>
+                        
+                                <label class="flex justify-between items-center cursor-pointer">
+                                    <input type="checkbox" checked class="sr-only peer">
+                                    <span class="text-md font-medium text-zinc-300">SnowStorm <small class="text-[8px] opacity-50">By Facebook</small></span>
+                                    <div class="relative w-11 h-6 bg-brown peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1.8px] after:start-[1.8px] after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brown-light"></div>
+                                </label>
+                                <label class="flex justify-between items-center cursor-pointer">
+                                    <input type="checkbox" checked class="sr-only peer">
+                                    <span class="text-md font-medium text-zinc-300">Popup Animations</span>
+                                    <div class="relative w-11 h-6 bg-brown peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1.8px] after:start-[1.8px] after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brown-light"></div>
+                                </label>
+                                <label tooltip="Removes literally every function from the site except core functions" class="flex justify-between items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer">
+                                    <span class="text-md font-medium text-zinc-300">Potato Mode</span>
+                                    <div class="relative w-11 h-6 bg-brown peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1.8px] after:start-[1.8px] after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brown-light"></div>
+                                </label>
+                            </form>
+                        </div>
+                    </div>
+                </div>    
+            ` )
+        
+            elementsManager.update();
+            initalizeRippledElements();
+            initalizeTooltipElements();
+
+            elementsManager.contextMenuOptions.settingsModal.find( "#settingsModalBackdrop" ).mousedown( function ( e ) {
+                elementsManager.contextMenuOptions.settingsModal.remove();
+                elementsManager.update();
+            } )
 
         } );
     }
