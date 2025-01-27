@@ -80,6 +80,10 @@
         totalFollowers: localStorage.getItem( "totalFollowers" ) == null ? undefined : localStorage.getItem( "totalFollowers" ),
         totalRepos: localStorage.getItem( "totalRepos" ) == null ? undefined : localStorage.getItem( "totalRepos" ),
         bestRepos: localStorage.getItem( "bestRepos" ) == null ? undefined : localStorage.getItem( "bestRepos" ),
+        SnowStorm: localStorage.getItem( "SnowStorm" ) == null ? undefined : localStorage.getItem( "SnowStorm" ),
+        popups: localStorage.getItem( "popups" ) == null ? undefined : localStorage.getItem( "popups" ),
+        basicMode: localStorage.getItem( "basicMode" ) == null ? undefined : localStorage.getItem( "basicMode" ),
+
 
         // Exists for times when we need just the raw name instead of the storage item.
         raw: {
@@ -89,6 +93,9 @@
             totalFollowers: "totalFollowers",
             totalRepos: "totalRepos",
             bestRepos: "bestRepos",
+            SnowStorm: "SnowStorm",
+            popups: "popups",
+            basicMode: "basicMode",
         }
     }
 
@@ -148,6 +155,10 @@
             contextMenu: $( "#contextMenu" ).length == 0 ? undefined : $( "#contextMenu" ),
             backdrop: $( "#contextMenuBackdrop" ).length == 0 ? undefined : $( "#contextMenuBackdrop" ),
             //...
+            settingsTheme: $( "#settingsModal #dropdownTheme" ).length == 0 ? undefined : $( "#settingsModal #dropdownTheme" ),
+            snowstormToggle: $( "#settingsModal #snowstormToggle" ).length == 0 ? undefined : $( "#settingsModal #snowstormToggle" ),
+            popupToggle: $( "#settingsModal #popupToggle" ).length == 0 ? undefined : $( "#settingsModal #popupToggle" ),
+            basicMode: $( "#settingsModal #basicModeToggle" ).length == 0 ? undefined : $( "#settingsModal #basicModeToggle" ),
             settings: $( "#contextMenu #settings" ).length == 0 ? undefined : $( "#contextMenu #settings" ),
             settingsModal: $( "#settingsModal" ).length == 0 ? undefined : $( "#settingsModal" ),
         },
@@ -189,6 +200,10 @@
             elementsManager.contextMenuOptions.contextMenu = $( "#contextMenu" ).length == 0 ? undefined : $( "#contextMenu" );
             elementsManager.contextMenuOptions.backdrop = $( "#contextMenuBackdrop" ).length == 0 ? undefined : $( "#contextMenuBackdrop" );
             //...
+            elementsManager.contextMenuOptions.settingsTheme = $( "#settingsModal #dropdownTheme" ).length == 0 ? undefined : $( "#settingsModal #dropdownTheme" );
+            elementsManager.contextMenuOptions.snowstormToggle = $( "#settingsModal #snowstormToggle" ).length == 0 ? undefined : $( "#settingsModal #snowstormToggle" );
+            elementsManager.contextMenuOptions.popupToggle = $( "#settingsModal #popupToggle" ).length == 0 ? undefined : $( "#settingsModal #popupToggle" );
+            elementsManager.contextMenuOptions.basicMode = $( "#settingsModal #basicModeToggle" ).length == 0 ? undefined : $( "#settingsModal #basicModeToggle" );
             elementsManager.contextMenuOptions.settings = $( "#contextMenu #settings" ).length == 0 ? undefined : $( "#contextMenu #settings" );
             elementsManager.contextMenuOptions.settingsModal = $( "#settingsModal" ).length == 0 ? undefined : $( "#settingsModal" );
         }
@@ -541,12 +556,6 @@
                                     ${ osType == "Windows" ? `<span class="text-sm opacity-20">CTRL + C</span>` : osType == "Mac" ? `<span class="text-sm opacity-20">⌘ + C</span>` : "" }
                                 </div>
                             </div>
-                            <div ripple id="paste" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition">
-                                <div class="flex flex-row justify-between items-center">
-                                    <span>Paste</span>
-                                    ${ osType == "Windows" ? `<span class="text-sm opacity-20">CTRL + V</span>` : osType == "Mac" ? `<span class="text-sm opacity-20">⌘ + V</span>` : "" }
-                                </div>
-                            </div>
                             <div ripple id="forward" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition">Forward</div>
                             <div ripple id="back" class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition">Back</div>
                             <hr class="border-brown-light border-[1.2px] rounded-full">
@@ -583,7 +592,7 @@
      * Adds ripple effects to elements with [ripple] attribute applied.
      */
     async function initalizeRippledElements() {
-        if ( isMobile ) return;
+        if ( isMobile || ( storageManager.basicMode && JSON.parse( storageManager.basicMode ) ) ) return;
 
         elementsManager.ripple.mousedown( function (e) {
             const rippleTarget = $( this );
@@ -612,7 +621,7 @@
      * Adds tooltips to elements with [tooltip] attribute applied
      */
     async function initalizeTooltipElements() {
-        if ( isMobile ) return;
+        if ( isMobile || ( storageManager.basicMode && JSON.parse( storageManager.basicMode ) ) ) return;
 
         var tooltip = $( `<div class="tooltip bg-brown-dark rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl"></div>` ).appendTo( "body" );
         var isTooltipVisible = false;
@@ -699,7 +708,7 @@
      * Dynamically hides the navigation when the user scrolls down, and will re-appear if the user scrolls back up.
      */
     async function dynamicNavigationScroll() {
-        if ( isMobile ) return;
+        if ( isMobile || ( storageManager.basicMode && JSON.parse( storageManager.basicMode ) ) ) return;
 
         var previousPos = elementsManager.body.parent().scrollTop();
         await elementsManager.body.parent().scroll( function () {
@@ -734,7 +743,7 @@
      * Adds animated text that pops up.
      */
     async function animatePopupText() {
-        if ( isMobile ) {
+        if ( isMobile || !JSON.parse( storageManager.popups ) || ( storageManager.basicMode && JSON.parse( storageManager.basicMode ) ) ) {
             elementsManager.popup.each( function () {
                 $( this ).removeClass( "invisible" );
             } );
@@ -802,10 +811,8 @@
     /**
      * Creates a alternate right click menu for desktop users which has functionalities of the right click menu, without the clutter most right click menus consist of.
      */
-    async function initalizeContextMenu() {
+    async function initalizeContextMenu( SnowStorm ) {
         if ( isMobile ) return;
-
-        return;
         
         $( document ).on( "contextmenu", function (e) {
             e.preventDefault();
@@ -833,46 +840,89 @@
         elementsManager.contextMenuOptions.backdrop.on( "click mousedown", function () {
             elementsManager.contextMenuOptions.contextMenu.addClass( "hidden" );
             elementsManager.contextMenuOptions.backdrop.addClass( "hidden" );
+        } )        
+
+        elementsManager.contextMenuOptions.contextMenu.find( "#copy" ).mousedown( function () {
+            var selectedText = window.getSelection().toString(); // Get the selected text
+            if ( selectedText ) {
+                navigator.clipboard.writeText( selectedText ).then( function() {
+                    elementsManager.contextMenuOptions.contextMenu.addClass( "hidden" );
+                    elementsManager.contextMenuOptions.backdrop.addClass( "hidden" );
+                } ).catch( function( e ) {
+                    console.error( "Error copying text: ", e );
+                } );
+            }
         } )
 
-        // Events for context menu
-        
+        elementsManager.contextMenuOptions.contextMenu.find( "#forward" ).mousedown( function () {
+            window.history.forward();
+        } )
+
+        elementsManager.contextMenuOptions.contextMenu.find( "#back" ).mousedown( function () {
+            window.history.back();
+        } )
+
+        elementsManager.contextMenuOptions.contextMenu.find( "#reload" ).mousedown( function () {
+            location.reload();
+        } )
+
+        elementsManager.contextMenuOptions.contextMenu.find( "#fullscreen" ).mousedown( function () {
+            if ( document.documentElement.requestFullscreen ) {
+                document.documentElement.requestFullscreen();
+            } else if ( ocument.documentElement.mozRequestFullScreen ) { // Firefox
+                document.documentElement.mozRequestFullScreen();
+            } else if ( document.documentElement.webkitRequestFullscreen ) { // Chrome, Safari and Opera
+                document.documentElement.webkitRequestFullscreen();
+            } else if ( document.documentElement.msRequestFullscreen ) { // IE/Edge
+                document.documentElement.msRequestFullscreen();
+            }
+        } )
 
         // Settings manages a wide range of things the website does, this allows edits to the runtime functions
         elementsManager.contextMenuOptions.settings.mousedown( function () {
             elementsManager.contextMenuOptions.contextMenu.addClass( "hidden" )
             elementsManager.contextMenuOptions.backdrop.addClass( "hidden" );
 
-            //TODO:
             $( "body" ).find( "div[class='h-\[100vh\]']" ).append( `
                 <div id="settingsModal" class="fixed inset-0 z-[50] select-none">
-                    <div id="settingsModalBackdrop" class="fixed inset-0 z-[-1] bg-brown-darker bg-opacity-50"></div>
-                    <div class="flex items-center justify-center min-h-screen">
+                    <div class="fixed inset-0 z-[-1] bg-brown-darker bg-opacity-50"></div>
+                    <div id="settingsModalBackdrop" class="flex items-center justify-center min-h-screen">
                         <div class="bg-brown-dark p-6 rounded-lg shadow-lg w-80">
                             <h2 class="text-5xl font-black mb-4">Settings</h2>
-
                             <form class="text-zinc-300 flex flex-col gap-5">
                                 <div class="mb-3">
                                     <label for="dropdownTheme" class="block text-md font-medium">Theme:</label>
-                                    <select id="dropdownTheme" name="theme" class="mt-1 block w-full px-3 py-2 bg-brown-darker appearance-none rounded-md outline-none bg-brown-dark">
-                                        <option value="light">Light</option>
-                                        <option value="dark">Dark</option>
+                                    <select ${ themeDisabled ? "disabled" : "" } id="dropdownTheme" name="theme" class="mt-1 block w-full px-3 py-2 bg-brown-darker appearance-none rounded-md outline-none bg-brown-dark">
+                                        ${ themeDisabled ? `<option value="custom" selected>Custom</option>` : (() => {
+                                            return `
+                                                <option value="light" ${ storageManager.theme == "light" ? "selected" : "" }>Light</option>
+                                                <option value="dark" ${ storageManager.theme == "dark" ? "selected" : "" }>Dark</option>
+                                            `
+                                        })() }
                                     </select>
                                 </div>
                         
                                 <label class="flex justify-between items-center cursor-pointer">
-                                    <input type="checkbox" checked class="sr-only peer">
+                                    <input id="snowstormToggle" type="checkbox" ${ (() => {
+                                        if ( storageManager.SnowStorm == undefined ) {
+                                            if ( SnowStorm.disabled != undefined ) {
+                                                return SnowStorm.disabled ? "" : "checked";
+                                            }
+                                        } else {
+                                            return JSON.parse( storageManager.SnowStorm ) ? "checked" : ""  
+                                        }
+                                    })() } class="sr-only peer">
                                     <span class="text-md font-medium text-zinc-300">SnowStorm <small class="text-[8px] opacity-50">By Facebook</small></span>
                                     <div class="relative w-11 h-6 bg-brown peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1.8px] after:start-[1.8px] after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brown-light"></div>
                                 </label>
                                 <label class="flex justify-between items-center cursor-pointer">
-                                    <input type="checkbox" checked class="sr-only peer">
+                                    <input id="popupToggle" type="checkbox" ${ storageManager.popups == undefined ? "checked" : JSON.parse( storageManager.popups ) ? "checked" : "" } class="sr-only peer">
                                     <span class="text-md font-medium text-zinc-300">Popup Animations</span>
                                     <div class="relative w-11 h-6 bg-brown peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1.8px] after:start-[1.8px] after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brown-light"></div>
                                 </label>
-                                <label tooltip="Removes literally every function from the site except core functions" class="flex justify-between items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer">
-                                    <span class="text-md font-medium text-zinc-300">Potato Mode</span>
+                                <label tooltip="Removes all features that add that modern asthetic to the website (includes: transitions, popups, snowstorm, etc)" class="flex justify-between items-center cursor-pointer">
+                                    <input id="basicModeToggle" ${ storageManager.basicMode == undefined ? "" : JSON.parse( storageManager.basicMode ) ? "checked" : "" } type="checkbox" class="sr-only peer">
+                                    <span class="text-md font-medium text-zinc-300">Basic Mode</span>
                                     <div class="relative w-11 h-6 bg-brown peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1.8px] after:start-[1.8px] after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brown-light"></div>
                                 </label>
                             </form>
@@ -884,12 +934,73 @@
             elementsManager.update();
             initalizeRippledElements();
             initalizeTooltipElements();
-
-            elementsManager.contextMenuOptions.settingsModal.find( "#settingsModalBackdrop" ).mousedown( function ( e ) {
-                elementsManager.contextMenuOptions.settingsModal.remove();
-                elementsManager.update();
+            
+            // If the backdrop is clicked
+            elementsManager.contextMenuOptions.settingsModal.mousedown( function ( e ) {
+                if ( $( e.target ).attr( "id" ) == "settingsModalBackdrop" ) {
+                    elementsManager.contextMenuOptions.settingsModal.remove();
+                    elementsManager.update();
+                }
             } )
 
+            // Theme toggle
+            elementsManager.contextMenuOptions.settingsTheme.on( "input", function () {
+                if ( storageManager.theme == "dark" ) {
+                    storageEditorManager.edit( storageManager.raw.theme, "light" );
+                    storageManager.theme = "light";
+                    elementsManager.update();
+                    initalizeCurrentTheme( SnowStorm );
+                } else {
+                    storageEditorManager.edit( storageManager.raw.theme, "dark" );
+                    storageManager.theme = "dark";
+                    elementsManager.update();
+                    initalizeCurrentTheme( SnowStorm );
+                }
+            } )
+
+            // Snow toggle
+            elementsManager.contextMenuOptions.snowstormToggle.on( "input", function () {
+                var isChecked = $( this ).is( ":checked" );
+                
+                // Update snowstorm variables
+                if ( isChecked ) {
+                    storageEditorManager.edit( storageManager.raw.SnowStorm, true );
+                    
+                    initalizeCurrentTheme( SnowStorm );
+                    SnowStorm.init();
+                } else {
+                    storageEditorManager.edit( storageManager.raw.SnowStorm, false );
+                    SnowStorm.stop();
+                }
+
+                SnowStorm.restartSnow();
+            } )
+
+            // Popup toggle
+            elementsManager.contextMenuOptions.popupToggle.on( "input", function () {
+                var isChecked = $( this ).is( ":checked" );
+                
+                // Update snowstorm variables
+                if ( isChecked )
+                    storageEditorManager.edit( storageManager.raw.popups, true );
+                else
+                    storageEditorManager.edit( storageManager.raw.popups, false );
+            } )
+
+
+            // Potato mode toggle
+            elementsManager.contextMenuOptions.basicMode.on( "input", function () {
+                var isChecked = $( this ).is( ":checked" );
+                
+                // Update snowstorm variables
+                if ( isChecked ) {
+                    storageEditorManager.edit( storageManager.raw.basicMode, true );
+                    window.location.reload();
+                } else {
+                    storageEditorManager.edit( storageManager.raw.basicMode, false );
+                    window.location.reload();
+                }
+            } )
         } );
     }
 
@@ -1240,7 +1351,7 @@
          * 9. `restartSnow()`: Clears existing snowflakes and re-creates them when the window is resized.
          */
         var SnowStorm = window.SnowStorm;
-        if ( !isMobile ) SnowStorm.init();
+        if ( !isMobile && JSON.parse( storageManager.SnowStorm ) && ( storageManager.basicMode && !JSON.parse( storageManager.basicMode ) ) ) SnowStorm.init();
 
         // Contains a long list of functions to run in order from HIGHEST priority to LOWEST priority.
         var tasks = [
@@ -1293,7 +1404,7 @@
             initalizeTooltipElements,
             initalizeAlternateLinks,
             async () => initalizeCurrentTheme( SnowStorm ),
-            initalizeContextMenu,
+            async () => initalizeContextMenu( SnowStorm ),
             dynamicNavigationScroll,
             latestBlogsPreviewer,
             async () => elementsManager.update(),
