@@ -17,6 +17,11 @@
 
 
 
+    /**
+     * The websites global version (relative to the github commit number)
+     */
+    var version = "0.7.8";
+
     // Not a common variable used however, it is used in some specific cases.
     var isReady = $( window ).ready;
 
@@ -926,6 +931,9 @@
                                     <div class="relative w-11 h-6 bg-brown peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1.8px] after:start-[1.8px] after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brown-light"></div>
                                 </label>
                             </form>
+                            <div class="flex flex-between justify-center text-center items-center mt-5">
+                                <small class="font-medium text-zinc-300 text-[10px] opacity-50">Version: v${ version }<br>System: ${ osType }<br></small>
+                            </div>
                         </div>
                     </div>
                 </div>    
