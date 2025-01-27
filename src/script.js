@@ -101,6 +101,17 @@
             SnowStorm: "SnowStorm",
             popups: "popups",
             basicMode: "basicMode",
+        },
+
+        /**
+         * Sets each storage item so we don't worry about undefineds (they still exist though)
+         */
+        init: () => {
+            if ( storageManager.basicMode != undefined ) return;
+
+            storageEditorManager.edit( storageManager.raw.SnowStorm, true );
+            storageEditorManager.edit( storageManager.raw.popups, true );
+            storageEditorManager.edit( storageManager.raw.basicMode, false );
         }
     }
 
@@ -748,7 +759,7 @@
      * Adds animated text that pops up.
      */
     async function animatePopupText() {
-        if ( isMobile || !JSON.parse( storageManager.popups ) || ( storageManager.basicMode && JSON.parse( storageManager.basicMode ) ) ) {
+        if ( isMobile || storageManager.popups == "false" || storageManager.basicMode == "true" ) {
             elementsManager.popup.each( function () {
                 $( this ).removeClass( "invisible" );
             } );
@@ -815,6 +826,7 @@
 
     /**
      * Creates a alternate right click menu for desktop users which has functionalities of the right click menu, without the clutter most right click menus consist of.
+     * FIXME: If you close the settings menu, then on the same page, open the settings menu again, any changed toggles will reset to its original position.
      */
     async function initalizeContextMenu( SnowStorm ) {
         if ( isMobile ) return;
@@ -888,6 +900,7 @@
             elementsManager.contextMenuOptions.contextMenu.addClass( "hidden" )
             elementsManager.contextMenuOptions.backdrop.addClass( "hidden" );
 
+            
             $( "body" ).find( "div[class='h-\[100vh\]']" ).append( `
                 <div id="settingsModal" class="fixed inset-0 z-[50] select-none">
                     <div class="fixed inset-0 z-[-1] bg-brown-darker bg-opacity-50"></div>
@@ -1349,6 +1362,9 @@
 
 
     await isReady( async function () {
+        // Initalize the storage variables
+        storageManager.init();
+
         /**
          * SnowStorm v1.0.0
          * 
@@ -1359,7 +1375,8 @@
          * 9. `restartSnow()`: Clears existing snowflakes and re-creates them when the window is resized.
          */
         var SnowStorm = window.SnowStorm;
-        if ( !isMobile && JSON.parse( storageManager.SnowStorm ) && ( storageManager.basicMode && !JSON.parse( storageManager.basicMode ) ) ) SnowStorm.init();
+        if ( storageManager.SnowStorm != "true"  && storageManager.basicMode != "false" )
+            if ( !isMobile ) SnowStorm.init();
 
         // Contains a long list of functions to run in order from HIGHEST priority to LOWEST priority.
         var tasks = [
