@@ -826,7 +826,6 @@
 
     /**
      * Creates a alternate right click menu for desktop users which has functionalities of the right click menu, without the clutter most right click menus consist of.
-     * FIXME: If you close the settings menu, then on the same page, open the settings menu again, any changed toggles will reset to its original position.
      */
     async function initalizeContextMenu( SnowStorm ) {
         if ( isMobile ) return;
@@ -900,7 +899,6 @@
             elementsManager.contextMenuOptions.contextMenu.addClass( "hidden" )
             elementsManager.contextMenuOptions.backdrop.addClass( "hidden" );
 
-            
             $( "body" ).find( "div[class='h-\[100vh\]']" ).append( `
                 <div id="settingsModal" class="fixed inset-0 z-[50] select-none">
                     <div class="fixed inset-0 z-[-1] bg-brown-darker bg-opacity-50"></div>
@@ -961,11 +959,16 @@
                 if ( $( e.target ).attr( "id" ) == "settingsModalBackdrop" ) {
                     elementsManager.contextMenuOptions.settingsModal.remove();
                     elementsManager.update();
+                    each( $( "#contextMenu .ripple" ), function () {
+                        $( this ).remove();
+                    } )
                 }
             } )
 
             // Theme toggle
             elementsManager.contextMenuOptions.settingsTheme.on( "input", function () {
+                elementsManager.loader.show();
+
                 if ( storageManager.theme == "dark" ) {
                     storageEditorManager.edit( storageManager.raw.theme, "light" );
                     storageManager.theme = "light";
@@ -977,6 +980,11 @@
                     elementsManager.update();
                     initalizeCurrentTheme( SnowStorm );
                 }
+
+                // Reset the isToggling flag after 500ms to prevent spamming
+                setTimeout( function () {
+                    elementsManager.loader.fadeOut(300);
+                }, 500 ); // Adjust timeout as needed
             } )
 
             // Snow toggle
@@ -986,15 +994,11 @@
                 // Update snowstorm variables
                 if ( isChecked ) {
                     storageEditorManager.edit( storageManager.raw.SnowStorm, true );
-                    
-                    initalizeCurrentTheme( SnowStorm );
-                    SnowStorm.init();
                 } else {
                     storageEditorManager.edit( storageManager.raw.SnowStorm, false );
-                    SnowStorm.stop();
                 }
 
-                SnowStorm.restartSnow();
+                window.location.reload();
             } )
 
             // Popup toggle
@@ -1002,10 +1006,13 @@
                 var isChecked = $( this ).is( ":checked" );
                 
                 // Update snowstorm variables
-                if ( isChecked )
+                if ( isChecked ) {
                     storageEditorManager.edit( storageManager.raw.popups, true );
-                else
+                } else {
                     storageEditorManager.edit( storageManager.raw.popups, false );
+                }
+
+                window.location.reload();
             } )
 
 
@@ -1016,11 +1023,11 @@
                 // Update snowstorm variables
                 if ( isChecked ) {
                     storageEditorManager.edit( storageManager.raw.basicMode, true );
-                    window.location.reload();
                 } else {
                     storageEditorManager.edit( storageManager.raw.basicMode, false );
-                    window.location.reload();
                 }
+
+                window.location.reload();
             } )
         } );
     }
@@ -1375,7 +1382,7 @@
          * 9. `restartSnow()`: Clears existing snowflakes and re-creates them when the window is resized.
          */
         var SnowStorm = window.SnowStorm;
-        if ( storageManager.SnowStorm != "true"  && storageManager.basicMode != "false" )
+        if ( storageManager.SnowStorm == "true" && storageManager.basicMode == "false" )
             if ( !isMobile ) SnowStorm.init();
 
         // Contains a long list of functions to run in order from HIGHEST priority to LOWEST priority.
