@@ -465,6 +465,11 @@
                                                         Blogs
                                                     </div>
                                                 </a>
+                                                <a goto="/projects/" class="cursor-pointer">
+                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                        Projects
+                                                    </div>
+                                                </a>
                                             </div>
                                             <div class="flex flex-col gap-1 py-3 px-4">
                                                 <span class="font-black font-nunitoblack text-sm px-3 pb-2">FOR BUSINESS</span>
