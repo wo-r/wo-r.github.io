@@ -20,7 +20,7 @@
     /**
      * The websites global version (relative to the github commit number)
      */
-    var version = "0.7.8";
+    var version = "0.8.5";
 
     // Not a common variable used however, it is used in some specific cases.
     var isReady = $( window ).ready;
@@ -1129,7 +1129,7 @@
             var repoData = await get( githubAPI( username, "/repos?per_page=100" ) );
             if ( repoData ) {
                 // Filter out repos with names .github or wo-r
-                var filteredRepos = repoData.filter( repo => !repo.name.includes( "/.github" ) );
+                var filteredRepos = repoData.filter( repo => !repo.html_url.includes( "/.github" ) && !repo.name.includes( "wo-r.github.io" ) );
                 totalRepos += filteredRepos.length;  // Add only the filtered repos
             }
 
@@ -1141,7 +1141,6 @@
                 elementsManager.totalRepos.text( totalRepos );
             }
         }
-
     }
 
     /**
@@ -1427,7 +1426,7 @@
             var repoHTML = "";
             var totalProjects = 0;
             allRepos.forEach( ( repo ) => {
-                if ( repo.name.includes( "/.github" ) ) return;
+                if ( repo.html_url.includes( "/.github" ) || repo.name.includes( "wo-r.github.io" ) ) return;
 
                 // TODO: redo this
                 repoHTML += `
