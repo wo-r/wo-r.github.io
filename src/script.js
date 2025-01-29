@@ -79,6 +79,7 @@
      * Consists of storage objects (READ-ONLY)
      */
     var storageManager = {
+        version: localStorage.getItem( "version" ) == null ? undefined : localStorage.getItem( "version" ),
         theme: localStorage.getItem( "theme" ) == null ? undefined : localStorage.getItem( "theme" ),
         sideMenu: localStorage.getItem( "sideMenu" ) == null ? undefined : localStorage.getItem( "sideMenu" ),
         lastUpdated: localStorage.getItem( "lastUpdated" ) == null ? undefined : localStorage.getItem( "lastUpdated" ),
@@ -88,10 +89,13 @@
         SnowStorm: localStorage.getItem( "SnowStorm" ) == null ? undefined : localStorage.getItem( "SnowStorm" ),
         popups: localStorage.getItem( "popups" ) == null ? undefined : localStorage.getItem( "popups" ),
         basicMode: localStorage.getItem( "basicMode" ) == null ? undefined : localStorage.getItem( "basicMode" ),
+        projects: localStorage.getItem( "projects" ) == null ? undefined : localStorage.getItem( "projects" ),
+        totalProjects: localStorage.getItem( "totalProjects" ) == null ? undefined : localStorage.getItem( "totalProjects" ),
 
 
         // Exists for times when we need just the raw name instead of the storage item.
         raw: {
+            version: "version",
             theme: "theme",
             sideMenu: "sideMenu",
             lastUpdated: "lastUpdated",
@@ -101,6 +105,8 @@
             SnowStorm: "SnowStorm",
             popups: "popups",
             basicMode: "basicMode",
+            projects: "projects",
+            totalProjects: "totalProjects",
         },
 
         /**
@@ -109,6 +115,7 @@
         init: () => {
             if ( storageManager.basicMode != undefined ) return;
 
+            storageEditorManager.edit( storageManager.raw.version, version );
             storageEditorManager.edit( storageManager.raw.SnowStorm, true );
             storageEditorManager.edit( storageManager.raw.popups, true );
             storageEditorManager.edit( storageManager.raw.basicMode, false );
@@ -178,6 +185,12 @@
             settings: $( "#contextMenu #settings" ).length == 0 ? undefined : $( "#contextMenu #settings" ),
             settingsModal: $( "#settingsModal" ).length == 0 ? undefined : $( "#settingsModal" ),
         },
+        projectOptions: {
+            projects: $( "#projects" ).length == 0 ? undefined : $( "#projects" ),
+            totalProjects: $( "#totalProjects" ).length == 0 ? undefined : $( "#totalProjects" ),
+            search: $( "#search" ).length == 0 ? undefined : $( "#search" ),
+            projectTitles: $( "#projects a h1" ).length == 0 ? undefined : $( "#projects a h1" ),
+        },
 
         // Isn't really a stanalone part of this (only exists as a check for the page)
         galleryOptions: {
@@ -215,13 +228,16 @@
             elementsManager.feedbackOptions.submitButton = $( "#submit" ).length == 0 ? undefined : $( "#submit" );
             elementsManager.contextMenuOptions.contextMenu = $( "#contextMenu" ).length == 0 ? undefined : $( "#contextMenu" );
             elementsManager.contextMenuOptions.backdrop = $( "#contextMenuBackdrop" ).length == 0 ? undefined : $( "#contextMenuBackdrop" );
-            //...
             elementsManager.contextMenuOptions.settingsTheme = $( "#settingsModal #dropdownTheme" ).length == 0 ? undefined : $( "#settingsModal #dropdownTheme" );
             elementsManager.contextMenuOptions.snowstormToggle = $( "#settingsModal #snowstormToggle" ).length == 0 ? undefined : $( "#settingsModal #snowstormToggle" );
             elementsManager.contextMenuOptions.popupToggle = $( "#settingsModal #popupToggle" ).length == 0 ? undefined : $( "#settingsModal #popupToggle" );
             elementsManager.contextMenuOptions.basicMode = $( "#settingsModal #basicModeToggle" ).length == 0 ? undefined : $( "#settingsModal #basicModeToggle" );
             elementsManager.contextMenuOptions.settings = $( "#contextMenu #settings" ).length == 0 ? undefined : $( "#contextMenu #settings" );
             elementsManager.contextMenuOptions.settingsModal = $( "#settingsModal" ).length == 0 ? undefined : $( "#settingsModal" );
+            elementsManager.projectOptions.projects = $( "#projects" ).length == 0 ? undefined : $( "#projects" );
+            elementsManager.projectOptions.totalProjects = $( "#totalProjects" ).length == 0 ? undefined : $( "#totalProjects" );
+            elementsManager.projectOptions.search = $( "#search" ).length == 0 ? undefined : $( "#search" );
+            elementsManager.projectOptions.projectTitles = $( "#projects a h1" ).length == 0 ? undefined : $( "#projects a h1" );
         }
     }
 
@@ -1111,9 +1127,13 @@
         // Get all accounts in list
         for ( var username of githubAccounts ) {
             var repoData = await get( githubAPI( username, "/repos?per_page=100" ) );
-            if ( repoData ) totalRepos += repoData.length;
+            if ( repoData ) {
+                // Filter out repos with names .github or wo-r
+                var filteredRepos = repoData.filter( repo => !repo.name.includes( "/.github" ) );
+                totalRepos += filteredRepos.length;  // Add only the filtered repos
+            }
 
-            usersProcessed++
+            usersProcessed++;
             if ( usersProcessed === githubAccounts.length ) {
                 storageEditorManager.edit( storageManager.raw.totalRepos, totalRepos );
                 dayCheckManager.updateLastUpdated();
@@ -1121,6 +1141,7 @@
                 elementsManager.totalRepos.text( totalRepos );
             }
         }
+
     }
 
     /**
@@ -1371,11 +1392,115 @@
         }
     }
 
+    /**
+     * Fetches all public repositories from all GitHub accounts and lists them under #projects
+     */
+    async function projectsManager() {
+        if ( elementsManager.projectOptions.projects == undefined ) return;
+
+        // Check if data is already cached and valid
+        if ( !dayCheckManager.isNewDay() && storageManager.projects != undefined ) {
+            if ( storageManager.projects ) {
+                elementsManager.projectOptions.projects.html( storageManager.projects );
+                elementsManager.projectOptions.totalProjects.text( storageManager.totalProjects )
+
+                elementsManager.update();
+
+                initalizeAlternateLinks();
+                initalizeTooltipElements();
+                initalizeRippledElements();
+            }
+        } else {
+            var allRepos = [];
+
+            // Fetch repositories from each GitHub account
+            await Promise.all( githubAccounts.map( async (username) => {
+                var repoData = await get( githubAPI( username, "/repos?per_page=100" ) );
+                if ( repoData ) {
+                    allRepos = allRepos.concat( repoData );
+                }
+            } ) );
+
+            allRepos.sort( ( a, b ) => new Date( b.created_at ) - new Date( a.created_at ));
+
+            // Create HTML for each repository
+            var repoHTML = "";
+            var totalProjects = 0;
+            allRepos.forEach( ( repo ) => {
+                if ( repo.name.includes( "/.github" ) ) return;
+
+                // TODO: redo this
+                repoHTML += `
+                    <a goto="${ repo.html_url }" class="cursor-pointer flex-1 select-none">
+                        <div ripple class="relative overflow-hidden p-10 bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full">
+                            <div class="flex flex-col gap-5 justify-between text-center md:text-left">
+                                <h1 class="text-1xl md:text-6xl font-nunitoblack font-black leading-tight tracking-tight justify-center h-full text-center lg:text-left lg:justify-start items-center lg:items-start">${ repo.name }</h1>
+                                <span class="text-sm md:text-lg justify-center h-full text-center lg:text-left lg:justify-start items-center lg:items-start">${ repo.description }</span>    
+                            </div>
+                        </div>
+                    </a>
+                `;
+
+                totalProjects++
+            } );
+
+            elementsManager.projectOptions.totalProjects.text( totalProjects );
+
+            // Cache the repository data
+            storageEditorManager.edit( storageManager.raw.projects, repoHTML );
+            storageEditorManager.edit( storageManager.raw.totalProjects, totalProjects );
+            dayCheckManager.updateLastUpdated();
+
+            // Display repositories in the #projects section
+            elementsManager.projectOptions.projects.html( repoHTML );
+            elementsManager.update();
+
+            // Initialize tooltips and other necessary UI updates
+            initalizeAlternateLinks();
+            initalizeTooltipElements();
+            initalizeRippledElements();
+        }
+
+        // Setup the search bar so we can search for blogs.
+        elementsManager.projectOptions.search.on( "input", function () {
+            var search = $( this ).val();
+            each( elementsManager.projectOptions.projectTitles, function () {
+                var elementBody = $( this ).parent().parent().parent();
+
+                // Could not find a result
+                if ( search.length === 0 ) {
+                    $( this ).html( $( this ).text() ).show();
+                    elementBody.fadeIn( 300 );
+
+                // Found a result
+                } else {
+                    // Found a result with matching text
+                    if ( $( this ).text().match( new RegExp( search, "gi" ) ) !== null ) {
+                        var highlightedText = $( this ).text().replace( new RegExp( search, "gi" ), highlighter );
+                        $( this ).html( highlightedText ).show();
+                        elementBody.fadeIn( 300 );
+
+                    // The result suddenly didn't match
+                    } else {
+                        elementBody.fadeOut( 300 );
+                    }
+                }
+            } )
+        } )
+    }
+
 
 
     await isReady( async function () {
         // Initalize the storage variables
         storageManager.init();
+
+        // Version control
+        if ( version != storageManager.version ) {
+            localStorage.clear(); // Clear
+            storageManager.init(); // Redo storage items
+            window.location.reload(); // Reload to apply stuff
+        }
 
         /**
          * SnowStorm v1.0.0
@@ -1451,6 +1576,7 @@
             blogsManager,
             galleryCarouselManager,
             feedbackManager,
+            projectsManager,
         ]
 
         // Function to handle all tasks and ensure they run sequentially
