@@ -20,7 +20,7 @@
     /**
      * The websites global version (relative to the github commit number)
      */
-    var version = "0.8.5";
+    var version = "0.8.8";
 
     // Not a common variable used however, it is used in some specific cases.
     var isReady = $( window ).ready;
