@@ -717,7 +717,6 @@
                 window.open( goto, "_blank" );
             
             // Targets a fragment identifier
-            // TODO: fix (doesn't scroll to stuff)
             } else if ( goto.startsWith( "#" ) ) {
                 if ( goto.length ) {
                     elementsManager.body.parent().animate( {
@@ -1238,6 +1237,7 @@
             // Setup the search bar so we can search for blogs.
             elementsManager.blogOptions.search.on( "input", function () {
                 var search = $( this ).val();
+                var hasResults = false;
                 each( elementsManager.blogOptions.blogTitles, function () {
                     var elementBody = $( this ).parent().parent().parent();
 
@@ -1245,6 +1245,7 @@
                     if ( search.length === 0 ) {
                         $( this ).html( $( this ).text() ).show();
                         elementBody.fadeIn( 300 );
+                        hasResults = true;
 
                     // Found a result
                     } else {
@@ -1253,6 +1254,7 @@
                             var highlightedText = $( this ).text().replace( new RegExp( search, "gi" ), highlighter );
                             $( this ).html( highlightedText ).show();
                             elementBody.fadeIn( 300 );
+                            hasResults = true;
 
                         // The result suddenly didn't match
                         } else {
@@ -1260,6 +1262,24 @@
                         }
                     }
                 } )
+
+                if ( !hasResults ) {
+                    $( "#noResults" ).length == 0 ? $( this ).parent().parent().parent().find( "#blogs" ).append( `
+                        <div id="noResults" class="flex-1">
+                            <a class="select-none">
+                                <div class="relative overflow-hidden p-10 bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full">
+                                    <div class="flex flex-col gap-5 justify-between text-center">
+                                        <span class="text-sm md:text-lg justify-center h-full text-center">No results were found for "<span id="noResultsText"></span>"</span>    
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    ` ) : null;
+
+                    $( "#noResultsText" ).text( search );
+                } else {
+                    $( "#noResults" ).remove();
+                }
             } )
         } );
     }
@@ -1489,7 +1509,6 @@
                 }
             } )
             
-            // TODO: add to blogs
             if ( !hasResults ) {
                 $( "#noResults" ).length == 0 ? $( this ).parent().parent().parent().find( "#projects" ).append( `
                     <div id="noResults" class="flex-1">
