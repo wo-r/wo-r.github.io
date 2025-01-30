@@ -1418,7 +1418,7 @@
         if ( elementsManager.projectOptions.projects == undefined ) return;
 
         // Check if data is already cached and valid
-        if ( !dayCheckManager.isNewDay() && storageManager.projects != undefined ) {
+        /*if ( !dayCheckManager.isNewDay() && storageManager.projects != undefined ) {
             if ( storageManager.projects ) {
                 elementsManager.projectOptions.projects.html( storageManager.projects );
                 elementsManager.projectOptions.totalProjects.text( storageManager.totalProjects )
@@ -1429,7 +1429,7 @@
                 initalizeTooltipElements();
                 initalizeRippledElements();
             }
-        } else {
+        } else*/ {
             var allRepos = [];
 
             // Fetch repositories from each GitHub account
@@ -1445,22 +1445,44 @@
             // Create HTML for each repository
             var repoHTML = "";
             var totalProjects = 0;
+            var topicHTML = "";
             allRepos.forEach( ( repo ) => {
                 if ( repo.html_url.includes( "/.github" ) || repo.name.includes( "wo-r.github.io" ) ) return;
+
+                if ( repo.topics.length != 0 ) {
+                    for ( var topic of repo.topics ) {
+                        topicHTML += `
+                            <span class="font-black font-nunitoblack text-[13px]">${ topic } </span>
+                        `
+                    }
+                }
 
                 // TODO: redo this
                 repoHTML += `
                     <a goto="${ repo.html_url }" class="cursor-pointer flex-1 select-none">
-                        <div ripple class="relative overflow-hidden p-10 bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full">
+                        <div ripple class="flex flex-col gap-5 justify-between h-full relative overflow-hidden p-10 bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full">
                             <div class="flex flex-col gap-5 justify-between text-center md:text-left">
                                 <h1 class="text-1xl md:text-6xl font-nunitoblack font-black leading-tight tracking-tight justify-center h-full text-center lg:text-left lg:justify-start items-center lg:items-start">${ repo.name }</h1>
                                 <span class="text-sm md:text-lg justify-center h-full text-center lg:text-left lg:justify-start items-center lg:items-start">${ repo.description }</span>    
                             </div>
+                            <div class="flex flex-row justify-between">
+                                <div class="flex flex-col gap-1">
+                                    <span class="font-black font-nunitoblack text-[13px]">Stars: ${ repo.stargazers_count }</span>
+                                    <span class="font-black font-nunitoblack text-[13px]">Forks: ${ repo.forks }</span>
+                                </div>
+                            </div>
+                            ${ topicHTML != "" ? `
+                                <div>
+                                    ${ topicHTML }
+                                </div>    
+                            ` : "" }                                
                         </div>
                     </a>
                 `;
 
                 totalProjects++
+
+                topicHTML = "";
             } );
 
             elementsManager.projectOptions.totalProjects.text( totalProjects );
