@@ -25,6 +25,7 @@
     // Not a common variable used however, it is used in some specific cases.
     var isReady = $( window ).ready;
 
+    // TODO: add a popup or something visually so the user knows an error actually happened and is why the website doesn't perform or look good, and can report it to github.
     var prevErr = async function( callback ) { try { return await callback() } catch ( e ) { console.error( e ) } };
 
     /**
@@ -1418,7 +1419,7 @@
         if ( elementsManager.projectOptions.projects == undefined ) return;
 
         // Check if data is already cached and valid
-        /*if ( !dayCheckManager.isNewDay() && storageManager.projects != undefined ) {
+        if ( !dayCheckManager.isNewDay() && storageManager.projects != undefined ) {
             if ( storageManager.projects ) {
                 elementsManager.projectOptions.projects.html( storageManager.projects );
                 elementsManager.projectOptions.totalProjects.text( storageManager.totalProjects )
@@ -1429,7 +1430,7 @@
                 initalizeTooltipElements();
                 initalizeRippledElements();
             }
-        } else*/ {
+        } else {
             var allRepos = [];
 
             // Fetch repositories from each GitHub account
@@ -1445,7 +1446,6 @@
             // Create HTML for each repository
             var repoHTML = "";
             var totalProjects = 0;
-            var topicHTML = "";
             allRepos.forEach( async ( repo ) => {
                 if ( repo.html_url.includes( "/.github" ) || repo.name.includes( "wo-r.github.io" ) ) return;
                 
