@@ -1446,27 +1446,26 @@
             // Create HTML for each repository
             var repoHTML = "";
             var totalProjects = 0;
-            allRepos.forEach( async ( repo ) => {
-                if ( repo.html_url.includes( "/.github" ) || repo.name.includes( "wo-r.github.io" ) ) return;
-                
+            for ( const repo of allRepos ) {
+                if ( repo.html_url.includes( "/.github" ) || repo.name.includes( "wo-r.github.io" ) ) continue;
+            
                 // Get the commit count dynamically
-                var commitVersion = await get(repo.commits_url.replace("{/sha}", "")).length;
-                commitVersion = `${ Math.floor(commitVersion / 100) }.${ Math.floor((commitVersion % 100) / 10) }.${ commitVersion % 10 }`;
-
-                // TODO: version with commit data :)
+                var commitVersion = await get( repo.commits_url.replace( "{/sha}", "" ) );
+                commitVersion = `${ Math.floor( commitVersion.length / 100 ) }.${ Math.floor( ( commitVersion.length % 100 ) / 10 ) }.${ commitVersion.length % 10 }`;
+            
                 repoHTML += `
-                    <a itemJson='{"version":"${ commitVersion }","created":"${ repo.created_at }","stars":"${ repo.stargazers_count }","forks":"${ repo.forks }","topics":${ JSON.stringify( repo.topics ) },"id":"${ repo.id }","full_name":"${ repo.full_name }","name":"${ repo.name }","description":"${ repo.description }"}' class="projectItem cursor-pointer flex-1 flex flex-col gap-2 select-none">
+                    <a itemJson='{"version":"${ commitVersion }","created":"${ repo.created_at }","stars":"${ repo.stargazers_count }","forks":"${ repo.forks }","topics":${ JSON.stringify(repo.topics) },"id":"${ repo.id }","full_name":"${ repo.full_name }","name":"${ repo.name }","description":"${ repo.description }"}' class="projectItem cursor-pointer flex-1 flex flex-col gap-2 select-none">
                         <div ripple class="flex flex-col gap-5 justify-between h-full relative overflow-hidden p-10 bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full">
                             <div class="flex flex-col gap-5 justify-between text-center md:text-left pointer-events-none">
                                 <h1 class="text-1xl md:text-6xl font-nunitoblack font-black leading-tight tracking-tight justify-center h-full text-center lg:text-left lg:justify-start items-center lg:items-start">${ repo.name }</h1>
-                                <span class="text-sm md:text-lg justify-center h-full text-center lg:text-left lg:justify-start items-center lg:items-start">${ repo.description }</span>    
+                                <span class="text-sm md:text-lg justify-center h-full text-center lg:text-left lg:justify-start items-center lg:items-start">${ repo.description }</span>
                             </div>                             
                         </div>
                     </a>
                 `;
 
-                totalProjects++
-            } );
+                totalProjects++;
+            }
 
             elementsManager.projectOptions.totalProjects.text( totalProjects );
 
@@ -1483,37 +1482,38 @@
             initalizeAlternateLinks();
             initalizeTooltipElements();
             initalizeRippledElements();
+        }
 
-            elementsManager.projectOptions.projects.mousedown( function ( e ) {
-                var item = null;
-                if ( $( e.target ).attr( "ripple" ) != undefined )
-                    item = $( e.target ).parent();
-                else if ( $( e.target ).hasClass( "ripple" ) )
-                    item = $( e.target ).parent().parent();
+        // TODO: replace with elementsManager
+        elementsManager.projectOptions.projects.mousedown( function ( e ) {
+            var item = null;
+            if ( $( e.target ).attr( "ripple" ) != undefined )
+                item = $( e.target ).parent();
+            else if ( $( e.target ).hasClass( "ripple" ) )
+                item = $( e.target ).parent().parent();
 
 
-                var itemData = JSON.parse( item.attr( "itemjson" ) );
+            var itemData = JSON.parse( item.attr( "itemjson" ) );
 
-                elementsManager.body.append( `
+            elementsManager.body.append( `
 
-                    <div id="projectDetails" class="fixed inset-0 z-[50] select-none">
-                        <div class="fixed inset-0 z-[-1] bg-brown-darker bg-opacity-50"></div>
-                        <div id="projectDetailsModalBackdrop" class="flex items-center justify-center min-h-screen">
-                            <div class="bg-brown-dark p-6 rounded-lg shadow-lg w-80 md:w-[500px] lg:w-[700px]">
-                                
-                            </div>
+                <div id="projectDetails" class="fixed inset-0 z-[50] select-none">
+                    <div class="fixed inset-0 z-[-1] bg-brown-darker bg-opacity-50"></div>
+                    <div id="projectDetailsModalBackdrop" class="flex items-center justify-center min-h-screen">
+                        <div class="bg-brown-dark p-6 rounded-lg shadow-lg w-80 md:w-[500px] lg:w-[700px]">
+                            ${ itemData.version }
                         </div>
                     </div>
+                </div>
 
-                ` )
+            ` )
 
-                $( "#projectDetails" ).mousedown( function ( e ) {
-                    if ( $( e.target ).attr( "id" ) == "projectDetailsModalBackdrop" ) {
-                        $( "#projectDetails" ).remove();
-                    }
-                } )
+            $( "#projectDetails" ).mousedown( function ( e ) {
+                if ( $( e.target ).attr( "id" ) == "projectDetailsModalBackdrop" ) {
+                    $( "#projectDetails" ).remove();
+                }
             } )
-        }
+        } )
 
         // Setup the search bar so we can search for blogs.
         elementsManager.projectOptions.search.on( "input", function () {
