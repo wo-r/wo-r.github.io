@@ -92,6 +92,8 @@
         basicMode: localStorage.getItem( "basicMode" ) == null ? undefined : localStorage.getItem( "basicMode" ),
         projects: localStorage.getItem( "projects" ) == null ? undefined : localStorage.getItem( "projects" ),
         totalProjects: localStorage.getItem( "totalProjects" ) == null ? undefined : localStorage.getItem( "totalProjects" ),
+        photos: localStorage.getItem( "photos" ) == null ? undefined : localStorage.getItem( "photos" ),
+        totalPhotos: localStorage.getItem( "totalPhotos" ) == null ? undefined : localStorage.getItem( "totalPhotos" ),
 
 
         // Exists for times when we need just the raw name instead of the storage item.
@@ -108,6 +110,8 @@
             basicMode: "basicMode",
             projects: "projects",
             totalProjects: "totalProjects",
+            photos: "photos",
+            totalPhotos: "totalPhotos",
         },
 
         /**
@@ -193,6 +197,10 @@
             projectTitles: $( "#projects a h1" ).length == 0 ? undefined : $( "#projects a h1" ),
             projectDetails: $( "#projectDetails" ).length == 0 ? undefined : $( "#projectDetails" ),
         },
+        photoOptions: {
+            photos: $( "#photos" ).length == 0 ? undefined : $( "#photos" ),
+            totalPhotos: $( "#totalPhotos" ).length == 0 ? undefined : $( "#totalPhotos" ),
+        },
 
         // Isn't really a stanalone part of this (only exists as a check for the page)
         galleryOptions: {
@@ -241,6 +249,8 @@
             elementsManager.projectOptions.search = $( "#search" ).length == 0 ? undefined : $( "#search" );
             elementsManager.projectOptions.projectTitles = $( "#projects a h1" ).length == 0 ? undefined : $( "#projects a h1" );
             elementsManager.projectOptions.projectDetails = $( "#projectDetails" ).length == 0 ? undefined : $( "#projectDetails" );
+            elementsManager.photoOptions.photos = $( "#photos" ).length == 0 ? undefined : $( "#photos" );
+            elementsManager.photoOptions.totalPhotos = $( "#totalPhotos" ).length == 0 ? undefined : $( "#totalPhotos" );
         }
     }
 
@@ -487,6 +497,11 @@
                                                 <a goto="/projects/" class="cursor-pointer">
                                                     <div ripple class="relative overflow-hidden py-2 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         Projects
+                                                    </div>
+                                                </a>
+                                                <a goto="/photography/" class="cursor-pointer">
+                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                        Photos
                                                     </div>
                                                 </a>
                                             </div>
@@ -1451,33 +1466,14 @@
             for ( const repo of allRepos ) {
                 if ( repo.html_url.includes( "/.github" ) || repo.name.includes( "wo-r.github.io" ) ) continue;
             
-                // Get the commit count dynamically
-                var commitVersion = await get( repo.commits_url.replace( "{/sha}", "" ) );
-                commitVersion = `${ Math.floor( commitVersion.length / 100 ) }.${ Math.floor( ( commitVersion.length % 100 ) / 10 ) }.${ commitVersion.length % 10 }`;
-                
-                var json = {
-                    "version": commitVersion,
-                    "created": repo.created_at,
-                    "stars": repo.stargazers_count,
-                    "forks": repo.forks,
-                    "topics": repo.topics,
-                    "id":  repo.id,
-                    "full_name": repo.full_name,
-                    "name": repo.name,
-                    "description": repo.description,
-                }
-
                 repoHTML += `
-                    <a class="projectItem cursor-pointer flex-1 flex flex-col gap-2 select-none">
+                    <a goto="${ repo.html_url }" class="cursor-pointer flex-1 flex flex-col gap-2 select-none">
                         <div ripple class="flex flex-col gap-5 justify-between h-full relative overflow-hidden p-10 bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full">
                             <div class="flex flex-col gap-5 justify-between text-center md:text-left pointer-events-none">
-                                <h1 class="text-1xl md:text-6xl font-nunitoblack font-black leading-tight tracking-tight justify-center h-full text-center lg:text-left lg:justify-start items-center lg:items-start">${ repo.name }</h1>
+                                <h1 class="text-1xl md:text-6xl font-nunitoblack font-black leading-tight tracking-tight justify-center h-full text-center lg:text-left lg:justify-start items-center lg:items-start">${ repo.name.replace( /-/g, " " ).replace( /\b\w/g, char => char.toUpperCase() ) }</h1>
                                 <span class="text-sm md:text-lg justify-center h-full text-center lg:text-left lg:justify-start items-center lg:items-start">${ repo.description.replace(/[,"'`]/g, '').replace(/[,"'`]/g, ' ') }</span>
                             </div>                             
                         </div>
-                        <code id="itemJson" class="hidden">
-                            ${ JSON.stringify( json ) }
-                        </code>
                     </a>
                 `;
 
@@ -1497,43 +1493,10 @@
 
             // Initialize tooltips and other necessary UI updates
             initalizeAlternateLinks();
-            initalizeTooltipElements();
             initalizeRippledElements();
         }
 
-        // TODO: replace with elementsManager
-        elementsManager.projectOptions.projects.mousedown( function ( e ) {
-            var item = null;
-            if ( $( e.target ).attr( "ripple" ) != undefined )
-                item = $( e.target ).parent();
-            else if ( $( e.target ).hasClass( "ripple" ) )
-                item = $( e.target ).parent().parent();
-
-            var itemData = JSON.parse( item.find( "#itemJson" ).text() );
-
-            elementsManager.body.append( `
-
-                <div id="projectDetails" class="fixed inset-0 z-[50] select-none">
-                    <div class="fixed inset-0 z-[-1] bg-brown-darker bg-opacity-50"></div>
-                    <div id="projectDetailsModalBackdrop" class="flex items-center justify-center min-h-screen">
-                        <div class="bg-brown-dark p-6 rounded-lg shadow-lg w-80 md:w-[500px] lg:w-[700px]">
-                            ${ itemData.version }
-                        </div>
-                    </div>
-                </div>
-
-            ` )
-
-            elementsManager.update();
-
-            elementsManager.projectOptions.projectDetails.mousedown( function ( e ) {
-                if ( $( e.target ).attr( "id" ) == "projectDetailsModalBackdrop" ) {
-                    elementsManager.projectOptions.projectDetails.remove();
-                }
-            } )
-        } )
-
-        // Setup the search bar so we can search for blogs.
+        // Setup the search bar so we can search for projects.
         elementsManager.projectOptions.search.on( "input", function () {
             var search = $( this ).val();
             var hasResults = false;
@@ -1580,6 +1543,67 @@
                 $( "#noResults" ).remove();
             }
         } )
+    }
+
+    /**
+     * Gets all photos from the images folder in photography
+     */
+    async function photosManager() {
+        if ( elementsManager.photoOptions.photos == undefined ) return;
+
+        // Check if data is already cached and valid
+        if ( !dayCheckManager.isNewDay() && storageManager.photos!= undefined ) {
+            if ( storageManager.photos ) {
+                elementsManager.photoOptions.photos.html( storageManager.photos );
+                elementsManager.photoOptions.totalPhotos.text( storageManager.totalPhotos )
+
+                elementsManager.update();
+
+                initalizeAlternateLinks();
+                initalizeTooltipElements();
+                initalizeRippledElements();
+            }
+        } else {
+            var allImages = [];
+            
+            // TODO: refractor
+            var contentData = await get( "https://api.github.com/repos/wo-r/wo-r.github.io/contents/photography/images" );
+
+            if (contentData) {
+                allImages = contentData;
+            }
+
+            // Filter for image files (e.g., .png, .jpg, .jpeg)
+            allImages = allImages.filter( file => file.name.match( /\.(jpg|jpeg|png)$/ ) ).map( file => file.download_url );
+
+            // Create HTML for each image
+            var imagesHTML = "";
+            var totalImages = allImages.length;
+            for ( const imageUrl of allImages ) {
+                imagesHTML += `
+                    <a href="${ imageUrl }" class="cursor-pointer flex-2 w-fit select-none" target="_blank">
+                        <div class="flex flex-col gap-5 justify-between h-full relative overflow-hidden bg-brown-dark hover:bg-brown-light hover:shadow-xl rounded-lg transition">
+                            <img src="${ imageUrl }" class="rounded-lg"/>
+                        </div>
+                    </a>
+                `;
+            }
+
+            elementsManager.photoOptions.totalPhotos.text( totalImages );
+
+            // Cache the repository data
+            storageEditorManager.edit( storageManager.raw.photos, imagesHTML );
+            storageEditorManager.edit( storageManager.raw.totalPhotos, totalImages );
+            dayCheckManager.updateLastUpdated();
+
+            // Display repositories in the #projects section
+            elementsManager.photoOptions.photos.html( imagesHTML );
+            elementsManager.update();
+
+            // Initialize tooltips and other necessary UI updates
+            initalizeAlternateLinks();
+            initalizeRippledElements();
+        }
     }
 
 
@@ -1670,6 +1694,7 @@
             galleryCarouselManager,
             feedbackManager,
             projectsManager,
+            photosManager,
         ]
 
         // Function to handle all tasks and ensure they run sequentially
