@@ -191,6 +191,7 @@
             totalProjects: $( "#totalProjects" ).length == 0 ? undefined : $( "#totalProjects" ),
             search: $( "#search" ).length == 0 ? undefined : $( "#search" ),
             projectTitles: $( "#projects a h1" ).length == 0 ? undefined : $( "#projects a h1" ),
+            projectDetails: $( "#projectDetails" ).length == 0 ? undefined : $( "#projectDetails" ),
         },
 
         // Isn't really a stanalone part of this (only exists as a check for the page)
@@ -239,6 +240,7 @@
             elementsManager.projectOptions.totalProjects = $( "#totalProjects" ).length == 0 ? undefined : $( "#totalProjects" );
             elementsManager.projectOptions.search = $( "#search" ).length == 0 ? undefined : $( "#search" );
             elementsManager.projectOptions.projectTitles = $( "#projects a h1" ).length == 0 ? undefined : $( "#projects a h1" );
+            elementsManager.projectOptions.projectDetails = $( "#projectDetails" ).length == 0 ? undefined : $( "#projectDetails" );
         }
     }
 
@@ -1452,15 +1454,30 @@
                 // Get the commit count dynamically
                 var commitVersion = await get( repo.commits_url.replace( "{/sha}", "" ) );
                 commitVersion = `${ Math.floor( commitVersion.length / 100 ) }.${ Math.floor( ( commitVersion.length % 100 ) / 10 ) }.${ commitVersion.length % 10 }`;
-            
+                
+                var json = {
+                    "version": commitVersion,
+                    "created": repo.created_at,
+                    "stars": repo.stargazers_count,
+                    "forks": repo.forks,
+                    "topics": repo.topics,
+                    "id":  repo.id,
+                    "full_name": repo.full_name,
+                    "name": repo.name,
+                    "description": repo.description,
+                }
+
                 repoHTML += `
-                    <a itemJson='{"version":"${ commitVersion }","created":"${ repo.created_at }","stars":"${ repo.stargazers_count }","forks":"${ repo.forks }","topics":${ JSON.stringify(repo.topics) },"id":"${ repo.id }","full_name":"${ repo.full_name }","name":"${ repo.name }","description":"${ repo.description }"}' class="projectItem cursor-pointer flex-1 flex flex-col gap-2 select-none">
+                    <a class="projectItem cursor-pointer flex-1 flex flex-col gap-2 select-none">
                         <div ripple class="flex flex-col gap-5 justify-between h-full relative overflow-hidden p-10 bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full">
                             <div class="flex flex-col gap-5 justify-between text-center md:text-left pointer-events-none">
                                 <h1 class="text-1xl md:text-6xl font-nunitoblack font-black leading-tight tracking-tight justify-center h-full text-center lg:text-left lg:justify-start items-center lg:items-start">${ repo.name }</h1>
-                                <span class="text-sm md:text-lg justify-center h-full text-center lg:text-left lg:justify-start items-center lg:items-start">${ repo.description }</span>
+                                <span class="text-sm md:text-lg justify-center h-full text-center lg:text-left lg:justify-start items-center lg:items-start">${ repo.description.replace(/[,"'`]/g, '').replace(/[,"'`]/g, ' ') }</span>
                             </div>                             
                         </div>
+                        <code id="itemJson" class="hidden">
+                            ${ JSON.stringify( json ) }
+                        </code>
                     </a>
                 `;
 
@@ -1492,8 +1509,7 @@
             else if ( $( e.target ).hasClass( "ripple" ) )
                 item = $( e.target ).parent().parent();
 
-
-            var itemData = JSON.parse( item.attr( "itemjson" ) );
+            var itemData = JSON.parse( item.find( "#itemJson" ).text() );
 
             elementsManager.body.append( `
 
@@ -1508,9 +1524,11 @@
 
             ` )
 
-            $( "#projectDetails" ).mousedown( function ( e ) {
+            elementsManager.update();
+
+            elementsManager.projectOptions.projectDetails.mousedown( function ( e ) {
                 if ( $( e.target ).attr( "id" ) == "projectDetailsModalBackdrop" ) {
-                    $( "#projectDetails" ).remove();
+                    elementsManager.projectOptions.projectDetails.remove();
                 }
             } )
         } )
