@@ -19,14 +19,19 @@
 
     /**
      * The websites global version (relative to the github commit number)
+     * NOTE: this is not frequently updated, and is only relevant if there is a big enough change in the application side of things.
      */
     var version = "0.8.8";
 
     // Not a common variable used however, it is used in some specific cases.
     var isReady = $( window ).ready;
 
-    // TODO: add a popup or something visually so the user knows an error actually happened and is why the website doesn't perform or look good, and can report it to github.
-    var prevErr = async function( callback ) { try { return await callback() } catch ( e ) { console.error( e ) } };
+    var prevErr = async function( callback ) { try { return await callback() } catch ( e ) { errorManager( e ) } };
+
+    /**
+     * This manages the sites name, and some url paths as well.
+     */
+    var baseName = "wo-r.github.io";
 
     /**
      * Really simple thing, but checks if you are localhost, allowing developer features for website testing and such.
@@ -60,6 +65,11 @@
     var highlighter = `<span class="text-brown-light">$&</span>`;
 
     var gallerysPath = "../portfolio/gallerys/gallerys.json";
+
+    /**
+     * This is an API url, however its structure is different from all other API urls used in this script file
+     */
+    var photosPath = `https://api.github.com/repos/${ githubAccounts[0] }/${ baseName }/contents/photography/images`;
 
     // EmailJS public key (this cannot be used against me since I set it up to ONLY work for my website url).
     var publicEmailOptions = {
@@ -202,7 +212,7 @@
             totalPhotos: $( "#totalPhotos" ).length == 0 ? undefined : $( "#totalPhotos" ),
         },
 
-        // Isn't really a stanalone part of this (only exists as a check for the page)
+        // Isn't really a standalone part of this (only exists as a check for the page)
         galleryOptions: {
             gradpass: $( "#gradpass" ).length == 0 ? undefined : $( "#gradpass" ),
         },
@@ -292,6 +302,26 @@
         } )
     }
 
+    /**
+     * Vastly manages errors caused from things in the code, and displays it properly to the user. This allows the user to send issues to the github repository for futher fixes to the site.
+     */
+    var errorManager = ( error ) => {
+        console.error( error )
+
+        elementsManager.body.append( `
+            <div class="transition-all error-popup flex flex-col gap-1 fixed bottom-6 left-0 md:left-6 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-red-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
+                <span>An unexpected error occured.</span>
+                <small class="font-medium text-zinc-300 text-[12px] opacity-50">${ error }</small>
+            </div>
+        ` );
+
+        setTimeout( () => {
+            $( ".error-popup" ).addClass( "hide" );
+            setTimeout( () => {
+                $( ".error-popup" ).remove();
+            }, 500 )
+        }, 2000 )
+    }
 
 
     /**
@@ -1107,7 +1137,7 @@
      */
     async function totalFollowerCount() {
         if ( elementsManager.totalFollowers == undefined ) return;
-
+        
         if ( !dayCheckManager.isNewDay() && storageManager.totalFollowers != undefined ) {
             if ( storageManager.totalFollowers ) {
                 elementsManager.totalFollowers.text( storageManager.totalFollowers );
@@ -1146,7 +1176,7 @@
             var repoData = await get( githubAPI( username, "/repos?per_page=100" ) );
             if ( repoData ) {
                 // Filter out repos with names .github or wo-r
-                var filteredRepos = repoData.filter( repo => !repo.html_url.includes( "/.github" ) && !repo.name.includes( "wo-r.github.io" ) );
+                var filteredRepos = repoData.filter( repo => !repo.html_url.includes( "/.github" ) && !repo.name.includes( baseName ) );
                 totalRepos += filteredRepos.length;  // Add only the filtered repos
             }
 
@@ -1405,10 +1435,36 @@
                             elementsManager.feedbackOptions.email.val( "" );
                             elementsManager.feedbackOptions.name.val( "" );
 
-                            elementsManager.feedbackOptions.submitButton.find( "span" ).text( "Send Message (Sent Successfully)" );
+                            // TODO: replace CSS with just popup
+                            // actually just make it a function :P
+                            elementsManager.body.append( `
+                                <div class="transition-all error-popup flex flex-col gap-1 fixed bottom-6 left-0 md:left-6 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-green-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
+                                    <span>Successfully sent your feedback</span>
+                                </div>
+                            ` );
+                    
+                            setTimeout( () => {
+                                $( ".error-popup" ).addClass( "hide" );
+                                setTimeout( () => {
+                                    $( ".error-popup" ).remove();
+                                }, 500 )
+                            }, 2000 )
                         }, ( e ) => {
-                            elementsManager.feedbackOptions.submitButton.find( "span" ).text( "Send Message (Error Occured, Check Console)" );
                             console.error( e );
+
+                            elementsManager.body.append( `
+                                <div class="transition-all error-popup flex flex-col gap-1 fixed bottom-6 left-0 md:left-6 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-red-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
+                                    <span>An unexpected error occured.</span>
+                                    <small class="font-medium text-zinc-300 text-[12px] opacity-50">${ e }</small>
+                                </div>
+                            ` );
+                    
+                            setTimeout( () => {
+                                $( ".error-popup" ).addClass( "hide" );
+                                setTimeout( () => {
+                                    $( ".error-popup" ).remove();
+                                }, 500 )
+                            }, 2000 )
                         } )
 
                         setTimeout( () => {
@@ -1464,7 +1520,7 @@
             var repoHTML = "";
             var totalProjects = 0;
             for ( const repo of allRepos ) {
-                if ( repo.html_url.includes( "/.github" ) || repo.name.includes( "wo-r.github.io" ) ) continue;
+                if ( repo.html_url.includes( "/.github" ) || repo.name.includes( baseName ) ) continue;
             
                 repoHTML += `
                     <a goto="${ repo.html_url }" class="cursor-pointer flex-1 flex flex-col gap-2 select-none">
@@ -1549,27 +1605,30 @@
      * Gets all photos from the images folder in photography
      */
     async function photosManager() {
-        if ( elementsManager.photoOptions.photos == undefined ) return;
+        if (elementsManager.photoOptions.photos == undefined) return;
 
-        // Check if data is already cached and valid
-        if ( !dayCheckManager.isNewDay() && storageManager.photos!= undefined ) {
+        if ( !dayCheckManager.isNewDay() && storageManager.photos != undefined ) {
             if ( storageManager.photos ) {
                 elementsManager.photoOptions.photos.html( storageManager.photos );
                 elementsManager.photoOptions.totalPhotos.text( storageManager.totalPhotos )
 
-                elementsManager.update();
+                await Promise.all( $( "img" ).map( (i, img) => {
+                    return new Promise( ( resolve, reject ) => {
+                        $( img ).on( "load", () => resolve() );
+                        $( img ).on( "error", () => reject( new Error( `An image failed to load: ${ img.src }` ) ) )
+                    } )
+                } ).get() );
 
-                initalizeAlternateLinks();
-                initalizeTooltipElements();
-                initalizeRippledElements();
+                elementsManager.update();
             }
         } else {
+            // Fetch fresh data from GitHub
             var allImages = [];
-            
-            // TODO: refractor
-            var contentData = await get( "https://api.github.com/repos/wo-r/wo-r.github.io/contents/photography/images" );
 
-            if (contentData) {
+            // Fetch content data from the images folder in GitHub repo
+            var contentData = await get( photosPath );
+
+            if ( contentData ) {
                 allImages = contentData;
             }
 
@@ -1579,30 +1638,34 @@
             // Create HTML for each image
             var imagesHTML = "";
             var totalImages = allImages.length;
-            for ( const imageUrl of allImages ) {
+            for ( var imageUrl of allImages ) {
                 imagesHTML += `
-                    <a href="${ imageUrl }" class="cursor-pointer flex-2 w-fit select-none" target="_blank">
+                    <a href="${ imageUrl }" class="cursor-pointer w-fit select-none" target="_blank">
                         <div class="flex flex-col gap-5 justify-between h-full relative overflow-hidden bg-brown-dark hover:bg-brown-light hover:shadow-xl rounded-lg transition">
-                            <img src="${ imageUrl }" class="rounded-lg"/>
+                            <img src="${ imageUrl }" data-src="${ imageUrl }" class="rounded-lg"/>
                         </div>
                     </a>
                 `;
             }
 
-            elementsManager.photoOptions.totalPhotos.text( totalImages );
-
-            // Cache the repository data
             storageEditorManager.edit( storageManager.raw.photos, imagesHTML );
             storageEditorManager.edit( storageManager.raw.totalPhotos, totalImages );
             dayCheckManager.updateLastUpdated();
 
-            // Display repositories in the #projects section
             elementsManager.photoOptions.photos.html( imagesHTML );
-            elementsManager.update();
+            elementsManager.photoOptions.totalPhotos.text( totalImages );
 
-            // Initialize tooltips and other necessary UI updates
-            initalizeAlternateLinks();
-            initalizeRippledElements();
+            await Promise.all( $( "img[data-src]" ).map( (i, img) => {
+                return new Promise( ( resolve, reject ) => {
+                    $( img ).on( "load", () => {
+                        $( img ).removeAttr( "data-src" );
+                        resolve();
+                    } );
+                    $( img ).on( "error", () => reject( new Error( `An image failed to load: ${ img.src }` ) ) )
+                } )
+            } ).get() );
+
+            elementsManager.update();
         }
     }
 
@@ -1711,7 +1774,7 @@
         elementsManager.loader.fadeOut( 300 );
 
         // Finally add some of the pasaz that the user can see.
-        animatePopupText();
+        await prevErr( animatePopupText );
     } )
 
 } ) ( jQuery, window, document );
