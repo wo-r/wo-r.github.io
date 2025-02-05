@@ -19,14 +19,19 @@
 
     /**
      * The websites global version (relative to the github commit number)
+     * NOTE: this is not frequently updated, and is only relevant if there is a big enough change in the application side of things.
      */
     var version = "0.8.8";
 
     // Not a common variable used however, it is used in some specific cases.
     var isReady = $( window ).ready;
 
-    // TODO: add a popup or something visually so the user knows an error actually happened and is why the website doesn't perform or look good, and can report it to github.
-    var prevErr = async function( callback ) { try { return await callback() } catch ( e ) { console.error( e ) } };
+    var prevErr = async function( callback ) { try { return await callback() } catch ( e ) { errorManager( e ) } };
+
+    /**
+     * This manages the sites name, and some url paths as well.
+     */
+    var baseName = "wo-r.github.io";
 
     /**
      * Really simple thing, but checks if you are localhost, allowing developer features for website testing and such.
@@ -61,6 +66,11 @@
 
     var gallerysPath = "../portfolio/gallerys/gallerys.json";
 
+    /**
+     * This is an API url, however its structure is different from all other API urls used in this script file
+     */
+    var photosPath = `https://api.github.com/repos/${ githubAccounts[0] }/${ baseName }/contents/photography/images`;
+
     // EmailJS public key (this cannot be used against me since I set it up to ONLY work for my website url).
     var publicEmailOptions = {
         key: "9ac5poQVMm8gyPC01",
@@ -92,6 +102,8 @@
         basicMode: localStorage.getItem( "basicMode" ) == null ? undefined : localStorage.getItem( "basicMode" ),
         projects: localStorage.getItem( "projects" ) == null ? undefined : localStorage.getItem( "projects" ),
         totalProjects: localStorage.getItem( "totalProjects" ) == null ? undefined : localStorage.getItem( "totalProjects" ),
+        photos: localStorage.getItem( "photos" ) == null ? undefined : localStorage.getItem( "photos" ),
+        totalPhotos: localStorage.getItem( "totalPhotos" ) == null ? undefined : localStorage.getItem( "totalPhotos" ),
 
 
         // Exists for times when we need just the raw name instead of the storage item.
@@ -108,6 +120,8 @@
             basicMode: "basicMode",
             projects: "projects",
             totalProjects: "totalProjects",
+            photos: "photos",
+            totalPhotos: "totalPhotos",
         },
 
         /**
@@ -193,8 +207,12 @@
             projectTitles: $( "#projects a h1" ).length == 0 ? undefined : $( "#projects a h1" ),
             projectDetails: $( "#projectDetails" ).length == 0 ? undefined : $( "#projectDetails" ),
         },
+        photoOptions: {
+            photos: $( "#photos" ).length == 0 ? undefined : $( "#photos" ),
+            totalPhotos: $( "#totalPhotos" ).length == 0 ? undefined : $( "#totalPhotos" ),
+        },
 
-        // Isn't really a stanalone part of this (only exists as a check for the page)
+        // Isn't really a standalone part of this (only exists as a check for the page)
         galleryOptions: {
             gradpass: $( "#gradpass" ).length == 0 ? undefined : $( "#gradpass" ),
         },
@@ -241,6 +259,8 @@
             elementsManager.projectOptions.search = $( "#search" ).length == 0 ? undefined : $( "#search" );
             elementsManager.projectOptions.projectTitles = $( "#projects a h1" ).length == 0 ? undefined : $( "#projects a h1" );
             elementsManager.projectOptions.projectDetails = $( "#projectDetails" ).length == 0 ? undefined : $( "#projectDetails" );
+            elementsManager.photoOptions.photos = $( "#photos" ).length == 0 ? undefined : $( "#photos" );
+            elementsManager.photoOptions.totalPhotos = $( "#totalPhotos" ).length == 0 ? undefined : $( "#totalPhotos" );
         }
     }
 
@@ -282,6 +302,26 @@
         } )
     }
 
+    /**
+     * Vastly manages errors caused from things in the code, and displays it properly to the user. This allows the user to send issues to the github repository for futher fixes to the site.
+     */
+    var errorManager = ( error ) => {
+        console.error( error )
+
+        elementsManager.body.append( `
+            <div class="transition-all error-popup flex flex-col gap-1 fixed bottom-6 left-0 md:left-6 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-red-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
+                <span>An unexpected error occured.</span>
+                <small class="font-medium text-zinc-300 text-[12px] opacity-50">${ error }</small>
+            </div>
+        ` );
+
+        setTimeout( () => {
+            $( ".error-popup" ).addClass( "hide" );
+            setTimeout( () => {
+                $( ".error-popup" ).remove();
+            }, 500 )
+        }, 2000 )
+    }
 
 
     /**
@@ -487,6 +527,11 @@
                                                 <a goto="/projects/" class="cursor-pointer">
                                                     <div ripple class="relative overflow-hidden py-2 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
                                                         Projects
+                                                    </div>
+                                                </a>
+                                                <a goto="/photography/" class="cursor-pointer">
+                                                    <div ripple class="relative overflow-hidden py-2 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition">
+                                                        Photos
                                                     </div>
                                                 </a>
                                             </div>
@@ -1092,7 +1137,7 @@
      */
     async function totalFollowerCount() {
         if ( elementsManager.totalFollowers == undefined ) return;
-
+        
         if ( !dayCheckManager.isNewDay() && storageManager.totalFollowers != undefined ) {
             if ( storageManager.totalFollowers ) {
                 elementsManager.totalFollowers.text( storageManager.totalFollowers );
@@ -1131,7 +1176,7 @@
             var repoData = await get( githubAPI( username, "/repos?per_page=100" ) );
             if ( repoData ) {
                 // Filter out repos with names .github or wo-r
-                var filteredRepos = repoData.filter( repo => !repo.html_url.includes( "/.github" ) && !repo.name.includes( "wo-r.github.io" ) );
+                var filteredRepos = repoData.filter( repo => !repo.html_url.includes( "/.github" ) && !repo.name.includes( baseName ) );
                 totalRepos += filteredRepos.length;  // Add only the filtered repos
             }
 
@@ -1390,10 +1435,36 @@
                             elementsManager.feedbackOptions.email.val( "" );
                             elementsManager.feedbackOptions.name.val( "" );
 
-                            elementsManager.feedbackOptions.submitButton.find( "span" ).text( "Send Message (Sent Successfully)" );
+                            // TODO: replace CSS with just popup
+                            // actually just make it a function :P
+                            elementsManager.body.append( `
+                                <div class="transition-all error-popup flex flex-col gap-1 fixed bottom-6 left-0 md:left-6 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-green-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
+                                    <span>Successfully sent your feedback</span>
+                                </div>
+                            ` );
+                    
+                            setTimeout( () => {
+                                $( ".error-popup" ).addClass( "hide" );
+                                setTimeout( () => {
+                                    $( ".error-popup" ).remove();
+                                }, 500 )
+                            }, 2000 )
                         }, ( e ) => {
-                            elementsManager.feedbackOptions.submitButton.find( "span" ).text( "Send Message (Error Occured, Check Console)" );
                             console.error( e );
+
+                            elementsManager.body.append( `
+                                <div class="transition-all error-popup flex flex-col gap-1 fixed bottom-6 left-0 md:left-6 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-red-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
+                                    <span>An unexpected error occured.</span>
+                                    <small class="font-medium text-zinc-300 text-[12px] opacity-50">${ e }</small>
+                                </div>
+                            ` );
+                    
+                            setTimeout( () => {
+                                $( ".error-popup" ).addClass( "hide" );
+                                setTimeout( () => {
+                                    $( ".error-popup" ).remove();
+                                }, 500 )
+                            }, 2000 )
                         } )
 
                         setTimeout( () => {
@@ -1449,35 +1520,16 @@
             var repoHTML = "";
             var totalProjects = 0;
             for ( const repo of allRepos ) {
-                if ( repo.html_url.includes( "/.github" ) || repo.name.includes( "wo-r.github.io" ) ) continue;
+                if ( repo.html_url.includes( "/.github" ) || repo.name.includes( baseName ) ) continue;
             
-                // Get the commit count dynamically
-                var commitVersion = await get( repo.commits_url.replace( "{/sha}", "" ) );
-                commitVersion = `${ Math.floor( commitVersion.length / 100 ) }.${ Math.floor( ( commitVersion.length % 100 ) / 10 ) }.${ commitVersion.length % 10 }`;
-                
-                var json = {
-                    "version": commitVersion,
-                    "created": repo.created_at,
-                    "stars": repo.stargazers_count,
-                    "forks": repo.forks,
-                    "topics": repo.topics,
-                    "id":  repo.id,
-                    "full_name": repo.full_name,
-                    "name": repo.name,
-                    "description": repo.description,
-                }
-
                 repoHTML += `
-                    <a class="projectItem cursor-pointer flex-1 flex flex-col gap-2 select-none">
+                    <a goto="${ repo.html_url }" class="cursor-pointer flex-1 flex flex-col gap-2 select-none">
                         <div ripple class="flex flex-col gap-5 justify-between h-full relative overflow-hidden p-10 bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full">
                             <div class="flex flex-col gap-5 justify-between text-center md:text-left pointer-events-none">
-                                <h1 class="text-1xl md:text-6xl font-nunitoblack font-black leading-tight tracking-tight justify-center h-full text-center lg:text-left lg:justify-start items-center lg:items-start">${ repo.name }</h1>
+                                <h1 class="text-1xl md:text-6xl font-nunitoblack font-black leading-tight tracking-tight justify-center h-full text-center lg:text-left lg:justify-start items-center lg:items-start">${ repo.name.replace( /-/g, " " ).replace( /\b\w/g, char => char.toUpperCase() ) }</h1>
                                 <span class="text-sm md:text-lg justify-center h-full text-center lg:text-left lg:justify-start items-center lg:items-start">${ repo.description.replace(/[,"'`]/g, '').replace(/[,"'`]/g, ' ') }</span>
                             </div>                             
                         </div>
-                        <code id="itemJson" class="hidden">
-                            ${ JSON.stringify( json ) }
-                        </code>
                     </a>
                 `;
 
@@ -1497,43 +1549,10 @@
 
             // Initialize tooltips and other necessary UI updates
             initalizeAlternateLinks();
-            initalizeTooltipElements();
             initalizeRippledElements();
         }
 
-        // TODO: replace with elementsManager
-        elementsManager.projectOptions.projects.mousedown( function ( e ) {
-            var item = null;
-            if ( $( e.target ).attr( "ripple" ) != undefined )
-                item = $( e.target ).parent();
-            else if ( $( e.target ).hasClass( "ripple" ) )
-                item = $( e.target ).parent().parent();
-
-            var itemData = JSON.parse( item.find( "#itemJson" ).text() );
-
-            elementsManager.body.append( `
-
-                <div id="projectDetails" class="fixed inset-0 z-[50] select-none">
-                    <div class="fixed inset-0 z-[-1] bg-brown-darker bg-opacity-50"></div>
-                    <div id="projectDetailsModalBackdrop" class="flex items-center justify-center min-h-screen">
-                        <div class="bg-brown-dark p-6 rounded-lg shadow-lg w-80 md:w-[500px] lg:w-[700px]">
-                            ${ itemData.version }
-                        </div>
-                    </div>
-                </div>
-
-            ` )
-
-            elementsManager.update();
-
-            elementsManager.projectOptions.projectDetails.mousedown( function ( e ) {
-                if ( $( e.target ).attr( "id" ) == "projectDetailsModalBackdrop" ) {
-                    elementsManager.projectOptions.projectDetails.remove();
-                }
-            } )
-        } )
-
-        // Setup the search bar so we can search for blogs.
+        // Setup the search bar so we can search for projects.
         elementsManager.projectOptions.search.on( "input", function () {
             var search = $( this ).val();
             var hasResults = false;
@@ -1580,6 +1599,74 @@
                 $( "#noResults" ).remove();
             }
         } )
+    }
+
+    /**
+     * Gets all photos from the images folder in photography
+     */
+    async function photosManager() {
+        if (elementsManager.photoOptions.photos == undefined) return;
+
+        if ( !dayCheckManager.isNewDay() && storageManager.photos != undefined ) {
+            if ( storageManager.photos ) {
+                elementsManager.photoOptions.photos.html( storageManager.photos );
+                elementsManager.photoOptions.totalPhotos.text( storageManager.totalPhotos )
+
+                await Promise.all( $( "img" ).map( (i, img) => {
+                    return new Promise( ( resolve, reject ) => {
+                        $( img ).on( "load", () => resolve() );
+                        $( img ).on( "error", () => reject( new Error( `An image failed to load: ${ img.src }` ) ) )
+                    } )
+                } ).get() );
+
+                elementsManager.update();
+            }
+        } else {
+            // Fetch fresh data from GitHub
+            var allImages = [];
+
+            // Fetch content data from the images folder in GitHub repo
+            var contentData = await get( photosPath );
+
+            if ( contentData ) {
+                allImages = contentData;
+            }
+
+            // Filter for image files (e.g., .png, .jpg, .jpeg)
+            allImages = allImages.filter( file => file.name.match( /\.(jpg|jpeg|png)$/ ) ).map( file => file.download_url );
+
+            // Create HTML for each image
+            var imagesHTML = "";
+            var totalImages = allImages.length;
+            for ( var imageUrl of allImages ) {
+                imagesHTML += `
+                    <a href="${ imageUrl }" class="cursor-pointer w-fit select-none" target="_blank">
+                        <div class="flex flex-col gap-5 justify-between h-full relative overflow-hidden bg-brown-dark hover:bg-brown-light hover:shadow-xl rounded-lg transition">
+                            <img src="${ imageUrl }" data-src="${ imageUrl }" class="rounded-lg"/>
+                        </div>
+                    </a>
+                `;
+            }
+
+            storageEditorManager.edit( storageManager.raw.photos, imagesHTML );
+            storageEditorManager.edit( storageManager.raw.totalPhotos, totalImages );
+            dayCheckManager.updateLastUpdated();
+
+            elementsManager.photoOptions.photos.html( imagesHTML );
+            elementsManager.photoOptions.totalPhotos.text( totalImages );
+
+            await Promise.all( $( "img[data-src]" ).map( (i, img) => {
+                return new Promise( ( resolve, reject ) => {
+                    $( img ).on( "load", () => {
+                        $( img ).removeAttr( "data-src" );
+                        resolve();
+                    } );
+                    $( img ).on( "error", () => reject( new Error( `An image failed to load: ${ img.src }` ) ) )
+                } )
+            } ).get() );
+
+            elementsManager.update();
+        }
     }
 
 
@@ -1670,6 +1757,7 @@
             galleryCarouselManager,
             feedbackManager,
             projectsManager,
+            photosManager,
         ]
 
         // Function to handle all tasks and ensure they run sequentially
@@ -1686,7 +1774,7 @@
         elementsManager.loader.fadeOut( 300 );
 
         // Finally add some of the pasaz that the user can see.
-        animatePopupText();
+        await prevErr( animatePopupText );
     } )
 
 } ) ( jQuery, window, document );
