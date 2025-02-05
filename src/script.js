@@ -21,7 +21,7 @@
      * The websites global version (relative to the github commit number)
      * NOTE: this is not frequently updated, and is only relevant if there is a big enough change in the application side of things.
      */
-    var version = "0.8.8";
+    var version = "0.9.8";
 
     // Not a common variable used however, it is used in some specific cases.
     var isReady = $( window ).ready;
