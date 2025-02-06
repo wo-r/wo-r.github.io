@@ -129,6 +129,7 @@ b {
  */
 .loader {
     width: 40px;
+    pointer-events: none !important;
     aspect-ratio: 1;
     --c: linear-gradient(#494327 0 0);
     --r1: radial-gradient(farthest-side at bottom, #494327 93%, #494327);
@@ -167,13 +168,13 @@ b {
 }
 
 /* ============================== Error Popup Animation ============================== */
-.error-popup {
+.popupManager.popup {
     opacity: 0;
     transform: translateY(20px);
     animation: popupAnimation 0.5s ease-out forwards;
 }
 
-.error-popup.hide {
+.popupManager.popup.hide {
     opacity: 1;
     transform: translateY(20px);
     animation: popdownAnimation 0.5s ease-in forwards;

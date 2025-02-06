@@ -26,7 +26,7 @@
     // Not a common variable used however, it is used in some specific cases.
     var isReady = $( window ).ready;
 
-    var prevErr = async function( callback ) { try { return await callback() } catch ( e ) { errorManager( e ) } };
+    var prevErr = async function( callback ) { try { return await callback() } catch ( e ) { popupManager( "error", e, 5000 ) } };
 
     /**
      * This manages the sites name, and some url paths as well.
@@ -303,25 +303,69 @@
     }
 
     /**
-     * Vastly manages errors caused from things in the code, and displays it properly to the user. This allows the user to send issues to the github repository for futher fixes to the site.
+     * Manages popup information cards used throughout the site.
+     * NOTE: this was a replacement for the original function "errorManager()", and serves as a universal popup system.
+     * 
+     * Type:
+     * - error
+     * - success
+     * - warn
      */
-    var errorManager = ( error ) => {
-        console.error( error )
+    var popupManager = ( type = undefined, details = undefined, delay = 3000 ) => {
+        var popupHTML = "";
+        
+        if ( delay == 0 || details == undefined || type == undefined ) {
+            console.error( "You must have a variable for each item in the function." )
+            return;
+        }
 
-        elementsManager.body.append( `
-            <div class="transition-all error-popup flex flex-col gap-1 fixed bottom-6 left-0 md:left-6 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-red-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
-                <span>An unexpected error occured.</span>
-                <small class="font-medium text-zinc-300 text-[12px] opacity-50">${ error }</small>
-            </div>
-        ` );
+        if ( type == "error" )
+            console.error( details );
+
+        switch ( type ) {
+            case "error": {
+                popupHTML = `
+                    <div class="transition-all popupManager popup flex flex-col gap-1 fixed bottom-6 left-0 md:left-6 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-red-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
+                        <span>An unexpected error occured.</span>
+                        <small class="font-medium text-zinc-300 text-[12px] opacity-50">${ details }</small>
+                    </div>
+                `
+                break;
+            }
+            case "success": {
+                popupHTML = `
+                    <div class="transition-all popupManager popup flex flex-col gap-1 fixed bottom-6 left-0 md:left-6 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-green-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
+                        <span>${ details }</span>
+                    </div>
+                `
+                break;
+            }
+            case "warn": {
+                popupHTML = `
+                    <div class="transition-all popupManager popup flex flex-col gap-1 fixed bottom-6 left-0 md:left-6 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-yellow-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
+                        <span>An issue was found.</span>
+                        <small class="font-medium text-zinc-300 text-[12px] opacity-50">${ details }</small>
+                    </div>
+                `
+                break;
+            }
+        }
+
+        if ( popupHTML == "" ) {
+            console.error( "The popup for error control had an error? (this shouldn't happen but it did?)" );
+            return;
+        }
+
+        elementsManager.body.append( popupHTML );
 
         setTimeout( () => {
-            $( ".error-popup" ).addClass( "hide" );
+            $( ".popupManager" ).addClass( "hide" );
             setTimeout( () => {
-                $( ".error-popup" ).remove();
+                $( ".popupManager" ).remove();
             }, 500 )
-        }, 2000 )
+        }, delay )
     }
+
 
 
     /**
@@ -1435,36 +1479,9 @@
                             elementsManager.feedbackOptions.email.val( "" );
                             elementsManager.feedbackOptions.name.val( "" );
 
-                            // TODO: replace CSS with just popup
-                            // actually just make it a function :P
-                            elementsManager.body.append( `
-                                <div class="transition-all error-popup flex flex-col gap-1 fixed bottom-6 left-0 md:left-6 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-green-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
-                                    <span>Successfully sent your feedback</span>
-                                </div>
-                            ` );
-                    
-                            setTimeout( () => {
-                                $( ".error-popup" ).addClass( "hide" );
-                                setTimeout( () => {
-                                    $( ".error-popup" ).remove();
-                                }, 500 )
-                            }, 2000 )
+                            popupManager( "success", "Successfully sent your feedback" )
                         }, ( e ) => {
-                            console.error( e );
-
-                            elementsManager.body.append( `
-                                <div class="transition-all error-popup flex flex-col gap-1 fixed bottom-6 left-0 md:left-6 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-red-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
-                                    <span>An unexpected error occured.</span>
-                                    <small class="font-medium text-zinc-300 text-[12px] opacity-50">${ e }</small>
-                                </div>
-                            ` );
-                    
-                            setTimeout( () => {
-                                $( ".error-popup" ).addClass( "hide" );
-                                setTimeout( () => {
-                                    $( ".error-popup" ).remove();
-                                }, 500 )
-                            }, 2000 )
+                            popupManager( "error", e, 5000 );
                         } )
 
                         setTimeout( () => {
@@ -1612,14 +1629,23 @@
                 elementsManager.photoOptions.photos.html( storageManager.photos );
                 elementsManager.photoOptions.totalPhotos.text( storageManager.totalPhotos )
 
-                await Promise.all( $( "img" ).map( (i, img) => {
-                    return new Promise( ( resolve, reject ) => {
-                        $( img ).on( "load", () => resolve() );
-                        $( img ).on( "error", () => reject( new Error( `An image failed to load: ${ img.src }` ) ) )
-                    } )
-                } ).get() );
+                const timeout = new Promise((_, reject) => setTimeout(() => {
+                    reject( new Error('Images are taking too long to load. (I dont want you sitting on a loading screen forever basically)') );
+                }, 10000));  // 10 seconds timeout
+
+                await Promise.race( [
+                    timeout,
+                    Promise.all( $( "img" ).map( (i, img) => {
+                        return new Promise( ( resolve, reject ) => {
+                            $( img ).on( "load", () => resolve() );
+                            $( img ).on( "error", () => reject( new Error( `An image failed to load: ${ img.src }` ) ) )
+                        } )
+                    } ).get() )
+                ] )
 
                 elementsManager.update();
+
+                initalizeAlternateLinks();
             }
         } else {
             // Fetch fresh data from GitHub
@@ -1640,7 +1666,7 @@
             var totalImages = allImages.length;
             for ( var imageUrl of allImages ) {
                 imagesHTML += `
-                    <a href="${ imageUrl }" class="cursor-pointer w-fit select-none" target="_blank">
+                    <a goto="${ imageUrl }" class="cursor-pointer w-fit select-none" target="_blank">
                         <div class="flex flex-col gap-5 justify-between h-full relative overflow-hidden bg-brown-dark hover:bg-brown-light hover:shadow-xl rounded-lg transition">
                             <img src="${ imageUrl }" data-src="${ imageUrl }" class="rounded-lg"/>
                         </div>
@@ -1655,17 +1681,26 @@
             elementsManager.photoOptions.photos.html( imagesHTML );
             elementsManager.photoOptions.totalPhotos.text( totalImages );
 
-            await Promise.all( $( "img[data-src]" ).map( (i, img) => {
-                return new Promise( ( resolve, reject ) => {
-                    $( img ).on( "load", () => {
-                        $( img ).removeAttr( "data-src" );
-                        resolve();
-                    } );
-                    $( img ).on( "error", () => reject( new Error( `An image failed to load: ${ img.src }` ) ) )
-                } )
-            } ).get() );
+            const timeout = new Promise((_, reject) => setTimeout(() => {
+                reject(new Error('Images are taking too long to load. (I dont want you sitting on a loading screen forever basically)'));
+            }, 10000));  // 10 seconds timeout
+
+            await Promise.race( [
+                timeout,
+                Promise.all( $( "img[data-src]" ).map( (i, img) => {
+                    return new Promise( ( resolve, reject ) => {
+                        $( img ).on( "load", () => {
+                            $( img ).removeAttr( "data-src" );
+                            resolve();
+                        } );
+                        $( img ).on( "error", () => reject( new Error( `An image failed to load: ${ img.src }` ) ) )
+                    } )
+                } ).get() )
+            ] );
 
             elementsManager.update();
+
+            initalizeAlternateLinks();
         }
     }
 
