@@ -896,23 +896,27 @@
                     veryFast: 30,
                     extremelyFast: 5,
                     slow: 200
-                }[speed];
+                }[ speed ];
             
                 // Split the text into words and wrap each word in a span
                 const words = text.split( " " );
                 words.forEach( function ( word ) {
                     if ( word.trim() ) {
-                        wrappedText += `<div class="popup-word flex flex-row">${ word.split( "" ).map( function ( letter ) {
-                            return `<span class="popup-letter">${ letter }</span>`;
-                        } ).join( "" ) }</div> `;
+                        wrappedText += `
+                            <div class="popupWord flex flex-row">
+                                ${ word.split( "" ).map( function ( letter ) {                                    
+                                    return `<span class="popupLetter">${ letter }</span>`;
+                                } ).join( "" ) }
+                            </div> 
+                        `;
                     } else {
-                        wrappedText += `<span class="popup-letter">&nbsp;</span>`;
+                        wrappedText += `<span class="popupLetter">&nbsp;</span>`;
                     }
                 } );
             
                 $( element ).html( wrappedText );
             
-                $( element ).find( ".popup-letter" ).each( function ( index ) {
+                $( element ).find( ".popupLetter" ).each( function ( index ) {
                     $( this ).delay( delay * index ).queue( function ( next ) {
                         $( this ).addClass( "show" );
                         next();
@@ -1220,7 +1224,7 @@
             var repoData = await get( githubAPI( username, "/repos?per_page=100" ) );
             if ( repoData ) {
                 // Filter out repos with names .github or wo-r
-                var filteredRepos = repoData.filter( repo => !repo.html_url.includes( "/.github" ) && !repo.name.includes( baseName ) );
+                var filteredRepos = repoData.filter( repo => ( !repo.html_url.includes( "/.github" ) && !repo.name.includes( baseName ) ) || repo.name.includes( "emulating-the-nintendo-switch" ) || repo.name.includes( "understanding-human-behavior" ) );
                 totalRepos += filteredRepos.length;  // Add only the filtered repos
             }
 
@@ -1537,7 +1541,12 @@
             var repoHTML = "";
             var totalProjects = 0;
             for ( const repo of allRepos ) {
+
+                // Self repo
                 if ( repo.html_url.includes( "/.github" ) || repo.name.includes( baseName ) ) continue;
+
+                // Blog stuff
+                if ( repo.name.includes( "emulating-the-nintendo-switch" ) || repo.name.includes( "understanding-human-behavior" ) ) continue;
             
                 repoHTML += `
                     <a goto="${ repo.html_url }" class="cursor-pointer flex-1 flex flex-col gap-2 select-none">
