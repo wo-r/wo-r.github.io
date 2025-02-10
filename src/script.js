@@ -349,6 +349,14 @@
                 `
                 break;
             }
+            case "info": {
+                popupHTML = `
+                    <div class="transition-all popupManager popup flex flex-col gap-1 fixed bottom-6 left-0 md:left-6 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-blue-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
+                        <small class="font-medium text-zinc-300 text-[12px] opacity-50">${ details }</small>
+                    </div>
+                `
+                break;
+            }
         }
 
         if ( popupHTML == "" ) {
@@ -364,6 +372,18 @@
                 $( ".popupManager" ).remove();
             }, 500 )
         }, delay )
+    }
+
+    // Globals (For Debugging)
+    if ( isDeveloper ) {
+        window.popupManager = popupManager;
+        window.isDeveloper = isDeveloper;
+        window.version = version;
+        window.theme = storageManager.theme;
+        window.snowEnabled = storageManager.SnowStorm;
+        window.basicMode = storageManager.basicMode;
+        window.popups = storageManager.popups;
+        window.lastUpdated = storageManager.lastUpdated;
     }
 
 
