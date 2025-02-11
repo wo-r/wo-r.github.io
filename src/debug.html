@@ -128,6 +128,23 @@
                                 <span class="underline" tooltip="Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium accusamus similique velit error. Aliquid assumenda id nihil quisquam voluptates repellat et veniam nulla, amet ut vel ullam natus illo consequatur.">Tooltip Popup Example</span>
                             </div>  
                             <!--Tooltip Popup Example-->
+                            <!--Popup Modals-->
+                            <!--Re-add "fixed bottom-6 left-0 md:left-6" to all modals below-->
+                            <div class="transition-all popupManager popup flex flex-col gap-1 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-red-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
+                                <span>An unexpected error occured.</span>
+                                <small class="font-medium text-zinc-300 text-[12px] opacity-50">Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda nihil corporis similique obcaecati ipsam, impedit quas ipsa, praesentium incidunt eaque placeat velit pariatur laudantium minima asperiores, corrupti debitis? Incidunt, vitae.</small>
+                            </div>
+                            <div class="transition-all popupManager popup flex flex-col gap-1 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-green-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
+                                <small class="font-medium text-zinc-300 text-[12px] opacity-50">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore pariatur fugit enim laborum, fugiat necessitatibus sit totam delectus eius officiis eveniet mollitia animi aspernatur dignissimos harum odit quidem, amet quos.</small>
+                            </div>
+                            <div class="transition-all popupManager popup flex flex-col gap-1 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-yellow-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
+                                <span>An issue was found.</span>
+                                <small class="font-medium text-zinc-300 text-[12px] opacity-50">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Modi necessitatibus quia, voluptatum quos fugit dolore iure dolor quibusdam unde magni earum quasi fuga, accusamus aspernatur totam et! Totam, ipsam consequatur?</small>
+                            </div>
+                            <div class="transition-all popupManager popup flex flex-col gap-1 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-blue-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
+                                <small class="font-medium text-zinc-300 text-[12px] opacity-50">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit officia est voluptatum perspiciatis iste neque magni dolor ad, laborum sapiente culpa ullam ipsum ut rem aliquid ipsam necessitatibus dolore suscipit?</small>
+                            </div>
+                            <!--Popup Modals-->
                             <!--Buttons-->
                             <!--Remove .w-min for button to work-->
                             <div class="flex flex-col gap-2">
@@ -262,6 +279,9 @@
                                             >
                                         </svg>
                                     </div>
+                                    <div class="p-5 bg-black rounded-xl">
+                                        <div class="loader"></div>
+                                    </div>
                                 </div>
                             </div>
                             <!--Various Icons-->
@@ -281,6 +301,67 @@
                                 </div>
                             </div>
                             <!--Search Bar-->
+                            <!--Context Modal-->
+                            <div class="shadow-xl z-[200] bg-brown-dark text-zinc-300 rounded-lg shadow-lg w-52 select-none">
+                                <div class="flex flex-col p-0 m-0">
+                                    <div ripple class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-t-lg transition">
+                                        <div class="flex flex-row justify-between items-center">
+                                            <span>Copy</span>
+                                            <span class="text-sm opacity-20">⌘ + C</span>
+                                        </div>
+                                    </div>
+                                    <div ripple class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition">Forward</div>
+                                    <div ripple class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition">Back</div>
+                                    <hr class="border-brown-light border-[1.2px] rounded-full">
+                                    <div ripple class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition">
+                                        <div class="flex flex-row justify-between items-center">
+                                            <span>Reload</span>
+                                        </div>
+                                    </div>
+                                    <div ripple class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 transition">
+                                        <div class="flex flex-row justify-between items-center">
+                                            <span>Fullscreen</span>
+                                        </div>
+                                    </div>
+                                    <hr class="border-brown-light border-[1.2px] rounded-full">
+                                    <div ripple class="cursor-pointer relative overflow-hidden py-3 px-3 font-semibold hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-b-lg transition">Settings</div>
+                                </div>
+                            </div>
+                            <!--Context Modal-->
+                            <!--Settings Modal-->
+                            <!--This is steralized of all ids-->
+                            <div class="bg-brown-dark p-6 rounded-lg shadow-lg w-80 select-none">
+                                <h2 class="text-5xl font-black mb-4">Settings</h2>
+                                <form class="text-zinc-300 flex flex-col gap-5">
+                                    <div class="mb-3">
+                                        <label class="block text-md font-medium">Theme:</label>
+                                        <select name="theme" class="mt-1 block w-full px-3 py-2 bg-brown-darker appearance-none rounded-md outline-none bg-brown-dark">
+                                            <option value="light">Light</option>
+                                            <option value="dark" selected="">Dark</option>
+                                        </select>
+                                    </div>
+                                    <label class="flex justify-between items-center cursor-pointer">
+                                        <input type="checkbox" checked="" class="sr-only peer">
+                                        <span class="text-md font-medium text-zinc-300">SnowStorm <small class="text-[8px] opacity-50">By Facebook</small></span>
+                                        <div class="relative w-11 h-6 bg-brown peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1.8px] after:start-[1.8px] after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brown-light"></div>
+                                    </label>
+                                    <label class="flex justify-between items-center cursor-pointer">
+                                        <input type="checkbox" checked="" class="sr-only peer">
+                                        <span class="text-md font-medium text-zinc-300">Popup Animations</span>
+                                        <div class="relative w-11 h-6 bg-brown peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1.8px] after:start-[1.8px] after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brown-light"></div>
+                                    </label>
+                                    <!--Used a tooltip-->
+                                    <label class="flex justify-between items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer">
+                                        <span class="text-md font-medium text-zinc-300">Basic Mode</span>
+                                        <div class="relative w-11 h-6 bg-brown peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1.8px] after:start-[1.8px] after:bg-white after:border-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brown-light"></div>
+                                    </label>
+                                </form>
+                                <div class="flex flex-between justify-center text-center items-center mt-5">
+                                    <small class="font-medium text-zinc-300 text-[10px] opacity-50">Version: vX.X.X<br>System: XXX<br></small>
+                                </div>
+                            </div>
+                            <!--Settings Modal-->
                             <!--Big Photo Card-->
                             <div class="mt-10"></div>
                             This tests the images from /photography
@@ -356,18 +437,20 @@
                                         >Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita exercitationem nisi nemo qui autem iste ea, quaerat saepe, nulla cumque quibusdam veritatis voluptas rerum! Rem itaque dignissimos eum perspiciatis voluptatum?</span>    
                                     </div>
                                 </div>
-                                <div class="flex flex-row gap-2">
-                                    <a goto="#who-am-i" class="cursor-pointer flex-1 text-center w-max select-none">
-                                        <div ripple class="relative overflow-hidden p-10 font-black bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full flex items-center justify-center">
-                                            Button #1
-                                        </div>
-                                    </a>
-                                    <a goto="#best-projects" class="cursor-pointer flex-1 text-center w-max select-none">
-                                        <div ripple class="relative overflow-hidden p-10 font-black bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full flex items-center justify-center">
-                                            Button #2
-                                        </div>
-                                    </a>
-                                    <a goto="#best-projects" class="cursor-pointer flex-1 text-center w-max select-none">
+                                <div class="flex flex-col md:flex-row justify-between gap-2 select-none flex-1">
+                                    <div class="flex-1 flex flex-row gap-2">
+                                        <a class="cursor-pointer flex-1 text-center w-max select-none">
+                                            <div ripple class="relative overflow-hidden p-10 font-black bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full flex items-center justify-center">
+                                                Button #1
+                                            </div>
+                                        </a>
+                                        <a class="cursor-pointer flex-1 text-center w-max select-none">
+                                            <div ripple class="relative overflow-hidden p-10 font-black bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full flex items-center justify-center">
+                                                Button #2
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <a class="cursor-pointer flex-1 text-center w-full md:w-max select-none">
                                         <div ripple class="relative overflow-hidden p-10 font-black bg-brown-dark hover:bg-brown-light hover:shadow-xl hover:bg-opacity-20 rounded-lg transition h-full flex items-center justify-center">
                                             Button #3
                                         </div>
