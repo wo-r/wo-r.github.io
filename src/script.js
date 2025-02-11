@@ -334,7 +334,7 @@
             }
             case "success": {
                 popupHTML = `
-                    <div class="transition-all popupManager popup flex flex-col gap-1 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-green-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
+                    <div class="transition-all popupManager popup flex flex-col gap-1 fixed bottom-6 left-0 md:left-6 break-all md:break-words md:max-w-[80ch] w-fit transform -translate-x-1/2 bg-brown-dark border border-green-500 rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl">
                         <small class="font-medium text-zinc-300 text-[12px] opacity-50">${ details }</small>
                     </div>
                 `
@@ -449,6 +449,8 @@
      * Adds events and other important things so the side menu functions correctly.
      */
     async function initalizeSideMenu() {
+        if ( elementsManager.sideMenuOptions.sideMenu == undefined ) return;
+
         // Easily manages the closed and opened states of the menu
         var PropMenuState = function ( callback ) {
             var isMenuOpened = callback;
@@ -743,6 +745,8 @@
     async function initalizeRippledElements() {
         if ( isMobile || ( storageManager.basicMode && JSON.parse( storageManager.basicMode ) ) ) return;
 
+        if ( elementsManager.ripple == undefined ) return;
+
         elementsManager.ripple.mousedown( function (e) {
             const rippleTarget = $( this );
             const rippleCircle = $( "<span></span>" );
@@ -771,6 +775,8 @@
      */
     async function initalizeTooltipElements() {
         if ( isMobile || ( storageManager.basicMode && JSON.parse( storageManager.basicMode ) ) ) return;
+
+        if ( elementsManager.tooltip == undefined ) return;
 
         var tooltip = $( `<div class="tooltip bg-brown-dark rounded-xl font-semibold p-5 text-zinc-300 font-black z-50 select-none shadow-xl"></div>` ).appendTo( "body" );
         var isTooltipVisible = false;
@@ -804,6 +810,8 @@
      * Manages elements with the attribute "disabled".
      */
     async function initalizeDisabledElements() {
+        if ( elementsManager.disabled == undefined ) return;
+
         elementsManager.disabled.each(function () {
             let disabled = $(this);
             disabled.attr( "tooltip", "This is currently not available" );
@@ -818,6 +826,8 @@
      * Completely replacing the href attribute, this attribute ([goto]) allows you to not see a box showing the link, and performs the same functionalities as [href].
      */
     async function initalizeAlternateLinks() {
+        if ( elementsManager.goto == undefined ) return;
+
         elementsManager.goto.click( function () {
             if ( isElementDisabled( this ) ) return;
 
@@ -857,6 +867,8 @@
      */
     async function dynamicNavigationScroll() {
         if ( isMobile || ( storageManager.basicMode && JSON.parse( storageManager.basicMode ) ) ) return;
+
+        if ( elementsManager.navigation == undefined ) return;
 
         var previousPos = elementsManager.body.parent().scrollTop();
         await elementsManager.body.parent().scroll( function () {
@@ -965,6 +977,8 @@
      */
     async function initalizeContextMenu( SnowStorm ) {
         if ( isMobile ) return;
+
+        if ( elementsManager.contextMenuOptions.contextMenu == undefined ) return;
         
         $( document ).on( "contextmenu", function (e) {
             e.preventDefault();

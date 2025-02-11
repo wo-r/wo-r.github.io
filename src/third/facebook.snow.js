@@ -15,6 +15,16 @@
     var SnowStorm = function () {
         var self = this;
 
+        // This was added because somehow there isn't a way to just completely disable snow? And well HTML based options are the fastest so we shall use this method.
+        if ( document.getElementsByTagName("nosnow").length != 0 ) {
+            // Dummy function
+            self.init = function () {};
+            self.restartSnow = function () {};
+            window.SnowStorm = self
+
+            return;
+        }
+
         // Configuration
         self.excludeMobile = true;
         self.autoStart = true;
@@ -24,7 +34,7 @@
         self.useGPU = true;
         self.className = null;
         self.snowColor = "#494327";
-        self.snowCharacter = "<div class='w-full transition-all animate-spin select-none'>&bull;</div>";
+        self.snowCharacter = "<div class='snowflake w-full transition-all animate-spin select-none'>&bull;</div>";
         self.snowStick = true;
         self.targetElement = $("body")[0];
         self.useMeltEffect = true;
