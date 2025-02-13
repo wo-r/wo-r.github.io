@@ -16,6 +16,7 @@
     "use strict";
 
 
+    
 
     /**
      * The websites global version (relative to the github commit number)
@@ -84,7 +85,7 @@
     var isElementDisabled = function ( callback ) { return $( callback ).attr( "disabled" ) !== undefined ? true : false };
 
     // Determines if themes apply to the current page.
-    var themeDisabled = window.location.href.includes( "blogs/blog" ) ? true : false;
+    var themeDisabled = window.location.href.includes( "blogs/blog" ) || window.location.href.includes( "resume" ) ? true : false;
 
     /**
      * Consists of storage objects (READ-ONLY)
@@ -903,6 +904,8 @@
      * Adds animated text that pops up.
      */
     async function animatePopupText() {
+        if ( elementsManager.popup == undefined ) return;
+
         if ( isMobile || storageManager.popups == "false" || storageManager.basicMode == "true" ) {
             elementsManager.popup.each( function () {
                 $( this ).removeClass( "invisible" );
@@ -1848,7 +1851,6 @@
         // Run all tasks and wait until completion
         await runTasks();
 
-        // After this finishes, remove the loading screen.
         elementsManager.loader.fadeOut( 300 );
 
         // Finally add some of the pasaz that the user can see.
