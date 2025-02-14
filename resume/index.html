@@ -32,7 +32,7 @@
                             nunitoblack: ['NunitoBlack', 'sans-serif']
                         },
                         colors: {
-                            "brown": "red",
+                            "brown": "#c09a05",
                             "brown-dark":"#115740",
                             "brown-darker":"#115740",
                             "brown-light": "#FFCD00",
@@ -51,7 +51,7 @@
         <style>
             ::selection {
                 background: #FFCD00;
-                color: black;
+                color: #115740;
             }
 
             .ripple {
@@ -98,21 +98,77 @@
                                         >Lorem ipsum dolor sit amet consectetur, adipisicing elit. Autem, molestias fuga unde amet magni nulla asperiores. Enim quasi libero, harum et, ipsa repudiandae, non dolor vitae quisquam obcaecati optio excepturi. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Placeat, repudiandae accusantium, repellat rerum, ab repellendus in id hic quos dolorem debitis enim sint iste doloremque aliquid sequi magni itaque. Consequatur.</span>    
                                     </div>
                                 </div>
-                                <div class="flex flex-row gap-2">
-                                    <div class="px-10 py-5 bg-brown-darker rounded-xl">
-                                        <!--Dropdown maybe?-->
-                                    </div>
-                                    <a class="cursor-pointer flex-1 text-center w-min select-none">
+                                <div class="flex flex-col sm:flex-row gap-2 flex-wrap">
+                                    <a class="cursor-pointer flex-2 text-center w-full sm:w-min select-none">
                                         <div 
                                             ripple 
-                                            class="relative overflow-hidden p-10 font-black bg-brown-dark hover:bg-brown-light hover:shadow-xl rounded-lg transition h-full flex items-center justify-center"
+                                            class="font-black font-nunitoblack relative overflow-hidden px-10 py-5 font-black bg-brown-dark hover:bg-brown-light hover:text-brown-dark hover:shadow-xl rounded-lg transition h-full flex items-center justify-center"
                                         >
-                                            Placeholder
+                                            Certifications
                                         </div>
                                     </a>
+                                    <a class="cursor-pointer flex-2 text-center w-full sm:w-min select-none">
+                                        <div 
+                                            ripple 
+                                            class="font-black font-nunitoblack relative overflow-hidden px-10 py-5 font-black bg-brown-dark hover:bg-brown-light hover:text-brown-dark hover:shadow-xl rounded-lg transition h-full flex items-center justify-center"
+                                        >
+                                            Experience
+                                        </div>
+                                    </a>
+                                    <a class="cursor-pointer flex-1 md:flex-2 text-center w-full sm:w-min select-none">
+                                        <div 
+                                            ripple 
+                                            class="font-black font-nunitoblack relative overflow-hidden px-10 py-5 font-black bg-brown-dark hover:bg-brown-light hover:text-brown-dark hover:shadow-xl rounded-lg transition h-full flex items-center justify-center"
+                                        >
+                                            Education
+                                        </div>
+                                    </a>
+                                    <div class="flex-1 bg-brown-dark rounded-lg overflow-hidden relative"><!--TEMP-->
+                                        <a disabled class="cursor-pointer flex-1 lg:flex-2 text-center w-full sm:w-min select-none">
+                                            <div 
+                                                class="font-black font-nunitoblack relative overflow-hidden px-10 py-5 font-black bg-brown-dark hover:bg-brown-light hover:text-brown-dark hover:shadow-xl rounded-lg transition h-full flex items-center justify-center"
+                                            >
+                                                LinkedIn
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="flex-2 text-center w-full sm:w-fit">
+                                        <div 
+                                            class="relative overflow-hidden px-10 py-5 font-black bg-brown-dark rounded-lg transition h-full flex items-center justify-center"
+                                        >
+                                            <a goto="tel:+XXX-XXX-XXXX" class="hover:text-brown-light cursor-pointer">XXX-XXX-XXXX</a>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 text-center w-full sm:w-fit">
+                                        <div 
+                                            class="relative overflow-hidden px-10 py-5 font-black bg-brown-dark rounded-lg transition h-full flex items-center justify-center"
+                                        >
+                                            <a goto="mailto:wor.personal@gmail.com" class="hover:text-brown-light cursor-pointer">wor.personal@gmail.com</a>
+                                        </div>
+                                    </div>
                                 </div>
+                                <!--<div class="flex flex-col lg:flex-row gap-2">
+                                    TODO:
+                                </div>-->
+                                <!--<div class="flex flex-col lg:flex-row gap-2">
+                                    <div class="flex-1 p-10 bg-brown-light text-brown-dark rounded-xl flex flex-col lg:flex-row w-full">
+                                        <div class="flex flex-col flex-1 items-center lg:items-start">
+                                            <h1 
+                                                popup 
+                                                fast 
+                                                class="flex flex-col md:flex-row gap-x-3 text-center lg:text-left flex warp text-4xl sm:text-6xl md:text-8xl font-nunitoblack font-black pb-2 leading-tight tracking-tight"
+                                            >Who am I?</h1>
+                                            <span 
+                                                popup 
+                                                extremelyFast 
+                                                class="text-md flex flex-row gap-x-1 flex-wrap justify-center text-center lg:text-left lg:justify-start items-center lg:items-start"
+                                            >My name is Braden, also known as Wo-r or BrandyBeers online. I'm a self taught programmer with over 4 years of experience, coding a wide range of things from simple javascript websites to fully developed websites with php, apis, backends, and even sql. I do pretty much anything I set my mind too, so even if its something I've never tried before, I will keep going at it until I get it right, or get it to at least function the way I intended. I love programming, to the point that its probably unhealthy, but hey, its fun at least.</span>    
+                                        </div>
+                                    </div>
+                                    <img src="./../src/logo/portrait.png" class="rounded-xl flex-2 w-full lg:w-[45vh]">
+                                </div>-->
                             </div>
-
+                            
                         </div>
                         <div id="footer" class="bg-brown-darker select-none flex-2"></div>
                     </div>
@@ -121,5 +177,25 @@
         </div>
         <script src="./../src/script.js"></script>
         <script src="./../src/third/facebook.snow.js"></script>
+        <script>
+            // Style changes to match resume page
+            $( window ).ready( function () {
+                $( "#sidemenu" ).find( "div.flex.flex-col.overflow-y-auto.py-5" ).find( "a" ).each( function () {
+                    $( this ).find( "div" ).removeClass( "hover:bg-opacity-20 transition" ).addClass( "hover:text-brown-dark hover:font-black hover:font-nunitoblack" )
+                } )
+                $( "#sidemenu" ).find( "div.flex.justify-between.py-3.px-4" ).find( "a" ).each( function () {
+                    $( this ).find( "div" ).removeClass( "hover:bg-opacity-20 transition" ).addClass( "group hover:fill-brown-dark hover:font-black hover:font-nunitoblack" )
+                    $( this ).find( "path" ).addClass( "group-hover:fill-brown-dark" )
+                } )
+                $( "#navbar" ).find( "a" ).each( function () {
+                    $( this ).find( "div" ).removeClass( "hover:bg-opacity-20 transition" ).addClass( "group hover:fill-brown-dark hover:font-black hover:font-nunitoblack" )
+                    $( this ).find( "path" ).addClass( "group-hover:fill-brown-dark" )
+                } )
+                $( "#footer" ).find( "a" ).each( function () {
+                    $( this ).find( "div" ).removeClass( "hover:bg-opacity-20 transition" ).addClass( "group hover:fill-brown-dark hover:font-black hover:font-nunitoblack" )
+                    $( this ).find( "path" ).addClass( "group-hover:fill-brown-dark" )
+                } )
+            } )
+        </script>
     </body>
 </html>
